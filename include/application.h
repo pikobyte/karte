@@ -16,6 +16,7 @@
 #define APPLICATION_H
 
 #include "definitions.h"
+#include "timer.h"
 #include "utils.h"
 
 /**
@@ -28,11 +29,13 @@
  * update, render.
  */
 typedef struct Application_s {
-    u64 frames;    /**< The number of passed frames. */
-    f32 fps;       /**< The current frames-per-second. */
-    f32 dt;        /**< Time between frames. */
-    f32 exec_time; /**< Total execution time. */
-    bool running;  /**< Running flag. */
+    u64 frames;         /**< The number of passed frames. */
+    f64 fps;            /**< The current frames-per-second. */
+    f64 dt;             /**< Time between frames. */
+    f64 exec_time;      /**< Total execution time. */
+    bool running;       /**< Running flag. */
+    Timer *fps_timer;   /**< Timer to calculate frames-per-second. */
+    Timer *limit_timer; /**< Timer to limit the frames-per-second. */
 } Application;
 
 /**
@@ -44,48 +47,49 @@ Application *ApplicationCreate(void);
 /**
  * \brief Frees up the memory of game systems and the application itself.
  * \param [out] app The application to be freed.
- * \returns None.
+ * \returns Void.
  */
 void ApplicationFree(Application *app);
 
 /**
  * \brief Starts the main application loop.
- * \param [out] app The application to be run.
- * \returns None.
+ * \param [in, out] app The application to be run.
+ * \returns Void.
  */
 void ApplicationRun(Application *app);
 
 /**
  * \brief Updates the input handler and deals with global input.
- * \param [out] app The corresponding application.
- * \returns None.
+ * \param [in, out] app The corresponding application.
+ * \returns Void.
  */
 void ApplicationHandleInput(Application *app);
 
 /**
  * \brief Updates the systems of the application.
- * \param [out] app The corresponding application.
- * \returns None.
+ * \param [in, out] app The corresponding application.
+ * \returns Void.
  */
 void ApplicationUpdate(Application *app);
 
 /**
  * \brief Renders the systems of the application.
- * \param [out] app The corresponding application.
- * \returns None.
+ * \param [in, out] app The corresponding application.
+ * \returns Void.
  */
 void ApplicationRender(const Application *app);
 
 /**
  * \brief Performs pre-frame timing.
- * \param [out] app The corresponding application.
- * \returns None.
+ * \param [in, out] app The corresponding application.
+ * \returns Void.
  */
 void ApplicationPreFrame(Application *app);
 
 /**
  * \brief Performs post-frame timing.
- * \returns None.
+ * \param [in, out] app The corresponding application.
+ * \returns Void.
  */
 void ApplicationPostFrame(Application *app);
 

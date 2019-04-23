@@ -4,7 +4,7 @@
 
 /**
  * \file utils.h
- * 
+ *
  * \brief General utility functions, from logging to memory and string
  * manipulation.
  *
@@ -33,7 +33,7 @@ typedef enum LogCode_e { LOG, WARNING, ERROR, FATAL } LogCode;
  * \param [in] lc The log code.
  * \param [in] str The formatted string to be logged.
  * \param [in] ... Extra parameters required for the formatted string.
- * \returns None.
+ * \returns Void.
  */
 void Log(const LogCode lc, const char *str, ...);
 
@@ -50,8 +50,8 @@ void *Allocate(const size_t size);
 
 /**
  * \brief Deallocates memory and decrements the number of allocations.
- * \param [out] mem A pointer to the memory to be freed.
- * \returns None.
+ * \param [in, out] mem A pointer to the memory to be freed.
+ * \returns Void.
  */
 void Free(void *mem);
 
@@ -60,8 +60,8 @@ void Free(void *mem);
 /* -------------------------------------------------------------------------- */
 /**
  * \brief Gets the date and time then puts it into a character buffer.
- * \param [out] dest The destination buffer.
- * \returns None.
+ * \param [in, out] dest The destination buffer.
+ * \returns Void.
  */
 void DateAndTime(char *dest);
 

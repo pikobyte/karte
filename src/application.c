@@ -35,6 +35,8 @@ Application *ApplicationCreate(void) {
         Log(FATAL, "Could not initialise SDL_ttf: %s", TTF_GetError());
     }
 
+    app->fps_timer = TimerCreate();
+    app->limit_timer = TimerCreate();
     app->running = true;
 
     return app;
@@ -50,6 +52,9 @@ void ApplicationFree(Application *app) {
     SDL_AudioQuit();
     SDL_VideoQuit();
     SDL_Quit();
+
+    TimerFree(app->fps_timer);
+    TimerFree(app->limit_timer);
     Free(app);
 }
 
@@ -60,6 +65,8 @@ void ApplicationFree(Application *app) {
  * this.
  */
 void ApplicationRun(Application *app) {
+    TimerStart(app->fps_timer);
+
     while (app->running) {
         ApplicationPreFrame(app);
         ApplicationHandleInput(app);
@@ -93,11 +100,24 @@ void ApplicationRender(const Application *app) { UNUSED(app); }
  * \desc Calculates timing before the new frame has begun and also sets the
  * application frames-per-second.
  */
-void ApplicationPreFrame(Application *app) { UNUSED(app); }
+void ApplicationPreFrame(Application *app) {
+    app->dt = TimerGetTicks(app->limit_timer) / 1000.0;
+    TimerStart(app->limit_timer);
+
+    const f64 seconds = TimerGetTicks(app->fps_timer) / 1000.0;
+    app->fps = app->frames / seconds;
+}
 
 /**
  * \desc Calculates timing after the frame has ended, updating the window title
  * to display frames-per-second and then delays the application to cap to the
  * target FPS.
  */
-void ApplicationPostFrame(Application *app) { UNUSED(app); }
+void ApplicationPostFrame(Application *app) {
+    const u64 ticks = TimerGetTicks(app->limit_timer);
+    if (ticks < (1000.0 / 60.0)) {
+        SDL_Delay((1000.0 / 60.0) - ticks);
+    }
+
+    app->exec_time += app->dt;
+}
