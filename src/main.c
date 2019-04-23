@@ -12,8 +12,13 @@
  */
 
 #include "definitions.h"
+#include "inlines.h"
 
 int main(void) {
-    printf("Hello Karte!\n");
+    void *all = Allocate(sizeof(int));
+    Destroy(all);
+
+    Log(LOG, "Allocations remaining: %u", g_mem_allocs);
+
     return 0;
 }

@@ -4,8 +4,8 @@
 
 /**
  * \file definitions.c
- * \brief Definitions of types, structs, constants and global variables for the
- * Karte program. This is where all common standard and external library
+ * \brief Definitions of types, structs, macros, constants and global variables
+ * for the Karte program. This is where all common standard and external library
  * includes are stated.
  *
  * \author Anthony Mercer
@@ -37,5 +37,9 @@ typedef int64_t i64;
 typedef uint64_t u64;
 typedef float f32;
 typedef double f64;
+
+#define UNUSED(x) (void)(x)
+
+static u32 g_mem_allocs = 0;
 
 #endif
