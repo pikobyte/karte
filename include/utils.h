@@ -21,9 +21,12 @@
 /* LOGGING                                                                    */
 /* -------------------------------------------------------------------------- */
 /**
- * \desc Enumeration to describe log codes.
+ * \brief Enumeration to describe log codes.
+ *
+ * The list of log codes and thier usages are: log for general information
+ * output, warning, error, and fatal. The latter causes the program to exit.
  */
-enum LogCode { LOG, ERROR, WARNING };
+enum LogCode { LOG, WARNING, ERROR, FATAL };
 
 /**
  * \brief Logs a formatted string with based on a log code.

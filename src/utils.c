@@ -21,7 +21,9 @@
  * \desc Takes a log code (log, warning or error) and accompanying formatted
  * string and required parameters. The log first states the current date and
  * time, then the log code and finally the input formatted string and extra
- * parameters.
+ * parameters. If the error is fatal, then the program exits returning an error
+ * code. The log is written to the stdout for logs/warnings and stderr for
+ * errors/fatals.
  */
 void Log(const enum LogCode lc, const char *str, ...) {
     char buff[512] = {0};
@@ -32,11 +34,14 @@ void Log(const enum LogCode lc, const char *str, ...) {
     case LOG:
         sprintf(type, "\x1B[1;32mKARTE LOG\x1B[0;37m");
         break;
+    case WARNING:
+        sprintf(type, "\x1B[1;33mKARTE WRN\x1B[0;37m");
+        break;
     case ERROR:
         sprintf(type, "\x1B[1;31mKARTE ERR\x1B[0;37m");
         break;
-    case WARNING:
-        sprintf(type, "\x1B[1;33mKARTE WRN\x1B[0;37m");
+    case FATAL:
+        sprintf(type, "\x1B[1;45;41mKARTE FTL\x1B[0;37m");
         break;
     default:
         sprintf(type, "\x1B[1;32mKARTE LOG\x1B[0;37m");
@@ -49,7 +54,10 @@ void Log(const enum LogCode lc, const char *str, ...) {
 
     va_list ap;
     va_start(ap, str);
-    if (lc == ERROR) {
+    if (lc == FATAL) {
+        vfprintf(stderr, buff, ap);
+        exit(EXIT_FAILURE);
+    } else if (lc == ERROR) {
         vfprintf(stderr, buff, ap);
     } else {
         vfprintf(stdout, buff, ap);
@@ -62,14 +70,14 @@ void Log(const enum LogCode lc, const char *str, ...) {
 /* -------------------------------------------------------------------------- */
 /**
  * \desc Allocates zero-initialised memory based on a chosen size. If the memory
- * is not allocated by the operating system, NULL is returned. Otherwise the
+ * is not allocated by the operating system, the program exits. Otherwise the
  * number of global memory allocations is increased, and a pointer to the start
  * of the allocated memory is returned.
  */
 void *Allocate(const size_t size) {
     void *mem = calloc(1, size);
     if (mem == NULL) {
-        return NULL;
+        Log(FATAL, "Could not allocate memory of size %i!", size);
     }
 
     g_mem_allocs++;
@@ -78,11 +86,12 @@ void *Allocate(const size_t size) {
 
 /**
  * \desc Checks to see if the memory is first valid, and if it is, then it is
- * freed and the number of global memory allocations is decreased.
+ * freed and the number of global memory allocations is decreased. Otherwise,
+ * the program exits with an error code.
  */
 void Destroy(void *mem) {
     if (mem == NULL) {
-        return;
+        Log(FATAL, "Could not free memory at %p!", mem);
     }
 
     free(mem);
