@@ -1,0 +1,15 @@
+# Visual studio code
+.vscode/*
+
+# Shell scripts
+clang_format.sh
+
+# Executable
+bin/karte
+
+# Build files
+build/*.o
+build/*.d
+
+# Documentation
+docs/html/*
