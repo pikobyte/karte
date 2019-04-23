@@ -26,7 +26,7 @@
  * The list of log codes and thier usages are: log for general information
  * output, warning, error, and fatal. The latter causes the program to exit.
  */
-enum LogCode { LOG, WARNING, ERROR, FATAL };
+typedef enum LogCode_e { LOG, WARNING, ERROR, FATAL } LogCode;
 
 /**
  * \brief Logs a formatted string with based on a log code.
@@ -35,7 +35,7 @@ enum LogCode { LOG, WARNING, ERROR, FATAL };
  * \param [in] ... Extra parameters required for the formatted string.
  * \returns None.
  */
-void Log(const enum LogCode lc, const char *str, ...);
+void Log(const LogCode lc, const char *str, ...);
 
 /* -------------------------------------------------------------------------- */
 /* MEMORY                                                                     */
@@ -50,17 +50,17 @@ void *Allocate(const size_t size);
 
 /**
  * \brief Deallocates memory and decrements the number of allocations.
- * \param [in] mem A pointer to the memory to be freed.
+ * \param [out] mem A pointer to the memory to be freed.
  * \returns None.
  */
-void Destroy(void *mem);
+void Free(void *mem);
 
 /* -------------------------------------------------------------------------- */
 /* MISCELLANEOUS                                                              */
 /* -------------------------------------------------------------------------- */
 /**
  * \brief Gets the date and time then puts it into a character buffer.
- * \param [in] dest The destination buffer.
+ * \param [out] dest The destination buffer.
  * \returns None.
  */
 void DateAndTime(char *dest);

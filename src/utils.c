@@ -25,7 +25,7 @@
  * code. The log is written to the stdout for logs/warnings and stderr for
  * errors/fatals.
  */
-void Log(const enum LogCode lc, const char *str, ...) {
+void Log(const LogCode lc, const char *str, ...) {
     char buff[512] = {0};
     char tod[32] = {0};
     char type[32] = {0};
@@ -89,7 +89,7 @@ void *Allocate(const size_t size) {
  * freed and the number of global memory allocations is decreased. Otherwise,
  * the program exits with an error code.
  */
-void Destroy(void *mem) {
+void Free(void *mem) {
     if (mem == NULL) {
         Log(FATAL, "Could not free memory at %p!", mem);
     }

@@ -3,7 +3,8 @@
  * ========================================================================== */
 
 /**
- * \file definitions.c
+ * \file definitions.h
+ * 
  * \brief Definitions of types, structs, macros, constants and global variables
  * for the Karte program. This is where all common standard and external library
  * includes are stated.
@@ -17,6 +18,7 @@
 
 #include <math.h>
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -26,6 +28,7 @@
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
 
 typedef int8_t i8;
 typedef uint8_t u8;
@@ -38,8 +41,12 @@ typedef uint64_t u64;
 typedef float f32;
 typedef double f64;
 
+/**
+ * \desc This is a utility macro which simply prevents the GCC unused-parameter
+ * warning from firing. This should be removed in final releases.
+ */
 #define UNUSED(x) (void)(x)
 
-static u32 g_mem_allocs = 0;
+u32 g_mem_allocs;
 
 #endif
