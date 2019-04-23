@@ -3,26 +3,27 @@
  * ========================================================================== */
 
 /**
- * \file inlines.h
- * \brief Declaration and implementation of general inline functions.
+ * \file utils.c
+ *
+ * \brief General utility functions, from logging to memory and string
+ * manipulation.
  *
  * \author Anthony Mercer
  *
  */
 
-#ifndef INLINES_H
-#define INLINES_H
-
-#include "definitions.h"
-
-static inline void TimeOfDay(char *dest);
-
-enum LogCode { LOG, ERROR, WARNING };
+#include "utils.h"
 
 /* -------------------------------------------------------------------------- */
 /* LOGGING                                                                    */
 /* -------------------------------------------------------------------------- */
-static inline void Log(const enum LogCode lc, const char *str, ...) {
+/**
+ * \desc Takes a log code (log, warning or error) and accompanying formatted
+ * string and required parameters. The log first states the current date and
+ * time, then the log code and finally the input formatted string and extra
+ * parameters.
+ */
+void Log(const enum LogCode lc, const char *str, ...) {
     char buff[512] = {0};
     char tod[32] = {0};
     char type[32] = {0};
@@ -42,7 +43,7 @@ static inline void Log(const enum LogCode lc, const char *str, ...) {
         break;
     }
 
-    TimeOfDay(tod);
+    DateAndTime(tod);
 
     sprintf(buff, "[%s %s] %s\n", tod, type, str);
 
@@ -59,25 +60,43 @@ static inline void Log(const enum LogCode lc, const char *str, ...) {
 /* -------------------------------------------------------------------------- */
 /* MEMORY                                                                     */
 /* -------------------------------------------------------------------------- */
-static inline void *Allocate(const size_t size) {
+/**
+ * \desc Allocates zero-initialised memory based on a chosen size. If the memory
+ * is not allocated by the operating system, NULL is returned. Otherwise the
+ * number of global memory allocations is increased, and a pointer to the start
+ * of the allocated memory is returned.
+ */
+void *Allocate(const size_t size) {
     void *mem = calloc(1, size);
     if (mem == NULL) {
         return NULL;
     }
 
-    ++g_mem_allocs;
+    g_mem_allocs++;
     return mem;
 }
 
-static inline void Destroy(void *mem) {
+/**
+ * \desc Checks to see if the memory is first valid, and if it is, then it is
+ * freed and the number of global memory allocations is decreased.
+ */
+void Destroy(void *mem) {
+    if (mem == NULL) {
+        return;
+    }
+
     free(mem);
-    --g_mem_allocs;
+    g_mem_allocs--;
 }
 
 /* -------------------------------------------------------------------------- */
 /* MISCELLANEOUS                                                              */
 /* -------------------------------------------------------------------------- */
-static inline void TimeOfDay(char *dest) {
+/**
+ * \desc Takes a destination buffer to which the current date and time is copied
+ * to in a YY/MM/DD hr/min/sec format.
+ */
+void DateAndTime(char *dest) {
     char buff[27] = {0};
     struct tm *tm_info = NULL;
     time_t timer = {0};
@@ -86,5 +105,3 @@ static inline void TimeOfDay(char *dest) {
     strftime(buff, 26, "%Y-%m-%d %H:%M:%S", tm_info);
     strcpy(dest, buff);
 }
-
-#endif

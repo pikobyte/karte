@@ -12,7 +12,7 @@
  */
 
 #include "definitions.h"
-#include "inlines.h"
+#include "utils.h"
 
 int main(void) {
     void *all = Allocate(sizeof(int));
