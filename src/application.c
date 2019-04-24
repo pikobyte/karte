@@ -37,6 +37,7 @@ Application *ApplicationCreate(void) {
 
     app->fps_timer = TimerCreate();
     app->limit_timer = TimerCreate();
+    app->wind = WindowCreate();
     app->running = true;
 
     return app;
@@ -55,6 +56,7 @@ void ApplicationFree(Application *app) {
 
     TimerFree(app->fps_timer);
     TimerFree(app->limit_timer);
+    WindowFree(app->wind);
     Free(app);
 }
 
@@ -73,7 +75,8 @@ void ApplicationRun(Application *app) {
         ApplicationUpdate(app);
         ApplicationRender(app);
         ApplicationPostFrame(app);
-        app->running = false;
+        if (app->exec_time > 2.0)
+            app->running = false;
     }
 
     Log(LOG, "Execution time: %.3f s", app->exec_time);
@@ -94,7 +97,11 @@ void ApplicationUpdate(Application *app) { UNUSED(app); }
  * \desc Renders the application by clearing the window, drawing to it and then
  * flipping the buffers.
  */
-void ApplicationRender(const Application *app) { UNUSED(app); }
+void ApplicationRender(const Application *app) {
+    WindowClear(app->wind);
+    // TODO: Render graphics here.
+    WindowFlip(app->wind);
+}
 
 /**
  * \desc Calculates timing before the new frame has begun and also sets the
@@ -111,12 +118,16 @@ void ApplicationPreFrame(Application *app) {
 /**
  * \desc Calculates timing after the frame has ended, updating the window title
  * to display frames-per-second and then delays the application to cap to the
- * target FPS.
+ * target FPS, provided v-sync is turned off.
  */
 void ApplicationPostFrame(Application *app) {
     const u64 ticks = TimerGetTicks(app->limit_timer);
-    if (ticks < (1000.0 / 60.0)) {
+    if (!app->wind->v_sync && ticks < (1000.0 / 60.0)) {
         SDL_Delay((1000.0 / 60.0) - ticks);
+    }
+
+    if (app->frames++ % 24 == 0) {
+        WindowSetTitle(app->wind, "Karte | FPS: %d", (u32)app->fps);
     }
 
     app->exec_time += app->dt;

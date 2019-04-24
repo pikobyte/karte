@@ -18,6 +18,7 @@
 #include "definitions.h"
 #include "timer.h"
 #include "utils.h"
+#include "window.h"
 
 /**
  * \brief Holds pointers to systems and timing data.
@@ -36,6 +37,7 @@ typedef struct Application_s {
     bool running;       /**< Running flag. */
     Timer *fps_timer;   /**< Timer to calculate frames-per-second. */
     Timer *limit_timer; /**< Timer to limit the frames-per-second. */
+    Window *wind;       /**< Main rendering window. */
 } Application;
 
 /**

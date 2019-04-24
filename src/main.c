@@ -4,7 +4,7 @@
 
 /**
  * \file main.c
- * 
+ *
  * \brief The program main entry point. Creates, runs and cleans up the Karte
  * application.
  *

@@ -4,7 +4,7 @@
 
 /**
  * \file definitions.h
- * 
+ *
  * \brief Definitions of types, structs, macros, constants and global variables
  * for the Karte program. This is where all common standard and external library
  * includes are stated.
