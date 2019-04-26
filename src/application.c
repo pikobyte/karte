@@ -35,6 +35,7 @@ Application *ApplicationCreate(void) {
         Log(FATAL, "Could not initialise SDL_ttf: %s", TTF_GetError());
     }
 
+    app->input = InputCreate();
     app->fps_timer = TimerCreate();
     app->limit_timer = TimerCreate();
     app->wind = WindowCreate();
@@ -54,6 +55,7 @@ void ApplicationFree(Application *app) {
     SDL_VideoQuit();
     SDL_Quit();
 
+    InputFree(app->input);
     TimerFree(app->fps_timer);
     TimerFree(app->limit_timer);
     WindowFree(app->wind);
@@ -75,8 +77,6 @@ void ApplicationRun(Application *app) {
         ApplicationUpdate(app);
         ApplicationRender(app);
         ApplicationPostFrame(app);
-        if (app->exec_time > 2.0)
-            app->running = false;
     }
 
     Log(LOG, "Execution time: %.3f s", app->exec_time);
@@ -86,7 +86,11 @@ void ApplicationRun(Application *app) {
  * \desc Updates the application's input handler and checks for any global
  * input. This is where user input can result in the application closing.
  */
-void ApplicationHandleInput(Application *app) { UNUSED(app); }
+void ApplicationHandleInput(Application *app) {
+    if (!InputUpdate(app->input) || InputKeyPressed(app->input, SDLK_ESCAPE)) {
+        app->running = false;
+    }
+}
 
 /**
  * \desc Updates the application state i.e. where all logic is performed.
