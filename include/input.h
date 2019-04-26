@@ -50,14 +50,14 @@ Input *InputCreate(void);
 
 /**
  * \brief Frees the input memory.
- * \params [in, out] The input to be freed.
+ * \param [in, out] The input to be freed.
  * \returns Void.
  */
 void InputFree(Input *input);
 
 /**
  * \brief Polls for events.
- * \params [in, out] The input object to be polled.
+ * \param [in, out] The input object to be polled.
  * \returns Exit program condition.
  */
 bool InputUpdate(Input *input);
@@ -67,48 +67,48 @@ bool InputUpdate(Input *input);
  * -------------------------------------------------------------------------- */
 /**
  * \brief Checks whether a keyboard button is pressed.
- * \params [in] input A pointer to an input handler.
- * \params [in] key A keyboard key code to check.
+ * \param [in] input A pointer to an input handler.
+ * \param [in] key A keyboard key code to check.
  * \returns Whether the current key is pressed.
  */
 bool InputKeyPressed(const Input *input, const u32 key);
 
 /**
  * \brief Checks whether a keyboard modifier button is pressed.
- * \params [in] input A pointer to an input handler.
- * \params [in] mod A keyboard modifier combination to check.
+ * \param [in] input A pointer to an input handler.
+ * \param [in] mod A keyboard modifier combination to check.
  * \returns Whether the current modifier combination is pressed.
  */
 bool InputModPressed(const Input *input, const u16 mod);
 
 /**
  * \brief Checks whether a keyboard button is held down.
- * \params [in] input A pointer to an input handler.
- * \params [in] key A keyboard key code to check.
+ * \param [in] input A pointer to an input handler.
+ * \param [in] key A keyboard key code to check.
  * \returns Whether the current key is held down.
  */
 bool InputKeyDown(const Input *input, const u32 key);
 
 /**
  * \brief Checks whether a keyboard modifier button is held down.
- * \params [in] input A pointer to an input handler.
- * \params [in] mod A keyboard modifier combination to check.
+ * \param [in] input A pointer to an input handler.
+ * \param [in] mod A keyboard modifier combination to check.
  * \returns Whether the current modifier combination is held down.
  */
 bool InputModDown(const Input *input, const u16 mod);
 
 /**
  * \brief Checks whether a keyboard button is released.
- * \params [in] input A pointer to an input handler.
- * \params [in] key A keyboard key code to check.
+ * \param [in] input A pointer to an input handler.
+ * \param [in] key A keyboard key code to check.
  * \returns Whether the current key is released.
  */
 bool InputKeyReleased(const Input *input, const u32 key);
 
 /**
  * \brief Checks whether a keyboard modifier button is released.
- * \params [in] input A pointer to an input handler.
- * \params [in] mod A keyboard modifier combination to check.
+ * \param [in] input A pointer to an input handler.
+ * \param [in] mod A keyboard modifier combination to check.
  * \returns Whether the current modifier combination is released.
  */
 bool InputModReleased(const Input *input, const u16 mod);
@@ -118,24 +118,24 @@ bool InputModReleased(const Input *input, const u16 mod);
  * -------------------------------------------------------------------------- */
 /**
  * \brief Checks whether a mouse button is pressed.
- * \params [in] input A pointer to an input handler.
- * \params [in] button A mouse button code to check.
+ * \param [in] input A pointer to an input handler.
+ * \param [in] button A mouse button code to check.
  * \returns Whether the current mouse button is pressed.
  */
 bool InputMousePressed(const Input *input, const u32 button);
 
 /**
  * \brief Checks whether a mouse button is held down.
- * \params [in] input A pointer to an input handler.
- * \params [in] button A mouse button code to check.
+ * \param [in] input A pointer to an input handler.
+ * \param [in] button A mouse button code to check.
  * \returns Whether the current mouse button is held down.
  */
 bool InputMouseDown(const Input *input, const u32 button);
 
 /**
  * \brief Checks whether a mouse button is released.
- * \params [in] input A pointer to an input handler.
- * \params [in] button A mouse button code to check.
+ * \param [in] input A pointer to an input handler.
+ * \param [in] button A mouse button code to check.
  * \returns Whether the current mouse button is released.
  */
 bool InputMouseReleased(const Input *input, const u32 button);
@@ -154,14 +154,14 @@ u32 InputMouseY(void);
 
 /**
  * \brief Snaps the mouse x-position to a given division.
- * \params [in] snap The value to snap to.
+ * \param [in] snap The value to snap to.
  * \returns The snapped x-position of the mouse in pixels.
  */
 u32 InputMouseSnapX(const u32 snap);
 
 /**
  * \brief Snaps the mouse y-position to a given division.
- * \params [in] snap The value to snap to.
+ * \param [in] snap The value to snap to.
  * \returns The snapped y-position of the mouse in pixels.
  */
 u32 InputMouseSnapY(const u32 snap);
