@@ -1,0 +1,3 @@
+# Enforce all headers and source files are labelled as C.
+*.h linguist-language=C
+*.c linguist-language=C
