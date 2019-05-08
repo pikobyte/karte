@@ -40,20 +40,23 @@ void TextureFree(Texture *tex) { Free(tex); }
  * surface is freed and alpha blending is enable for the texture. Finally, the
  * texture source rectangles are created for quick access later.
  */
-void TextureLoad(Texture *tex, const Window *wind, const char *path) {
+bool TextureLoad(Texture *tex, const Window *wind, const char *path) {
     if (!FileExists(path)) {
-        Log(FATAL, "No such texture %s", path);
+        Log(ERROR, "No such texture %s", path);
+        return false;
     }
 
     SDL_Surface *surf = IMG_Load(path);
     if (surf == NULL) {
-        Log(FATAL, "Could not load SDL_Surface for texture %s", path);
+        Log(ERROR, "Could not load SDL_Surface for texture %s", path);
+        return false;
     }
     SDL_SetColorKey(surf, 1, SDL_MapRGB(surf->format, 255, 0, 255));
 
     tex->sdl_texture = SDL_CreateTextureFromSurface(wind->sdl_renderer, surf);
     if (tex->sdl_texture == NULL) {
-        Log(FATAL, "Could not load SDL_Texture for texture %s", path);
+        Log(ERROR, "Could not load SDL_Texture for texture %s", path);
+        return false;
     }
 
     tex->width = surf->w;
@@ -62,7 +65,8 @@ void TextureLoad(Texture *tex, const Window *wind, const char *path) {
     tex->glyph_h = tex->height / 16;
 
     if (tex->width % 16 != 0 || tex->height % 16 != 0) {
-        Log(FATAL, "Incorrect texture dimensions for %s", path);
+        Log(ERROR, "Incorrect texture dimensions for %s", path);
+        return false;
     }
 
     SDL_FreeSurface(surf);
@@ -73,4 +77,6 @@ void TextureLoad(Texture *tex, const Window *wind, const char *path) {
             (SDL_Rect){(i % 16) * tex->glyph_w, (i / 16) * tex->glyph_h,
                        tex->glyph_w, tex->glyph_h};
     }
+
+    return true;
 }

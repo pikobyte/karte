@@ -18,6 +18,7 @@
 #include "definitions.h"
 #include "editor.h"
 #include "input.h"
+#include "resourcer.h"
 #include "timer.h"
 #include "utils.h"
 #include "window.h"
@@ -41,6 +42,7 @@ typedef struct Application_s {
     Input *input;       /**< Input handler to poll event. */
     Timer *fps_timer;   /**< Timer to calculate frames-per-second. */
     Timer *limit_timer; /**< Timer to limit the frames-per-second. */
+    Resourcer *res;     /**< Main program resource handler. */
     Window *wind;       /**< Main rendering window. */
 } Application;
 
@@ -98,7 +100,6 @@ void ApplicationPreFrame(Application *app);
  * \returns Void.
  */
 void ApplicationPostFrame(Application *app);
-
 
 /**
  * \brief Retrieves the directory that the project lives in.

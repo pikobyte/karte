@@ -18,6 +18,7 @@
 #include "definitions.h"
 #include "glyph.h"
 #include "input.h"
+#include "resourcer.h"
 #include "texture.h"
 #include "utils.h"
 #include "window.h"
@@ -41,7 +42,7 @@ typedef struct Editor_s {
  * created.
  * \returns Pointer to an application object.
  */
-Editor *EditorCreate(const Window *wind);
+Editor *EditorCreate(const Window *wind, Resourcer *res);
 
 /**
  * \brief Frees the editor memory.

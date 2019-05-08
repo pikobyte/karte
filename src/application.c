@@ -40,8 +40,9 @@ Application *ApplicationCreate(void) {
     app->input = InputCreate();
     app->fps_timer = TimerCreate();
     app->limit_timer = TimerCreate();
+    app->res = ResourcerCreate();
     app->wind = WindowCreate();
-    app->editor = EditorCreate(app->wind);
+    app->editor = EditorCreate(app->wind, app->res);
     app->running = true;
 
     return app;
@@ -59,10 +60,11 @@ void ApplicationFree(Application *app) {
     SDL_Quit();
 
     EditorFree(app->editor);
-    InputFree(app->input);
-    TimerFree(app->fps_timer);
-    TimerFree(app->limit_timer);
     WindowFree(app->wind);
+    ResourcerFree(app->res);
+    TimerFree(app->limit_timer);
+    TimerFree(app->fps_timer);
+    InputFree(app->input);
     Free(app);
 }
 
@@ -146,7 +148,7 @@ void ApplicationPostFrame(Application *app) {
 /**
  * \desc Concatenates the home directory (Linux) with the absolute path of the
  * project directory.
- * FIXME: The absolute directory (CWD) need to adapt to user/install path in
+ * FIXME: The absolute directory (CWD) needs to adapt to user/install path in
  * release mode.
  */
 char *ApplicationDir(void) {

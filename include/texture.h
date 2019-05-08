@@ -55,8 +55,8 @@ void TextureFree(Texture *tex);
  * \param [in, out] tex The texture object the image should be loaded into.
  * \param [in] wind The window object holding the SDL_Renderer.
  * \param [in] path The path to the image file.
- * \returns Void.
+ * \returns Success of texture creation.
  */
-void TextureLoad(Texture *tex, const Window *wind, const char *path);
+bool TextureLoad(Texture *tex, const Window *wind, const char *path);
 
 #endif

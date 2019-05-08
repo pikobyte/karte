@@ -18,13 +18,13 @@
  * \desc Allocates the memory for the editor via the creation of the texture and
  * the renderable glyphs.
  */
-Editor *EditorCreate(const Window *wind) {
+Editor *EditorCreate(const Window *wind, Resourcer *res) {
     Editor *editor = Allocate(sizeof(Editor));
     Log(LOG, "Created editor at %p.", editor);
 
-    editor->tex = TextureCreate();
-    TextureLoad(editor->tex, wind,
-                strcat(g_dir, "/res/textures/curses_16x16.png"));
+    ResourcerLoadTexture(res, wind,
+                         strcat(g_dir, "/res/textures/curses_16x16.png"));
+    editor->tex = res->textures[0];
 
     for (u32 i = 0; i < 256; ++i) {
         Glyph *glyph = GlyphCreate();
@@ -50,7 +50,6 @@ void EditorFree(Editor *editor) {
         GlyphFree(editor->glyphs[i]);
     }
     ArrayFree(editor->glyphs);
-    TextureFree(editor->tex);
     Free(editor);
 }
 
