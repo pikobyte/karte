@@ -10,6 +10,10 @@
  *
  * \author Anthony Mercer
  *
+ * \mainpage
+ * Karte is a simple tool which can be used to create ASCII art and tilemaps
+ * through the inclusion of tile properties. It is designed to be a Linux
+ * alternative to REXPaint.
  */
 
 #include "application.h"
