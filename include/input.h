@@ -20,7 +20,7 @@
 #include "utils.h"
 
 #define NUM_KEYS 256
-#define NUM_MOUSE_BUTTONS 16
+#define NUM_BUTTONS 16
 
 /**
  * \brief Holds keyboard and mouse data.
@@ -31,15 +31,15 @@
  * time. The mouse wheel movement is also stored.
  */
 typedef struct Input_s {
-    bool curr_key_map[NUM_KEYS];
-    bool prev_key_map[NUM_KEYS];
-    u16 curr_mod_map;
-    u16 prev_mod_map;
-    bool curr_mouse_map[NUM_MOUSE_BUTTONS];
-    bool prev_mouse_map[NUM_MOUSE_BUTTONS];
-    f64 mouse_dx;
-    f64 mouse_dy;
-    i8 mouse_wheel;
+    bool curr_key_map[NUM_KEYS];      /**< Currently pressed keyboard. */
+    bool prev_key_map[NUM_KEYS];      /**< Previously pressed keyboard. */
+    u16 curr_mod_map;                 /**< Currently pressed modifiers. */
+    u16 prev_mod_map;                 /**< Previously pressed modifiers. */
+    bool curr_mouse_map[NUM_BUTTONS]; /**< Currently pressed mouse. */
+    bool prev_mouse_map[NUM_BUTTONS]; /**< Previously pressed mouse. */
+    f64 mouse_dx;                     /**< Change in mouse x-position. */
+    f64 mouse_dy;                     /**< Change in mouse y-position. */
+    i8 mouse_wheel;                   /**< Mouse wheel change. */
 } Input;
 
 /**

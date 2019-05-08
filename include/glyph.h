@@ -33,11 +33,11 @@
  * custom background and foreground colours.
  */
 typedef struct Glyph_s {
-    i32 index;
-    f64 x;
-    f64 y;
-    SDL_Color bg;
-    SDL_Color fg;
+    i32 index;    /**< ASCII index. */
+    f64 x;        /**< x-position to be rendered in pixels. */
+    f64 y;        /**< y-position to be rendered in pixels. */
+    SDL_Color bg; /**< Background colour of the glyph. */
+    SDL_Color fg; /**< Foreground colour of the glyph. */
 } Glyph;
 
 /**

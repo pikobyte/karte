@@ -29,12 +29,12 @@
  * source rectangles are stored for quick look-up when required.
  */
 typedef struct Texture_s {
-    SDL_Texture *sdl_texture;
-    u32 width;
-    u32 height;
-    u32 glyph_w;
-    u32 glyph_h;
-    SDL_Rect rects[256];
+    SDL_Texture *sdl_texture; /**< The SDL texture handle. */
+    u32 width;                /**< Width of the texture in pixels. */
+    u32 height;               /**< Height of the texture in pixels. */
+    u32 glyph_w;              /**< Glyph width (width / 16). */
+    u32 glyph_h;              /**< Glyph height (height / 16). */
+    SDL_Rect rects[256];      /**< Cached source rectangles for glyphs. */
 } Texture;
 
 /**
@@ -45,7 +45,7 @@ Texture *TextureCreate(void);
 
 /**
  * \brief Frees the texture memory.
- * \param [in, out] The texture to be freed.
+ * \param [in, out] tex The texture to be freed.
  * \returns Void.
  */
 void TextureFree(Texture *tex);

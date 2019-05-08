@@ -40,7 +40,7 @@ bool InputUpdate(Input *input) {
         input->prev_key_map[i] = input->curr_key_map[i];
     }
 
-    for (u32 i = 0; i < NUM_MOUSE_BUTTONS; ++i) {
+    for (u32 i = 0; i < NUM_BUTTONS; ++i) {
         input->prev_mouse_map[i] = input->curr_mouse_map[i];
     }
 
@@ -68,12 +68,12 @@ bool InputUpdate(Input *input) {
             input->curr_key_map[e.key.keysym.sym] = false;
             break;
         case SDL_MOUSEBUTTONDOWN:
-            if (e.button.button > NUM_MOUSE_BUTTONS)
+            if (e.button.button > NUM_BUTTONS)
                 break;
             input->curr_mouse_map[e.button.button] = true;
             break;
         case SDL_MOUSEBUTTONUP:
-            if (e.button.button > NUM_MOUSE_BUTTONS)
+            if (e.button.button > NUM_BUTTONS)
                 break;
             input->curr_mouse_map[e.button.button] = false;
             break;
@@ -167,7 +167,7 @@ bool InputModReleased(const Input *input, const u16 mod) {
  * and wasn't in the previous frame.
  */
 bool InputMousePressed(const Input *input, const u32 button) {
-    if (button > NUM_MOUSE_BUTTONS) {
+    if (button > NUM_BUTTONS) {
         return false;
     }
     return (input->curr_mouse_map[button] && !input->prev_mouse_map[button]);
@@ -179,7 +179,7 @@ bool InputMousePressed(const Input *input, const u32 button) {
  * and was also in the previous frame.
  */
 bool InputMouseDown(const Input *input, const u32 button) {
-    if (button > NUM_MOUSE_BUTTONS) {
+    if (button > NUM_BUTTONS) {
         return false;
     }
     return (input->curr_mouse_map[button] && input->prev_mouse_map[button]);
@@ -191,7 +191,7 @@ bool InputMouseDown(const Input *input, const u32 button) {
  * down but was in the previous frame.
  */
 bool InputMouseReleased(const Input *input, const u32 button) {
-    if (button > NUM_MOUSE_BUTTONS) {
+    if (button > NUM_BUTTONS) {
         return false;
     }
     return (!input->curr_mouse_map[button] && input->prev_mouse_map[button]);
