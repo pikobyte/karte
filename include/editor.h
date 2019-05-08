@@ -30,9 +30,9 @@
  * TODO: Details about UI, rendering, I/O when implemented.
  */
 typedef struct Editor_s {
-    bool visible;       /**< Visible components flag. */
-    Glyph *glyphs[256]; /**< Set of renderable glyphs. */
-    Texture *tex;       /**< Texture for the glyphs. */
+    bool visible;   /**< Visible components flag. */
+    Glyph **glyphs; /**< Set of renderable glyphs. */
+    Texture *tex;   /**< Texture for the glyphs. */
 } Editor;
 
 /**

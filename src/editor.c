@@ -26,12 +26,13 @@ Editor *EditorCreate(const Window *wind) {
     TextureLoad(editor->tex, wind, "res/textures/curses_16x16.png");
 
     for (u32 i = 0; i < 256; ++i) {
-        editor->glyphs[i] = GlyphCreate();
-        editor->glyphs[i]->index = i;
-        editor->glyphs[i]->x = (i % 16) * editor->tex->glyph_w;
-        editor->glyphs[i]->y = (i / 16) * editor->tex->glyph_h;
-        editor->glyphs[i]->bg = (SDL_Color){0, 0, 0, 255};
-        editor->glyphs[i]->fg = (SDL_Color){255, 255, 255, 255};
+        Glyph *glyph = GlyphCreate();
+        glyph->index = i;
+        glyph->x = (i % 16) * editor->tex->glyph_w;
+        glyph->y = (i / 16) * editor->tex->glyph_h;
+        glyph->bg = (SDL_Color){0, 0, 0, 255};
+        glyph->fg = (SDL_Color){255, 255, 255, 255};
+        ArrayPush(editor->glyphs, glyph);
     }
 
     editor->visible = true;
@@ -44,9 +45,10 @@ Editor *EditorCreate(const Window *wind) {
  * memory.
  */
 void EditorFree(Editor *editor) {
-    for (u32 i = 0; i < 256; ++i) {
+    for (u32 i = 0; i < (u32)ArrayCount(editor->glyphs); ++i) {
         GlyphFree(editor->glyphs[i]);
     }
+    ArrayFree(editor->glyphs);
     TextureFree(editor->tex);
     Free(editor);
 }
@@ -73,7 +75,7 @@ void EditorUpdate(Editor *editor) { UNUSED(editor); }
  */
 void EditorRender(const Editor *editor, const Window *wind) {
     if (editor->visible) {
-        for (u32 i = 0; i < 256; ++i) {
+        for (u32 i = 0; i < (u32)ArrayCount(editor->glyphs); ++i) {
             GlyphRender(editor->glyphs[i], wind, editor->tex);
         }
     }
