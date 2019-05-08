@@ -25,7 +25,8 @@
  *
  * The Texture object acts as a wrapper around a SDL_Texture, but with extra
  * data stored. These data contain the texture dimensions and the dimensions of
- * each glyph, assuming that each texture is a set of 16x16 glyphs.
+ * each glyph, assuming that each texture is a set of 16x16 glyphs. A set of 256
+ * source rectangles are stored for quick look-up when required.
  */
 typedef struct Texture_s {
     SDL_Texture *sdl_texture;
@@ -33,6 +34,7 @@ typedef struct Texture_s {
     u32 height;
     u32 glyph_w;
     u32 glyph_h;
+    SDL_Rect rects[256];
 } Texture;
 
 /**
