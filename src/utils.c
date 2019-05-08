@@ -96,11 +96,13 @@ void *Allocate(const size_t size) {
 /**
  * \desc Checks to see if the memory is first valid, and if it is, then it is
  * freed and the number of global memory allocations is decreased. Otherwise,
- * the program exits with an error code.
+ * the program produces an error. The program need not exit as it can continue
+ * normally.
  */
 void Free(void *mem) {
     if (mem == NULL) {
-        Log(FATAL, "Could not free memory at %p!", mem);
+        Log(ERROR, "Could not free memory at %p!", mem);
+        return;
     }
 
     free(mem);
