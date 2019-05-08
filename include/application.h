@@ -16,6 +16,7 @@
 #define APPLICATION_H
 
 #include "definitions.h"
+#include "editor.h"
 #include "input.h"
 #include "timer.h"
 #include "utils.h"
@@ -36,6 +37,7 @@ typedef struct Application_s {
     f64 dt;             /**< Time between frames. */
     f64 exec_time;      /**< Total execution time. */
     bool running;       /**< Running flag. */
+    Editor *editor;     /**< Main editor object. */
     Input *input;       /**< Input handler to poll event. */
     Timer *fps_timer;   /**< Timer to calculate frames-per-second. */
     Timer *limit_timer; /**< Timer to limit the frames-per-second. */
@@ -43,7 +45,7 @@ typedef struct Application_s {
 } Application;
 
 /**
- * \brief Creates the application object and initialises all systems required,
+ * \brief Creates the application object and initialises all systems required.
  * \returns Pointer to an application object.
  */
 Application *ApplicationCreate(void);

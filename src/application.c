@@ -39,6 +39,7 @@ Application *ApplicationCreate(void) {
     app->fps_timer = TimerCreate();
     app->limit_timer = TimerCreate();
     app->wind = WindowCreate();
+    app->editor = EditorCreate(app->wind);
     app->running = true;
 
     return app;
@@ -55,6 +56,7 @@ void ApplicationFree(Application *app) {
     SDL_VideoQuit();
     SDL_Quit();
 
+    EditorFree(app->editor);
     InputFree(app->input);
     TimerFree(app->fps_timer);
     TimerFree(app->limit_timer);
@@ -90,12 +92,14 @@ void ApplicationHandleInput(Application *app) {
     if (!InputUpdate(app->input) || InputKeyPressed(app->input, SDLK_ESCAPE)) {
         app->running = false;
     }
+
+    EditorHandleInput(app->editor, app->input);
 }
 
 /**
  * \desc Updates the application state i.e. where all logic is performed.
  */
-void ApplicationUpdate(Application *app) { UNUSED(app); }
+void ApplicationUpdate(Application *app) { EditorUpdate(app->editor); }
 
 /**
  * \desc Renders the application by clearing the window, drawing to it and then
@@ -103,7 +107,7 @@ void ApplicationUpdate(Application *app) { UNUSED(app); }
  */
 void ApplicationRender(const Application *app) {
     WindowClear(app->wind);
-    // TODO: Render graphics here.
+    EditorRender(app->editor, app->wind);
     WindowFlip(app->wind);
 }
 

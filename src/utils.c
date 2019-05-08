@@ -106,6 +106,7 @@ void Free(void *mem) {
     }
 
     free(mem);
+    mem = NULL;
     g_mem_allocs--;
 }
 
