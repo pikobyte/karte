@@ -1,6 +1,9 @@
 # Visual studio code
 .vscode/*
 
+# Nvidia nonsense.
+.nv/*
+
 # Shell scripts
 *.sh
 

@@ -23,7 +23,8 @@ Editor *EditorCreate(const Window *wind) {
     Log(LOG, "Created editor at %p.", editor);
 
     editor->tex = TextureCreate();
-    TextureLoad(editor->tex, wind, "res/textures/curses_16x16.png");
+    TextureLoad(editor->tex, wind,
+                strcat(g_dir, "/res/textures/curses_16x16.png"));
 
     for (u32 i = 0; i < 256; ++i) {
         Glyph *glyph = GlyphCreate();

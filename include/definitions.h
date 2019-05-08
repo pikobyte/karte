@@ -47,6 +47,22 @@ typedef double f64;
  */
 #define UNUSED(x) (void)(x)
 
+/**
+ * \desc Current working directory for the project. Requires changing for
+ * release.
+ */
+static const char CWD[] = "/Documents/pikobyte/karte/";
+
+/**
+ * \desc The number of memory allocations that have been made during program
+ * executions. Provided fatal issues do not occur, the number of allocations are
+ * reported at the end of program execution for debugging purposes.
+ */
 u32 g_mem_allocs;
+
+/**
+ * \desc Absolute path to the application directory.
+ */
+char g_dir[1024];
 
 #endif
