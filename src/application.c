@@ -93,7 +93,8 @@ void ApplicationRun(Application *app) {
  * input. This is where user input can result in the application closing.
  */
 void ApplicationHandleInput(Application *app) {
-    if (!InputUpdate(app->input) || InputKeyPressed(app->input, SDLK_ESCAPE)) {
+    InputUpdate(app->input);
+    if (app->input->quit || InputKeyPressed(app->input, SDLK_ESCAPE)) {
         app->running = false;
     }
 

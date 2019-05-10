@@ -40,6 +40,7 @@ typedef struct Input_s {
     f64 mouse_dx;                     /**< Change in mouse x-position. */
     f64 mouse_dy;                     /**< Change in mouse y-position. */
     i8 mouse_wheel;                   /**< Mouse wheel change. */
+    bool quit;                        /**< Exit program flag. */
 } Input;
 
 /**
@@ -58,9 +59,9 @@ void InputFree(Input *input);
 /**
  * \brief Polls for events.
  * \param [in, out] The input object to be polled.
- * \returns Exit program condition.
+ * \returns Void.
  */
-bool InputUpdate(Input *input);
+void InputUpdate(Input *input);
 
 /* -----------------------------------------------------------------------------
  * KEYBOARD
@@ -139,6 +140,12 @@ bool InputMouseDown(const Input *input, const u32 button);
  * \returns Whether the current mouse button is released.
  */
 bool InputMouseReleased(const Input *input, const u32 button);
+
+/**
+ * \brief Gets the position of the mouse in pixels.
+ * \returns The position stored as an SDL_Point.
+ */
+SDL_Point InputMousePos(void);
 
 /**
  * \brief Gets the x-position of the mouse in pixels.

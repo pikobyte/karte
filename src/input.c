@@ -21,6 +21,7 @@
 Input *InputCreate(void) {
     Input *input = Allocate(sizeof(Input));
     Log(LOG, "Created input at %p.", input);
+    input->quit = false;
     return input;
 }
 
@@ -35,7 +36,7 @@ void InputFree(Input *input) { Free(input); }
  * keys) and the mouse wheel is reset. The new key/button inputs are set based
  * on either down presses or up releases.
  */
-bool InputUpdate(Input *input) {
+void InputUpdate(Input *input) {
     for (u32 i = 0; i < NUM_KEYS; ++i) {
         input->prev_key_map[i] = input->curr_key_map[i];
     }
@@ -55,7 +56,7 @@ bool InputUpdate(Input *input) {
     while (SDL_PollEvent(&e)) {
         switch (e.type) {
         case SDL_QUIT:
-            return false;
+            input->quit = true;
             break;
         case SDL_KEYDOWN:
             if (e.key.keysym.sym > NUM_KEYS)
@@ -88,8 +89,6 @@ bool InputUpdate(Input *input) {
             break;
         }
     }
-
-    return true;
 }
 
 /* -----------------------------------------------------------------------------
@@ -195,6 +194,17 @@ bool InputMouseReleased(const Input *input, const u32 button) {
         return false;
     }
     return (!input->curr_mouse_map[button] && input->prev_mouse_map[button]);
+}
+
+/**
+ * \desc Returns the position of the mouse in pixels, where (0, 0) corresponds
+ * to the top left of the screen, and stores the position as an SDL_Point.
+ */
+SDL_Point InputMousePos(void) {
+    SDL_Point point = {0};
+    point.x = InputMouseX();
+    point.y = InputMouseY();
+    return point;
 }
 
 /**
