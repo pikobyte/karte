@@ -55,6 +55,7 @@ typedef struct Panel_s {
 
 /**
  * \brief Create a label at a given position with a given colour.
+ * \params [in] id Identifier for the panel.
  * \params [in] sx The width of a glyph.
  * \params [in] sy The height of a glyph.
  * \params [in] rect The dimensions of the panel in glyph units.

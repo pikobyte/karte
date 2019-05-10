@@ -37,6 +37,7 @@ typedef struct Label_s {
 
 /**
  * \brief Create a label at a given position with a given colour.
+ * \params [in] id Identifier for the label.
  * \params [in] sx The width of a glyph.
  * \params [in] sy The height of a glyph.
  * \params [in] x The x-position of the label in glyph units.
