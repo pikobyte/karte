@@ -28,7 +28,7 @@ Resourcer *ResourcerCreate(void) {
  * memory outside of the resourcer!
  */
 void ResourcerFree(Resourcer *res) {
-    for (u32 i = 0; i < (u32)ArrayCount(res->textures); ++i) {
+    for (i32 i = 0; i < ArrayCount(res->textures); ++i) {
         TextureFree(res->textures[i]);
     }
     Free(res);

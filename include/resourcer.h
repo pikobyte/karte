@@ -49,6 +49,7 @@ void ResourcerFree(Resourcer *res);
  * \param [out] res The resourcer to load the texture into.
  * \param [in] wind The window with SDL surface to load to.
  * \param [in] path The filepath of the texture.
+ * \returns The loaded texture.
  */
 Texture *ResourcerLoadTexture(Resourcer *res, const Window *wind,
                               const char *path);

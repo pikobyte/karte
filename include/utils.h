@@ -92,10 +92,10 @@
 
 /**
  * \brief Grows an array by increasing its size.
- * \params [in] arr Array to increase the size of.
- * \params [in] n The number of elements to grow the array by.
- * \params [in] size The size of object which populates the array.
- * \return The reallocated array, with a pointer to the data i.e. after the
+ * \param [in] arr Array to increase the size of.
+ * \param [in] n The number of elements to grow the array by.
+ * \param [in] size The size of object which populates the array.
+ * \returns The reallocated array, with a pointer to the data i.e. after the
  * header.
  */
 void *ArrayGrowBy(const void *arr, const i32 n, const i32 size);

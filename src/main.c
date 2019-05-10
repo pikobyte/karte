@@ -21,6 +21,8 @@
 #include "utils.h"
 
 int main(void) {
+    g_mem_allocs = 0;
+
     Application *app = ApplicationCreate();
 
     ApplicationRun(app);
