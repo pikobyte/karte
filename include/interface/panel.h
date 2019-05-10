@@ -15,6 +15,7 @@
 #ifndef PANEL_H
 #define PANEL_H
 
+#include "color.h"
 #include "definitions.h"
 #include "glyph.h"
 #include "texture.h"

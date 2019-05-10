@@ -53,6 +53,7 @@ Panel *PanelCreate(const char *id, const u32 sx, const u32 sy,
             glyph->x = (rect.x + i) * sx;
             glyph->y = (rect.y + j) * sy;
             glyph->fg = col;
+            glyph->bg = BLANK;
             glyph->index =
                 border == SINGLE ? SINGLE_BORDER[index] : DOUBLE_BORDER[index];
 
