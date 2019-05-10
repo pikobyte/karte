@@ -109,6 +109,21 @@ void ButtonUpdate(Button *button) {
 }
 
 /**
+ * \desc Renders a button to a window based on a given texture by iterating
+ * through its glyphs. This is done by first rendering the border then the text.
+ */
+void ButtonRender(const Button *button, const Window *wind,
+                  const Texture *tex) {
+    for (i32 i = 0; i < ArrayCount(button->panel->glyphs); ++i) {
+        GlyphRender(button->panel->glyphs[i], wind, tex);
+    }
+
+    for (i32 i = 0; i < ArrayCount(button->label->glyphs); ++i) {
+        GlyphRender(button->label->glyphs[i], wind, tex);
+    }
+}
+
+/**
  * \desc Performs a check to see if a button is pressed. This is done using the
  * pressed flag as well as a chosen button ID. This allows different buttons to
  * be checked and different behaviour to be issued.
@@ -122,11 +137,11 @@ bool ButtonIsPressed(const Button *button, const char *id) {
  * including the label and border (if it exists).
  */
 void ButtonSetColor(Button *button, const SDL_Color col) {
-    for (u32 i = 0; i < (u32)ArrayCount(button->label->glyphs); ++i) {
+    for (i32 i = 0; i < ArrayCount(button->label->glyphs); ++i) {
         button->label->glyphs[i]->bg = col;
     }
 
-    for (u32 i = 0; i < (u32)ArrayCount(button->panel->glyphs); ++i) {
+    for (i32 i = 0; i < ArrayCount(button->panel->glyphs); ++i) {
         button->panel->glyphs[i]->bg = col;
     }
 }

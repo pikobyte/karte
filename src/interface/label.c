@@ -53,3 +53,13 @@ void LabelFree(Label *label) {
     }
     Free(label);
 }
+
+/**
+ * \desc Renders a label to a window based on a given texture by iterating
+ * through its glyphs.
+ */
+void LabelRender(const Label *label, const Window *wind, const Texture *tex) {
+    for (i32 i = 0; i < ArrayCount(label->glyphs); ++i) {
+        GlyphRender(label->glyphs[i], wind, tex);
+    }
+}

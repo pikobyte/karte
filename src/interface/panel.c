@@ -68,8 +68,18 @@ Panel *PanelCreate(const char *id, const u32 sx, const u32 sy,
  * the panel pointer itself.
  */
 void PanelFree(Panel *panel) {
-    for (u32 i = 0; i < (u32)ArrayCount(panel->glyphs); ++i) {
+    for (i32 i = 0; i < ArrayCount(panel->glyphs); ++i) {
         GlyphFree(panel->glyphs[i]);
     }
     Free(panel);
+}
+
+/**
+ * \desc Renders a panel to a window based on a given texture by iterating
+ * through its glyphs.
+ */
+void PanelRender(const Panel *panel, const Window *wind, const Texture *tex) {
+    for (i32 i = 0; i < ArrayCount(panel->glyphs); ++i) {
+        GlyphRender(panel->glyphs[i], wind, tex);
+    }
 }

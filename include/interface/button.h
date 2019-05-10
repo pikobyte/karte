@@ -20,7 +20,9 @@
 #include "input.h"
 #include "interface/label.h"
 #include "interface/panel.h"
+#include "texture.h"
 #include "utils.h"
+#include "window.h"
 
 /**
  * \brief Buttons can be pressed by the user to activate some functionality.
@@ -42,15 +44,15 @@ typedef struct Button_s {
 
 /**
  * \brief Create a button at a given position with a given colour.
- * \params [in] id Identifier for the button.
- * \params [in] sx The width of a glyph.
- * \params [in] sy The height of a glyph.
- * \params [in] x The x-position of the label in glyph units.
- * \params [in] y The y-position of the label in glyph units.
- * \params [in] text The button text to display.
- * \params [in] border The border type.
- * \params [in] text_col Colour of the text.
- * \params [in] bord_col Colour of the border.
+ * \param [in] id Identifier for the button.
+ * \param [in] sx The width of a glyph.
+ * \param [in] sy The height of a glyph.
+ * \param [in] x The x-position of the label in glyph units.
+ * \param [in] y The y-position of the label in glyph units.
+ * \param [in] text The button text to display.
+ * \param [in] border The border type.
+ * \param [in] text_col Colour of the text.
+ * \param [in] bord_col Colour of the border.
  * \returns Pointer to a panel object.
  */
 Button *ButtonCreate(const char *id, const u32 sx, const u32 sy, const i32 x,
@@ -78,6 +80,15 @@ void ButtonHandleInput(Button *button, const Input *input);
  * \returns Void.
  */
 void ButtonUpdate(Button *button);
+
+/**
+ * \brief Renders a button.
+ * \param [in] button Button to render.
+ * \param [in] wind Window to render to.
+ * \param [in] tex Texture to render from.
+ * \returns Void.
+ */
+void ButtonRender(const Button *panel, const Window *wind, const Texture *tex);
 
 /**
  * \brief Checks whether a button and chosen ID is pressed.

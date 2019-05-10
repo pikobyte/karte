@@ -16,7 +16,9 @@
 
 #include "definitions.h"
 #include "glyph.h"
+#include "texture.h"
 #include "utils.h"
+#include "window.h"
 
 /**
  * \brief A simple text label formed from ASCII glyphs.
@@ -37,14 +39,14 @@ typedef struct Label_s {
 
 /**
  * \brief Create a label at a given position with a given colour.
- * \params [in] id Identifier for the label.
- * \params [in] sx The width of a glyph.
- * \params [in] sy The height of a glyph.
- * \params [in] x The x-position of the label in glyph units.
- * \params [in] y The y-position of the label in glyph units.
- * \params [in] text The label text to display.
- * \params [in] fg Foreground colour of the text.
- * \params [in] bg Background colour of the text.
+ * \param [in] id Identifier for the label.
+ * \param [in] sx The width of a glyph.
+ * \param [in] sy The height of a glyph.
+ * \param [in] x The x-position of the label in glyph units.
+ * \param [in] y The y-position of the label in glyph units.
+ * \param [in] text The label text to display.
+ * \param [in] fg Foreground colour of the text.
+ * \param [in] bg Background colour of the text.
  * \returns Pointer to a label object.
  */
 Label *LabelCreate(const char *id, const u32 sx, const u32 sy, const i32 x,
@@ -57,5 +59,14 @@ Label *LabelCreate(const char *id, const u32 sx, const u32 sy, const i32 x,
  * \returns Void.
  */
 void LabelFree(Label *label);
+
+/**
+ * \brief Renders a label.
+ * \param [in] label Label to render.
+ * \param [in] wind Window to render to.
+ * \param [in] tex Texture to render from.
+ * \returns Void.
+ */
+void LabelRender(const Label *label, const Window *wind, const Texture *tex);
 
 #endif

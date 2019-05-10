@@ -17,7 +17,9 @@
 
 #include "definitions.h"
 #include "glyph.h"
+#include "texture.h"
 #include "utils.h"
+#include "window.h"
 
 /**
  * \desc Border types. None does what it says on the tin, and is used as a
@@ -55,12 +57,12 @@ typedef struct Panel_s {
 
 /**
  * \brief Create a label at a given position with a given colour.
- * \params [in] id Identifier for the panel.
- * \params [in] sx The width of a glyph.
- * \params [in] sy The height of a glyph.
- * \params [in] rect The dimensions of the panel in glyph units.
- * \params [in] border The border type.
- * \params [in] col Colour of the border.
+ * \param [in] id Identifier for the panel.
+ * \param [in] sx The width of a glyph.
+ * \param [in] sy The height of a glyph.
+ * \param [in] rect The dimensions of the panel in glyph units.
+ * \param [in] border The border type.
+ * \param [in] col Colour of the border.
  * \returns Pointer to a panel object.
  */
 Panel *PanelCreate(const char *id, const u32 sx, const u32 sy,
@@ -72,5 +74,14 @@ Panel *PanelCreate(const char *id, const u32 sx, const u32 sy,
  * \returns Void.
  */
 void PanelFree(Panel *panel);
+
+/**
+ * \brief Renders a panel.
+ * \param [in] panel Panel to render.
+ * \param [in] wind Window to render to.
+ * \param [in] tex Texture to render from.
+ * \returns Void.
+ */
+void PanelRender(const Panel *panel, const Window *wind, const Texture *tex);
 
 #endif
