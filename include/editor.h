@@ -18,6 +18,7 @@
 #include "definitions.h"
 #include "glyph.h"
 #include "input.h"
+#include "interface/interface.h"
 #include "resourcer.h"
 #include "texture.h"
 #include "utils.h"
@@ -27,18 +28,19 @@
  * \brief Stores data pertaining to the editor state.
  *
  * The editor is where most of the program input is processed and fed back to
- * the user.
- * TODO: Details about UI, rendering, I/O when implemented.
+ * the user. The editor contains a UI where the input from the user is taken and
+ * fed back appropriately.
  */
 typedef struct Editor_s {
-    bool visible;   /**< Visible components flag. */
-    Glyph **glyphs; /**< Set of renderable glyphs. */
-    Texture *tex;   /**< Texture for the glyphs. */
+    bool visible;    /**< Visible components flag. */
+    Interface *itfc; /**< The user interface. */
+    Glyph **glyphs;  /**< Set of renderable glyphs. */
+    Texture *tex;    /**< Texture for the glyphs. */
 } Editor;
 
 /**
  * \brief Creates the editor object and initialises textures and glyphs.
- * \params [in] wind A window holding an SDL renderer so that a texture can be
+ * \param [in] wind A window holding an SDL renderer so that a texture can be
  * created.
  * \returns Pointer to an application object.
  */
@@ -57,7 +59,7 @@ void EditorFree(Editor *editor);
  * \param [in] input The input handler to poll.
  * \returns Void.
  */
-void EditorHandleInput(Editor *editor, const Input *input);
+void EditorHandleInput(Editor *editor, Input *input);
 
 /**
  * \brief Updates the editor components.

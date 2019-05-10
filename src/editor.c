@@ -23,19 +23,10 @@ Editor *EditorCreate(const Window *wind, Resourcer *res) {
     Log(LOG, "Created editor at %p.", editor);
 
     ResourcerLoadTexture(res, wind,
-                         strcat(g_dir, "/res/textures/curses_16x16.png"));
+                         strcat(g_dir, "/res/textures/boxy_16x16.png"));
     editor->tex = res->textures[0];
 
-    for (u32 i = 0; i < 256; ++i) {
-        Glyph *glyph = GlyphCreate();
-        glyph->index = i;
-        glyph->x = (i % 16) * editor->tex->glyph_w;
-        glyph->y = (i / 16) * editor->tex->glyph_h;
-        glyph->bg = (SDL_Color){0, 0, 0, 255};
-        glyph->fg = (SDL_Color){255, 255, 255, 255};
-        ArrayPush(editor->glyphs, glyph);
-    }
-
+    editor->itfc = InterfaceCreate(editor->tex->glyph_w, editor->tex->glyph_h);
     editor->visible = true;
 
     return editor;
@@ -46,9 +37,7 @@ Editor *EditorCreate(const Window *wind, Resourcer *res) {
  * memory.
  */
 void EditorFree(Editor *editor) {
-    for (u32 i = 0; i < (u32)ArrayCount(editor->glyphs); ++i) {
-        GlyphFree(editor->glyphs[i]);
-    }
+    InterfaceFree(editor->itfc);
     ArrayFree(editor->glyphs);
     Free(editor);
 }
@@ -57,17 +46,19 @@ void EditorFree(Editor *editor) {
  * \desc Handles the input pertaining to the editor. This requires an input
  * object to poll for events.
  */
-void EditorHandleInput(Editor *editor, const Input *input) {
+void EditorHandleInput(Editor *editor, Input *input) {
     if (InputKeyPressed(input, SDLK_v)) {
         editor->visible ^= 1;
     }
+
+    InterfaceHandleInput(editor->itfc, input);
 }
 
 /**
  * \desc Updates of all of the pertinent editor components, such as tool
  * selection and visible glyphs.
  */
-void EditorUpdate(Editor *editor) { UNUSED(editor); }
+void EditorUpdate(Editor *editor) { InterfaceUpdate(editor->itfc); }
 
 /**
  * \desc Renders of all of the pertinent editor components provided the visible
@@ -75,8 +66,6 @@ void EditorUpdate(Editor *editor) { UNUSED(editor); }
  */
 void EditorRender(const Editor *editor, const Window *wind) {
     if (editor->visible) {
-        for (u32 i = 0; i < (u32)ArrayCount(editor->glyphs); ++i) {
-            GlyphRender(editor->glyphs[i], wind, editor->tex);
-        }
+        InterfaceRender(editor->itfc, wind, editor->tex);
     }
 }

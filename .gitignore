@@ -11,8 +11,7 @@
 bin/karte
 
 # Build files
-build/*.o
-build/*.d
+build/*
 
 # Documentation
 docs/html/*
