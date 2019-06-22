@@ -197,17 +197,6 @@ bool InputMouseReleased(const Input *input, const u32 button) {
 }
 
 /**
- * \desc Returns the position of the mouse in pixels, where (0, 0) corresponds
- * to the top left of the screen, and stores the position as an SDL_Point.
- */
-SDL_Point InputMousePos(void) {
-    SDL_Point point = {0};
-    point.x = InputMouseX();
-    point.y = InputMouseY();
-    return point;
-}
-
-/**
  * \desc Returns the x-position of the mouse in pixels, where (0, 0) corresponds
  * to the top left of the screen.
  */
@@ -228,6 +217,17 @@ u32 InputMouseY(void) {
 }
 
 /**
+ * \desc Returns the position of the mouse in pixels, where (0, 0) corresponds
+ * to the top left of the screen, and stores the position as an SDL_Point.
+ */
+SDL_Point InputMousePos(void) {
+    SDL_Point point = {0};
+    point.x = InputMouseX();
+    point.y = InputMouseY();
+    return point;
+}
+
+/**
  * \desc Snaps the x-position of the mouse to some division. This essentially
  * rounds the mouse x-position and returns this rounded value.
  */
@@ -245,4 +245,16 @@ u32 InputMouseSnapY(const u32 snap) {
     i32 x = 0, y = 0;
     SDL_GetMouseState(&x, &y);
     return (u32)((y / snap) * snap);
+}
+
+/**
+ * \desc Snaps the position of the mouse to some division. This essentially
+ * rounds the mouse position and returns this rounded position as an x-y pair
+ * stored in an SDL_Point.
+ */
+SDL_Point InputMouseSnap(const u32 snap_x, const u32 snap_y) {
+    SDL_Point point = {0};
+    point.x = InputMouseSnapX(snap_x);
+    point.y = InputMouseSnapY(snap_y);
+    return point;
 }

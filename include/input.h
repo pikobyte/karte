@@ -142,12 +142,6 @@ bool InputMouseDown(const Input *input, const u32 button);
 bool InputMouseReleased(const Input *input, const u32 button);
 
 /**
- * \brief Gets the position of the mouse in pixels.
- * \returns The position stored as an SDL_Point.
- */
-SDL_Point InputMousePos(void);
-
-/**
  * \brief Gets the x-position of the mouse in pixels.
  * \returns The x-position of the mouse in pixels.
  */
@@ -158,6 +152,12 @@ u32 InputMouseX(void);
  * \returns The y-position of the mouse in pixels.
  */
 u32 InputMouseY(void);
+
+/**
+ * \brief Gets the position of the mouse in pixels.
+ * \returns The position stored as an SDL_Point.
+ */
+SDL_Point InputMousePos(void);
 
 /**
  * \brief Snaps the mouse x-position to a given division.
@@ -172,5 +172,14 @@ u32 InputMouseSnapX(const u32 snap);
  * \returns The snapped y-position of the mouse in pixels.
  */
 u32 InputMouseSnapY(const u32 snap);
+
+/**
+ * \brief Snaps the mouse position to a given division.
+ * \param [in] snap_x The x-position value to snap to.
+ * \param [in] snap_y The x-position value to snap to.
+ * \returns An x-y pair stored as an SDL_Point storing the snapped position of
+ * the mouse in pixels.
+ */
+SDL_Point InputMouseSnap(const u32 snap_x, const u32 snap_y);
 
 #endif
