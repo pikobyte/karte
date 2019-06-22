@@ -5,7 +5,12 @@
 /**
  * \file button.h
  *
- * \brief A UI component which allows user input from the mouse.
+ * \brief A UI component which allows user input. The behaviour of a button
+ * press is described retroactively: only the press of a button is checked here.
+ * Buttons can be active or inactive, and in the former case, undergo the
+ * following behaviour: hovered, impressed and pressed. The latter two cases
+ * represent input presses and input releases respectively. Button presses are
+ * only registered when input is released whilst hovering over that button.
  *
  * \author Anthony Mercer
  *
@@ -33,13 +38,13 @@
  * press is based on its ID and its pressed state,
  */
 typedef struct Button_s {
-    char id[256];
-    SDL_Rect rect;
-    Label *label;
-    Panel *panel;
-    bool hovering;
-    bool impressed;
-    bool pressed;
+    char id[256];   /**< Identifier. */
+    Label *label;   /**< Text label. */
+    Panel *panel;   /**< Panel encompassing the button. */
+    bool active;    /**< Whether the button can be interacted with. */
+    bool hovering;  /**< Flag for when hovering over the button. */
+    bool impressed; /**< Flag for when input is held on a button. */
+    bool pressed;   /**< Flag for when input is release on a button. */
 } Button;
 
 /**
@@ -53,11 +58,13 @@ typedef struct Button_s {
  * \param [in] border The border type.
  * \param [in] text_col Colour of the text.
  * \param [in] bord_col Colour of the border.
+ * \param [in] active The default active state of the button.
  * \returns Pointer to a panel object.
  */
 Button *ButtonCreate(const char *id, const u32 sx, const u32 sy, const i32 x,
-                     const i32 y, char *text, const Border border,
-                     const SDL_Color text_col, const SDL_Color bord_col);
+                     const i32 y, const char *text, const Border border,
+                     const SDL_Color text_col, const SDL_Color bord_col,
+                     const bool active);
 
 /**
  * \brief Frees the button memory.
@@ -99,11 +106,27 @@ void ButtonRender(const Button *panel, const Window *wind, const Texture *tex);
 bool ButtonIsPressed(const Button *button, const char *id);
 
 /**
- * \brief Changes the colour of a button.
+ * \brief Changes the foreground colour of a button.
  * \param [in, out] button The button to change the colour of.
  * \param [in] col The colour to change to.
  * \returns Void.
  */
-void ButtonSetColor(Button *button, const SDL_Color col);
+void ButtonSetForeColor(Button *button, const SDL_Color col);
+
+/**
+ * \brief Changes the background colour of a button.
+ * \param [in, out] button The button to change the colour of.
+ * \param [in] col The colour to change to.
+ * \returns Void.
+ */
+void ButtonSetBackColor(Button *button, const SDL_Color col);
+
+/**
+ * \brief Changes the opacity of a button.
+ * \param [in, out] button The button to change the opacity of.
+ * \param [in] opacity The opacity to change to.
+ * \returns Void.
+ */
+void ButtonSetOpacity(Button *button, const u8 opacity);
 
 #endif

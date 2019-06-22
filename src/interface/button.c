@@ -5,7 +5,12 @@
 /**
  * \file button.c
  *
- * \brief A UI component which allows user input from the mouse.
+ * \brief A UI component which allows user input. The behaviour of a button
+ * press is described retroactively: only the press of a button is checked here.
+ * Buttons can be active or inactive, and in the former case, undergo the
+ * following behaviour: hovered, impressed and pressed. The latter two cases
+ * represent input presses and input releases respectively. Button presses are
+ * only registered when input is released whilst hovering over that button.
  *
  * \author Anthony Mercer
  *
@@ -24,18 +29,15 @@
  * button rectangle is converted to pixels based on glyph dimensions.
  */
 Button *ButtonCreate(const char *id, const u32 sx, const u32 sy, const i32 x,
-                     const i32 y, char *text, const Border border,
-                     const SDL_Color text_col, const SDL_Color bord_col) {
+                     const i32 y, const char *text, const Border border,
+                     const SDL_Color text_col, const SDL_Color bord_col,
+                     const bool active) {
     Button *button = Allocate(sizeof(Button));
     strcpy(button->id, id);
     const i32 len = strlen(text);
 
     const i32 label_x = border == NONE ? x : x + 1;
     const i32 label_y = border == NONE ? y : y + 1;
-    button->rect.x = x;
-    button->rect.y = y;
-    button->rect.w = border == NONE ? len : len + 2;
-    button->rect.h = border == NONE ? 1 : 3;
 
     char label_id[256];
     strcpy(label_id, button->id);
@@ -44,18 +46,22 @@ Button *ButtonCreate(const char *id, const u32 sx, const u32 sy, const i32 x,
         LabelCreate(label_id, sx, sy, label_x, label_y, text, text_col, BLACK);
     button->label = label;
 
+    SDL_Rect rect = {0};
+    rect.x = x;
+    rect.y = y;
+    rect.w = (border == NONE ? len : len + 2);
+    rect.h = (border == NONE ? 1 : 3);
+
     char panel_id[256];
     strcpy(panel_id, button->id);
     strcat(panel_id, "_panel");
-    Panel *panel =
-        PanelCreate(panel_id, sx, sy, button->rect, border, bord_col);
+    Panel *panel = PanelCreate(panel_id, sx, sy, rect, border, bord_col);
     button->panel = panel;
 
+    button->active = active;
     button->hovering = false;
     button->impressed = false;
     button->pressed = false;
-    button->rect = (SDL_Rect){button->rect.x * sx, button->rect.y * sy,
-                              button->rect.w * sx, button->rect.h * sy};
 
     return button;
 }
@@ -71,12 +77,16 @@ void ButtonFree(Button *button) {
 }
 
 /**
- * \desc Checks for user input on a button. Only if the user is hovering over
- * the button are the impressed or pressed flags set. Impressed is defined as
- * when the left mouse button is down; pressed when the left mouse button is
+ * \desc Checks for user input on an active button. Only if the user is hovering
+ * over the button are the impressed or pressed flags set. Impressed is defined
+ * as when the left mouse button is down; pressed when the left mouse button is
  * released.
  */
 void ButtonHandleInput(Button *button, const Input *input) {
+    if (!button->active) {
+        return;
+    }
+
     if (button->hovering) {
         button->impressed = InputMouseDown(input, SDL_BUTTON_LEFT) ||
                             InputMousePressed(input, SDL_BUTTON_LEFT);
@@ -91,20 +101,25 @@ void ButtonHandleInput(Button *button, const Input *input) {
  * hovering occurs, the hovering and impressed flags are set to false.
  */
 void ButtonUpdate(Button *button) {
-    const SDL_Rect rect = button->rect;
-    const SDL_Point point = InputMousePos();
+    if (!button->active) {
+        ButtonSetOpacity(button, 64);
+        return;
+    } else {
+        ButtonSetOpacity(button, 255);
+    }
 
-    if (SDL_PointInRect(&point, &rect)) {
+    const SDL_Point mouse = InputMousePos();
+    if (PanelWithin(button->panel, mouse)) {
         button->hovering = true;
         if (button->impressed) {
-            ButtonSetColor(button, BEIGE);
+            ButtonSetBackColor(button, BEIGE);
         } else {
-            ButtonSetColor(button, DARKGREY);
+            ButtonSetBackColor(button, DARKGREY);
         }
     } else {
         button->hovering = false;
         button->impressed = false;
-        ButtonSetColor(button, BLACK);
+        ButtonSetBackColor(button, BLACK);
     }
 }
 
@@ -133,15 +148,45 @@ bool ButtonIsPressed(const Button *button, const char *id) {
 }
 
 /**
- * \desc Set the background colour of all glyphs contained by a button,
+ * \desc Sets the foreground colour of all glyphs contained by a button,
  * including the label and border (if it exists).
  */
-void ButtonSetColor(Button *button, const SDL_Color col) {
+void ButtonSetForeColor(Button *button, const SDL_Color col) {
+    for (i32 i = 0; i < ArrayCount(button->label->glyphs); ++i) {
+        button->label->glyphs[i]->fg = col;
+    }
+
+    for (i32 i = 0; i < ArrayCount(button->panel->glyphs); ++i) {
+        button->panel->glyphs[i]->fg = col;
+    }
+}
+
+/**
+ * \desc Sets the background colour of all glyphs contained by a button,
+ * including the label and border (if it exists).
+ */
+void ButtonSetBackColor(Button *button, const SDL_Color col) {
     for (i32 i = 0; i < ArrayCount(button->label->glyphs); ++i) {
         button->label->glyphs[i]->bg = col;
     }
 
     for (i32 i = 0; i < ArrayCount(button->panel->glyphs); ++i) {
         button->panel->glyphs[i]->bg = col;
+    }
+}
+
+/**
+ * \desc Sets the opacity of all glyphs contained by a button, including the
+ * label and border (if it exists).
+ */
+void ButtonSetOpacity(Button *button, const u8 opacity) {
+    for (i32 i = 0; i < ArrayCount(button->label->glyphs); ++i) {
+        button->label->glyphs[i]->fg.a = opacity;
+        button->label->glyphs[i]->bg.a = opacity;
+    }
+
+    for (i32 i = 0; i < ArrayCount(button->panel->glyphs); ++i) {
+        button->panel->glyphs[i]->fg.a = opacity;
+        button->panel->glyphs[i]->bg.a = opacity;
     }
 }
