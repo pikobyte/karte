@@ -69,7 +69,8 @@ typedef struct Panel_s {
  * \returns Pointer to a panel object.
  */
 Panel *PanelCreate(const char *id, const u32 sx, const u32 sy,
-                   const SDL_Rect rect, const Border border, SDL_Color col);
+                   const SDL_Rect rect, const Border border,
+                   const SDL_Color col);
 
 /**
  * \brief Frees the panel memory.
