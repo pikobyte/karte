@@ -51,6 +51,7 @@ void LabelFree(Label *label) {
     for (i32 i = 0; i < ArrayCount(label->glyphs); ++i) {
         GlyphFree(label->glyphs[i]);
     }
+    ArrayFree(label->glyphs);
     Free(label);
 }
 

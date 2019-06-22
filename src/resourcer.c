@@ -31,6 +31,7 @@ void ResourcerFree(Resourcer *res) {
     for (i32 i = 0; i < ArrayCount(res->textures); ++i) {
         TextureFree(res->textures[i]);
     }
+    ArrayFree(res->textures);
     Free(res);
 }
 

@@ -74,6 +74,7 @@ void PanelFree(Panel *panel) {
     for (i32 i = 0; i < ArrayCount(panel->glyphs); ++i) {
         GlyphFree(panel->glyphs[i]);
     }
+    ArrayFree(panel->glyphs);
     Free(panel);
 }
 
