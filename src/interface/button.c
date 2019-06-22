@@ -42,9 +42,8 @@ Button *ButtonCreate(const char *id, const u32 sx, const u32 sy, const i32 x,
     char label_id[256];
     strcpy(label_id, button->id);
     strcat(label_id, "_label");
-    Label *label =
+    button->label =
         LabelCreate(label_id, sx, sy, label_x, label_y, text, text_col, BLACK);
-    button->label = label;
 
     SDL_Rect rect = {0};
     rect.x = x;
@@ -55,8 +54,7 @@ Button *ButtonCreate(const char *id, const u32 sx, const u32 sy, const i32 x,
     char panel_id[256];
     strcpy(panel_id, button->id);
     strcat(panel_id, "_panel");
-    Panel *panel = PanelCreate(panel_id, sx, sy, rect, border, bord_col);
-    button->panel = panel;
+    button->panel = PanelCreate(panel_id, sx, sy, rect, border, bord_col);
 
     button->active = active;
     button->hovering = false;

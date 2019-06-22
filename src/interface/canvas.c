@@ -42,9 +42,7 @@ Canvas *CanvasCreate(const char *id, const u32 sx, const u32 sy,
     }
 
     canvas->show_ghost = false;
-
-    Glyph *cur_glyph = GlyphCreate();
-    canvas->cur_glyph = cur_glyph;
+    canvas->cur_glyph = GlyphCreate();
 
     canvas->rect.x = rect.x * sx;
     canvas->rect.y = rect.y * sy;
