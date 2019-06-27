@@ -20,6 +20,7 @@
 #include "glyph.h"
 #include "input.h"
 #include "interface/button.h"
+#include "interface/canvas.h"
 #include "interface/label.h"
 #include "interface/panel.h"
 #include "utils.h"
@@ -32,11 +33,14 @@
  * currently loaded glyphs.
  */
 typedef struct Interface_s {
-    u32 sx;           /**< Glyph width. */
-    u32 sy;           /**< Glyph height. */
-    Button **buttons; /**< List of interface buttons. */
-    Label **labels;   /**< List of interface labels. */
-    Panel **panels;   /**< List of interface panels. */
+    u32 sx;            /**< Glyph width. */
+    u32 sy;            /**< Glyph height. */
+    Button **buttons;  /**< List of buttons. */
+    Canvas **canvases; /**< List of canvases. */
+    Label **labels;    /**< List of labels. */
+    Panel **panels;    /**< List of panels. */
+    Glyph *cur_glyph;  /**< Currently selected glyph. */
+    bool show_ghost;   /** Flag to show current glyph on a canvas. */
 } Interface;
 
 /**
