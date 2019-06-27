@@ -5,8 +5,9 @@
 /**
  * \file canvas.c
  *
- * \brief A canvas allows the selection and, depending if possible, writing to a
- * glyph on the screen.
+ * \brief A canvas allows the retrieval and/or editing of glyphs in a contained
+ * area. It can acts a a region for drawing via the use of a set of tools, or as
+ * a selection tool.
  *
  * \author Anthony Mercer
  *
@@ -20,34 +21,20 @@
  * dimensions are converted to pixel units.S
  */
 Canvas *CanvasCreate(const char *id, const u32 sx, const u32 sy,
-                     const SDL_Rect rect) {
+                     const SDL_Rect rect, const CanvasType type,
+                     const bool writable) {
     Canvas *canvas = Allocate(sizeof(Canvas));
     strcpy(canvas->id, id);
     canvas->sx = sx;
     canvas->sy = sy;
-
-    // Fill canvas with random glyphs (temporary).
-    for (i32 i = 0; i < rect.w; ++i) {
-        for (i32 j = 0; j < rect.h; ++j) {
-            Glyph *glyph = GlyphCreate();
-            glyph->x = (rect.x + i) * sx;
-            glyph->y = (rect.y + j) * sy;
-            glyph->index = rand() % 255;
-            glyph->fg = (SDL_Color){rand() % 255, rand() % 255, rand() % 255,
-                                    rand() % 255};
-            glyph->bg = (SDL_Color){rand() % 255, rand() % 255, rand() % 255,
-                                    rand() % 255};
-            ArrayPush(canvas->glyphs, glyph);
-        }
-    }
-
-    canvas->show_ghost = false;
-    canvas->cur_glyph = GlyphCreate();
-
+    canvas->type = type;
+    canvas->op = CANVAS_NONE;
+    canvas->glyph_index = -1;
     canvas->rect.x = rect.x * sx;
     canvas->rect.y = rect.y * sy;
     canvas->rect.w = rect.w * sx;
     canvas->rect.h = rect.h * sy;
+    canvas->writable = writable;
 
     return canvas;
 }
@@ -60,71 +47,110 @@ void CanvasFree(Canvas *canvas) {
     for (i32 i = 0; i < ArrayCount(canvas->glyphs); ++i) {
         GlyphFree(canvas->glyphs[i]);
     }
-    GlyphFree(canvas->cur_glyph);
     ArrayFree(canvas->glyphs);
     Free(canvas);
 }
 
 /**
- * \desc Checks for user input on an canvas where mouse input is snapped to the
- * glyph dimensions. If the mouse is within the canvas then input is registered.
- * The left mouse button paints, the right erases and the middle gets the
- * hovered over glyph.
+ * \desc Firstly resets the current canvas operation. Then checks for user input
+ * on an canvas where mouse input is snapped to the glyph dimensions. If the
+ * mouse is within the canvas then input is registered. If the canvas is not
+ * writable, then the left mouse button selects the current glyph. If the canvas
+ * is writable, then the left mouse button places, the right erases and the
+ * middle selects the hovered over glyph. The canvas operation and glyph index
+ * are then used during the canvas update.
  */
 void CanvasHandleInput(Canvas *canvas, const Input *input) {
+    canvas->op = CANVAS_NONE;
     const SDL_Point mpos = InputMouseSnap(canvas->sx, canvas->sy);
     for (i32 i = 0; i < ArrayCount(canvas->glyphs); ++i) {
         const Glyph *glyph = canvas->glyphs[i];
         const SDL_Rect r = {glyph->x, glyph->y, canvas->sx, canvas->sy};
 
-        if (SDL_PointInRect(&mpos, &r)) {
+        if (!SDL_PointInRect(&mpos, &r)) {
+            continue;
+        }
+
+        if (!canvas->writable) {
             if (InputMouseDown(input, SDL_BUTTON_LEFT) ||
                 InputMousePressed(input, SDL_BUTTON_LEFT)) {
-                canvas->glyphs[i]->index = canvas->cur_glyph->index;
-                canvas->glyphs[i]->fg = canvas->cur_glyph->fg;
-                canvas->glyphs[i]->bg = canvas->cur_glyph->bg;
-            } else if (InputMouseDown(input, SDL_BUTTON_RIGHT) ||
-                       InputMousePressed(input, SDL_BUTTON_RIGHT)) {
-                canvas->glyphs[i]->fg = BLANK;
-                canvas->glyphs[i]->bg = BLANK;
-                canvas->glyphs[i]->index = 0;
-            } else if (InputMouseDown(input, SDL_BUTTON_MIDDLE) ||
-                       InputMousePressed(input, SDL_BUTTON_MIDDLE)) {
-                canvas->cur_glyph->index = canvas->glyphs[i]->index;
-                canvas->cur_glyph->fg = canvas->glyphs[i]->fg;
-                canvas->cur_glyph->bg = canvas->glyphs[i]->bg;
+                canvas->op = CANVAS_SELECT;
+                canvas->glyph_index = i;
             }
+            continue;
+        }
+
+        if (InputMouseDown(input, SDL_BUTTON_LEFT) ||
+            InputMousePressed(input, SDL_BUTTON_LEFT)) {
+            canvas->op = CANVAS_PLACE;
+            canvas->glyph_index = i;
+        } else if (InputMouseDown(input, SDL_BUTTON_RIGHT) ||
+                   InputMousePressed(input, SDL_BUTTON_RIGHT)) {
+            canvas->op = CANVAS_ERASE;
+            canvas->glyph_index = i;
+        } else if (InputMouseDown(input, SDL_BUTTON_MIDDLE) ||
+                   InputMousePressed(input, SDL_BUTTON_MIDDLE)) {
+            canvas->op = CANVAS_SELECT;
+            canvas->glyph_index = i;
         }
     }
 }
 
 /**
- * \desc Updates a canvas state by showing the current glyph whenever the mouse
- * is within the canvas boundary.
+ * \desc The canvas is updated only updated if a passed in glyph requires change
+ * (i.e. not NULL) and if the current glyph index is valid. The current glyph
+ * passed in is used based on the canvas operation: placing sets the a canvas
+ * glyph to the current glyph; selection sets the current glyph to a canvas
+ * glyph (based on canvas type); erasure just sets a canvas glyph to blank.
  */
-void CanvasUpdate(Canvas *canvas) {
-    const SDL_Point mpos = InputMouseSnap(canvas->sx, canvas->sy);
-    if (SDL_PointInRect(&mpos, &canvas->rect)) {
-        canvas->cur_glyph->x = mpos.x;
-        canvas->cur_glyph->y = mpos.y;
-        canvas->show_ghost = true;
-    } else {
-        canvas->show_ghost = false;
+void CanvasUpdate(Canvas *canvas, Glyph *cur_glyph) {
+    const i64 i = canvas->glyph_index;
+
+    if (!cur_glyph || i < 0 || i > ArrayCount(canvas->glyphs)) {
+        return;
+    }
+
+    switch (canvas->op) {
+    case CANVAS_NONE: {
+        break;
+    }
+    case CANVAS_PLACE: {
+        canvas->glyphs[i]->fg = cur_glyph->fg;
+        canvas->glyphs[i]->bg = cur_glyph->bg;
+        canvas->glyphs[i]->index = cur_glyph->index;
+        break;
+    }
+    case CANVAS_SELECT: {
+        if (canvas->type == CANVAS_EDITOR) {
+            cur_glyph->fg = canvas->glyphs[i]->fg;
+            cur_glyph->bg = canvas->glyphs[i]->bg;
+            cur_glyph->index = canvas->glyphs[i]->index;
+        } else if (canvas->type == CANVAS_COLOR) {
+            cur_glyph->fg = canvas->glyphs[i]->fg;
+            cur_glyph->bg = canvas->glyphs[i]->bg;
+        } else if (canvas->type == CANVAS_GLYPH) {
+            cur_glyph->index = canvas->glyphs[i]->index;
+        }
+        break;
+    }
+    case CANVAS_ERASE: {
+        canvas->glyphs[i]->index = 0;
+        canvas->glyphs[i]->fg = BLANK;
+        canvas->glyphs[i]->bg = BLANK;
+        break;
+    }
+    default:
+        break;
     }
 }
 
 /**
  * \desc Renders a canvas to a window based on a given texture by iterating
- * through its glyphs. The current glyph is shown above the canvas surface and
- * is therefore rendered afterward.
+ * through its glyphs.
  */
 void CanvasRender(const Canvas *canvas, const Window *wind,
                   const Texture *tex) {
     for (i32 i = 0; i < ArrayCount(canvas->glyphs); ++i) {
         GlyphRender(canvas->glyphs[i], wind, tex);
-    }
-
-    if (canvas->show_ghost) {
-        GlyphRender(canvas->cur_glyph, wind, tex);
     }
 }
