@@ -58,7 +58,12 @@ void *ArrayGrowBy(const void *arr, const i32 n, const i32 size) {
  * \desc Checks to see if a file with a given path exists. Note that F_OK is
  * specific to Unix systems only.
  */
-bool FileExists(const char *path) { return access(path, F_OK) != -1; }
+bool FileExists(const char *path) { 
+    // TODO: Find a non-Posix way of doing this.
+    // GCC - access
+    // VC  - _access
+    return _access(path, F_OK) != -1; 
+}
 
 /* -------------------------------------------------------------------------- */
 /* LOGGING                                                                    */
@@ -80,10 +85,10 @@ void Log(const LogCode lc, const char *str, ...) {
     case LOG:
         sprintf(type, "\x1B[1;32mKARTE LOG\x1B[0;37m");
         break;
-    case WARNING:
+    case WARN:
         sprintf(type, "\x1B[1;33mKARTE WRN\x1B[0;37m");
         break;
-    case ERROR:
+    case ERR:
         sprintf(type, "\x1B[1;31mKARTE ERR\x1B[0;37m");
         break;
     case FATAL:

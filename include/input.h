@@ -39,7 +39,7 @@ typedef struct Input_s {
     bool prev_mouse_map[NUM_BUTTONS]; /**< Previously pressed mouse. */
     f64 mouse_dx;                     /**< Change in mouse x-position. */
     f64 mouse_dy;                     /**< Change in mouse y-position. */
-    i8 mouse_wheel;                   /**< Mouse wheel change. */
+    i32 mouse_wheel;                   /**< Mouse wheel change. */
 } Input;
 
 /**

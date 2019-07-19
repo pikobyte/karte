@@ -16,6 +16,21 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
+#if _WIN32
+    #define _CRT_SECURE_NO_WARNINGS
+    #define F_OK 0
+    #include <SDL.h>
+    #include <SDL_image.h>
+    #include <SDL_ttf.h>
+    #include <io.h>
+    #include <windows.h>
+#else if __linux__
+    #include <SDL2/SDL.h>
+    #include <SDL2/SDL_image.h>
+    #include <SDL2/SDL_ttf.h>
+    #include <unistd.h>
+#endif
+
 #include <math.h>
 #include <stdarg.h>
 #include <stdbool.h>
@@ -24,11 +39,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include <unistd.h>
-
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_image.h>
-#include <SDL2/SDL_ttf.h>
 
 typedef int8_t i8;
 typedef uint8_t u8;

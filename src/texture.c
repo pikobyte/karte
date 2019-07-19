@@ -73,9 +73,10 @@ bool TextureLoad(Texture *tex, const Window *wind, const char *path) {
     SDL_SetTextureBlendMode(tex->sdl_texture, SDL_BLENDMODE_BLEND);
 
     for (u32 i = 0; i < 256; ++i) {
-        tex->rects[i] =
-            (SDL_Rect){(i % 16) * tex->glyph_w, (i / 16) * tex->glyph_h,
-                       tex->glyph_w, tex->glyph_h};
+        tex->rects[i].x = (i % 16) * tex->glyph_w;
+        tex->rects[i].y = (i / 16) * tex->glyph_h;
+        tex->rects[i].w = tex->glyph_w;
+        tex->rects[i].h = tex->glyph_h;
     }
 
     return true;

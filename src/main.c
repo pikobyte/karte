@@ -20,13 +20,16 @@
 #include "definitions.h"
 #include "utils.h"
 
-int main(void) {
+int main(int argc, char *argv[]) {
     Application *app = ApplicationCreate();
 
     ApplicationRun(app);
     ApplicationFree(app);
 
     Log(LOG, "Allocations remaining: %u", g_mem_allocs);
+
+    UNUSED(argc);
+    UNUSED(argv);
 
     return 0;
 }

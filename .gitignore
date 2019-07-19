@@ -7,12 +7,14 @@
 # Shell scripts
 *.sh
 
-# Executable
-bin/karte
+# Executables
+bin/*
 
 # Build files
-build/*.o
-build/*.d
+build/*
 
 # Documentation
 docs/html/*
+
+# Dependencies
+deps
