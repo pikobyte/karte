@@ -27,7 +27,7 @@
  * default for buttons. Single and double are the lines which decorate the
  * border.
  */
-typedef enum Border_e { NONE = 0, SINGLE = 1, DOUBLE = 2 } Border;
+typedef enum Border_e { BORDER_NONE = 0, BORDER_SINGLE = 1, BORDER_DOUBLE = 2 } Border;
 
 /**
  * \desc Single border ASCII indices: top-left, top-right, bottom-left,

@@ -34,10 +34,10 @@ Button *ButtonCreate(const char *id, const u32 sx, const u32 sy, const i32 x,
                      const bool active) {
     Button *button = Allocate(sizeof(Button));
     strcpy(button->id, id);
-    const i32 len = strlen(text);
+    const i32 len = (i32)strlen(text);
 
-    const i32 label_x = border == NONE ? x : x + 1;
-    const i32 label_y = border == NONE ? y : y + 1;
+    const i32 label_x = border == BORDER_NONE ? x : x + 1;
+    const i32 label_y = border == BORDER_NONE ? y : y + 1;
 
     char label_id[256];
     strcpy(label_id, button->id);
@@ -48,8 +48,8 @@ Button *ButtonCreate(const char *id, const u32 sx, const u32 sy, const i32 x,
     SDL_Rect rect = {0};
     rect.x = x;
     rect.y = y;
-    rect.w = (border == NONE ? len : len + 2);
-    rect.h = (border == NONE ? 1 : 3);
+    rect.w = (border == BORDER_NONE ? len : len + 2);
+    rect.h = (border == BORDER_NONE ? 1 : 3);
 
     char panel_id[256];
     strcpy(panel_id, button->id);

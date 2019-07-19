@@ -46,7 +46,7 @@ void *ArrayGrowBy(const void *arr, const i32 n, const i32 size) {
         ptr[0] = act_req;
         return ptr + 2;
     } else {
-        Log(ERROR, "Could not allocate Array of size %i!", tot_req);
+        Log(ERR, "Could not allocate Array of size %i!", tot_req);
         return (void *)(2 * sizeof(i32));
     }
 }
@@ -60,9 +60,11 @@ void *ArrayGrowBy(const void *arr, const i32 n, const i32 size) {
  */
 bool FileExists(const char *path) { 
     // TODO: Find a non-Posix way of doing this.
-    // GCC - access
-    // VC  - _access
-    return _access(path, F_OK) != -1; 
+#if _WIN32
+    return _access(path, 0) != -1; 
+#else
+    return access(path, F_OK) != -1; 
+#endif
 }
 
 /* -------------------------------------------------------------------------- */
@@ -143,7 +145,7 @@ void *Allocate(const size_t size) {
  */
 void Free(void *mem) {
     if (mem == NULL) {
-        Log(ERROR, "Could not free memory at %p!", mem);
+        Log(ERR, "Could not free memory at %p!", mem);
         return;
     }
 

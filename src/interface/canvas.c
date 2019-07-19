@@ -65,7 +65,11 @@ void CanvasHandleInput(Canvas *canvas, const Input *input) {
     const SDL_Point mpos = InputMouseSnap(canvas->sx, canvas->sy);
     for (i32 i = 0; i < ArrayCount(canvas->glyphs); ++i) {
         const Glyph *glyph = canvas->glyphs[i];
-        const SDL_Rect r = {glyph->x, glyph->y, canvas->sx, canvas->sy};
+        SDL_Rect r = {0};
+        r.x = (u32)glyph->x;
+        r.y = (u32)glyph->y;
+        r.w = canvas->sx;
+        r.h = canvas->sy;
 
         if (!SDL_PointInRect(&mpos, &r)) {
             continue;

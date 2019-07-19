@@ -29,7 +29,7 @@ Panel *PanelCreate(const char *id, const u32 sx, const u32 sy,
     panel->sy = sy;
     panel->rect = rect;
 
-    if (border == NONE) {
+    if (border == BORDER_NONE) {
         return panel;
     }
 
@@ -57,8 +57,8 @@ Panel *PanelCreate(const char *id, const u32 sx, const u32 sy,
             glyph->y = (rect.y + j) * sy;
             glyph->fg = col;
             glyph->bg = BLANK;
-            glyph->index =
-                border == SINGLE ? SINGLE_BORDER[index] : DOUBLE_BORDER[index];
+            glyph->index = border == BORDER_SINGLE ? SINGLE_BORDER[index]
+                                                   : DOUBLE_BORDER[index];
 
             ArrayPush(panel->glyphs, glyph);
         }

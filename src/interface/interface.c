@@ -33,12 +33,12 @@ Interface *InterfaceCreate(const u32 sx, const u32 sy) {
     itfc->cur_glyph->index = 1;
     itfc->show_ghost = false;
 
-    Button *b1 = ButtonCreate("quit_button", sx, sy, 1, 41, "Quit", SINGLE,
-                              GREY, LIGHTGREY, true);
-    Button *b2 = ButtonCreate("save_button", sx, sy, 7, 41, "Save", SINGLE,
-                              GREY, LIGHTGREY, false);
-    Button *b3 = ButtonCreate("load_button", sx, sy, 13, 41, "Load", SINGLE,
-                              GREY, LIGHTGREY, false);
+    Button *b1 = ButtonCreate("quit_button", sx, sy, 1, 41, "Quit",
+                              BORDER_SINGLE, GREY, LIGHTGREY, true);
+    Button *b2 = ButtonCreate("save_button", sx, sy, 7, 41, "Save",
+                              BORDER_SINGLE, GREY, LIGHTGREY, false);
+    Button *b3 = ButtonCreate("load_button", sx, sy, 13, 41, "Load",
+                              BORDER_SINGLE, GREY, LIGHTGREY, false);
     ArrayPush(itfc->buttons, b1);
     ArrayPush(itfc->buttons, b2);
     ArrayPush(itfc->buttons, b3);
@@ -98,14 +98,14 @@ Interface *InterfaceCreate(const u32 sx, const u32 sy) {
     ArrayPush(itfc->labels, l3);
     ArrayPush(itfc->labels, l4);
 
-    Panel *p1 = PanelCreate("options", sx, sy, (SDL_Rect){0, 0, 20, 45}, SINGLE,
-                            LIGHTGREY);
-    Panel *p2 = PanelCreate("editor", sx, sy, (SDL_Rect){20, 0, 60, 45}, SINGLE,
-                            LIGHTGREY);
+    Panel *p1 = PanelCreate("options", sx, sy, (SDL_Rect){0, 0, 20, 45},
+                            BORDER_SINGLE, LIGHTGREY);
+    Panel *p2 = PanelCreate("editor", sx, sy, (SDL_Rect){20, 0, 60, 45},
+                            BORDER_SINGLE, LIGHTGREY);
     Panel *p3 = PanelCreate("color_box", sx, sy, (SDL_Rect){1, 16, 18, 6},
-                            SINGLE, LIGHTGREY);
+                            BORDER_SINGLE, LIGHTGREY);
     Panel *p4 = PanelCreate("glyph_box", sx, sy, (SDL_Rect){1, 23, 18, 18},
-                            SINGLE, LIGHTGREY);
+                            BORDER_SINGLE, LIGHTGREY);
     ArrayPush(itfc->panels, p1);
     ArrayPush(itfc->panels, p2);
     ArrayPush(itfc->panels, p3);

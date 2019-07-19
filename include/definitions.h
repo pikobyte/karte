@@ -18,13 +18,12 @@
 
 #if _WIN32
     #define _CRT_SECURE_NO_WARNINGS
-    #define F_OK 0
     #include <SDL.h>
     #include <SDL_image.h>
     #include <SDL_ttf.h>
     #include <io.h>
     #include <windows.h>
-#else if __linux__
+#else
     #include <SDL2/SDL.h>
     #include <SDL2/SDL_image.h>
     #include <SDL2/SDL_ttf.h>
