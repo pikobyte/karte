@@ -20,7 +20,7 @@
  */
 Input *InputCreate(void) {
     Input *input = Allocate(sizeof(Input));
-    Log(LOG, "Created input at %p.", input);
+    Log(LOG_NOTIFY, "Created input at %p.", input);
     input->quit = false;
     return input;
 }

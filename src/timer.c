@@ -20,7 +20,7 @@
  */
 Timer *TimerCreate(void) {
     Timer *timer = Allocate(sizeof(Timer));
-    Log(LOG, "Created timer at %p.", timer);
+    Log(LOG_NOTIFY, "Created timer at %p.", timer);
     return timer;
 }
 

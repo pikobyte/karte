@@ -21,20 +21,20 @@
  */
 Application *ApplicationCreate(void) {
     Application *app = Allocate(sizeof(Application));
-    Log(LOG, "Created application at %p.", app);
+    Log(LOG_NOTIFY, "Created application at %p.", app);
 
     strcpy(g_dir, ApplicationDir());
 
     if (SDL_Init(SDL_INIT_EVERYTHING)) {
-        Log(FATAL, "Could not initialise SDL2: %s", SDL_GetError());
+        Log(LOG_FATAL, "Could not initialise SDL2: %s", SDL_GetError());
     }
 
     if (!IMG_Init(IMG_INIT_JPG | IMG_INIT_PNG)) {
-        Log(FATAL, "Could not initialise SDL_image: %s", IMG_GetError());
+        Log(LOG_FATAL, "Could not initialise SDL_image: %s", IMG_GetError());
     }
 
     if (TTF_Init()) {
-        Log(FATAL, "Could not initialise SDL_ttf: %s", TTF_GetError());
+        Log(LOG_FATAL, "Could not initialise SDL_ttf: %s", TTF_GetError());
     }
 
     app->input = InputCreate();
@@ -85,7 +85,7 @@ void ApplicationRun(Application *app) {
         ApplicationPostFrame(app);
     }
 
-    Log(LOG, "Execution time: %.3f s", app->exec_time);
+    Log(LOG_NOTIFY, "Execution time: %.3f s", app->exec_time);
 }
 
 /**

@@ -46,7 +46,7 @@ void *ArrayGrowBy(const void *arr, const i32 n, const i32 size) {
         ptr[0] = act_req;
         return ptr + 2;
     } else {
-        Log(ERR, "Could not allocate Array of size %i!", tot_req);
+        Log(LOG_ERROR, "Could not allocate Array of size %i!", tot_req);
         return (void *)(2 * sizeof(i32));
     }
 }
@@ -58,12 +58,12 @@ void *ArrayGrowBy(const void *arr, const i32 n, const i32 size) {
  * \desc Checks to see if a file with a given path exists. Note that F_OK is
  * specific to Unix systems only.
  */
-bool FileExists(const char *path) { 
+bool FileExists(const char *path) {
     // TODO: Find a non-Posix way of doing this.
 #if _WIN32
-    return _access(path, 0) != -1; 
+    return _access(path, 0) != -1;
 #else
-    return access(path, F_OK) != -1; 
+    return access(path, F_OK) != -1;
 #endif
 }
 
@@ -84,16 +84,16 @@ void Log(const LogCode lc, const char *str, ...) {
     char type[32] = {0};
 
     switch (lc) {
-    case LOG:
+    case LOG_NOTIFY:
         sprintf(type, "\x1B[1;32mKARTE LOG\x1B[0;37m");
         break;
-    case WARN:
+    case LOG_WARNING:
         sprintf(type, "\x1B[1;33mKARTE WRN\x1B[0;37m");
         break;
-    case ERR:
+    case LOG_ERROR:
         sprintf(type, "\x1B[1;31mKARTE ERR\x1B[0;37m");
         break;
-    case FATAL:
+    case LOG_FATAL:
         sprintf(type, "\x1B[1;45;41mKARTE FTL\x1B[0;37m");
         break;
     default:
@@ -107,10 +107,10 @@ void Log(const LogCode lc, const char *str, ...) {
 
     va_list ap;
     va_start(ap, str);
-    if (lc == FATAL) {
+    if (lc == LOG_FATAL) {
         vfprintf(stderr, buff, ap);
         exit(EXIT_FAILURE);
-    } else if (lc == ERROR) {
+    } else if (lc == LOG_ERROR) {
         vfprintf(stderr, buff, ap);
     } else {
         vfprintf(stdout, buff, ap);
@@ -130,7 +130,7 @@ void Log(const LogCode lc, const char *str, ...) {
 void *Allocate(const size_t size) {
     void *mem = calloc(1, size);
     if (mem == NULL) {
-        Log(FATAL, "Could not allocate memory of size %i!", size);
+        Log(LOG_FATAL, "Could not allocate memory of size %i!", size);
     }
 
     g_mem_allocs++;
@@ -145,7 +145,7 @@ void *Allocate(const size_t size) {
  */
 void Free(void *mem) {
     if (mem == NULL) {
-        Log(ERR, "Could not free memory at %p!", mem);
+        Log(LOG_ERROR, "Could not free memory at %p!", mem);
         return;
     }
 

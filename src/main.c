@@ -26,7 +26,7 @@ int main(int argc, char *argv[]) {
     ApplicationRun(app);
     ApplicationFree(app);
 
-    Log(LOG, "Allocations remaining: %u", g_mem_allocs);
+    Log(LOG_NOTIFY, "Allocations remaining: %u", g_mem_allocs);
 
     UNUSED(argc);
     UNUSED(argv);

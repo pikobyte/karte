@@ -22,7 +22,7 @@
  */
 Window *WindowCreate(void) {
     Window *wind = Allocate(sizeof(Window));
-    Log(LOG, "Created window at %p.", wind);
+    Log(LOG_NOTIFY, "Created window at %p.", wind);
 
     wind->width = 1280;
     wind->height = 720;
@@ -35,14 +35,14 @@ Window *WindowCreate(void) {
         wind->width, wind->height, SDL_WINDOW_OPENGL | SDL_WINDOW_BORDERLESS);
 
     if (wind->sdl_window == NULL) {
-        Log(FATAL, "Could not initialise SDL_Window!");
+        Log(LOG_FATAL, "Could not initialise SDL_Window!");
     }
 
-    wind->sdl_renderer =
-        SDL_CreateRenderer(wind->sdl_window, -1, SDL_RENDERER_ACCELERATED |
-                                                     SDL_RENDERER_PRESENTVSYNC);
+    wind->sdl_renderer = SDL_CreateRenderer(wind->sdl_window, -1,
+                                            SDL_RENDERER_ACCELERATED |
+                                                SDL_RENDERER_PRESENTVSYNC);
     if (wind->sdl_renderer == NULL) {
-        Log(FATAL, "Could not initialise SDL_Renderer!");
+        Log(LOG_FATAL, "Could not initialise SDL_Renderer!");
     }
     SDL_SetRenderDrawColor(wind->sdl_renderer, 0x00, 0x00, 0x00, 0x00);
 

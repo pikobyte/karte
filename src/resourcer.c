@@ -19,7 +19,7 @@
  */
 Resourcer *ResourcerCreate(void) {
     Resourcer *res = Allocate(sizeof(Resourcer));
-    Log(LOG, "Created resourcer at %p.", res);
+    Log(LOG_NOTIFY, "Created resourcer at %p.", res);
     return res;
 }
 

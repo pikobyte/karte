@@ -22,14 +22,14 @@
  */
 Interface *InterfaceCreate(const u32 sx, const u32 sy) {
     Interface *itfc = Allocate(sizeof(Interface));
-    Log(LOG, "Created interface at %p.", itfc);
+    Log(LOG_NOTIFY, "Created interface at %p.", itfc);
     itfc->sx = sx;
     itfc->sy = sy;
 
     itfc->cur_glyph = GlyphCreate();
     itfc->cur_glyph->x = 17 * sx;
     itfc->cur_glyph->y = 14 * sy;
-    itfc->cur_glyph->fg = RED;
+    itfc->cur_glyph->fg = BLUE;
     itfc->cur_glyph->index = 1;
     itfc->show_ghost = false;
 

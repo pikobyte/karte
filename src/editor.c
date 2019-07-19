@@ -20,7 +20,7 @@
  */
 Editor *EditorCreate(const Window *wind, Resourcer *res) {
     Editor *editor = Allocate(sizeof(Editor));
-    Log(LOG, "Created editor at %p.", editor);
+    Log(LOG_NOTIFY, "Created editor at %p.", editor);
 
     ResourcerLoadTexture(res, wind,
                          strcat(g_dir, "/res/textures/boxy_16x16.png"));
