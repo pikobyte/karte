@@ -30,9 +30,9 @@ Window *WindowCreate(void) {
     wind->v_sync = true;
     strcpy(wind->title, "Karte");
 
-    wind->sdl_window = SDL_CreateWindow(wind->title, SDL_WINDOWPOS_UNDEFINED,
-                                        SDL_WINDOWPOS_UNDEFINED, wind->width,
-                                        wind->height, SDL_WINDOW_OPENGL);
+    wind->sdl_window = SDL_CreateWindow(
+        wind->title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+        wind->width, wind->height, SDL_WINDOW_OPENGL | SDL_WINDOW_BORDERLESS);
 
     if (wind->sdl_window == NULL) {
         Log(FATAL, "Could not initialise SDL_Window!");
