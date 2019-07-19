@@ -28,25 +28,25 @@ Interface *InterfaceCreate(const u32 sx, const u32 sy) {
 
     itfc->cur_glyph = GlyphCreate();
     itfc->cur_glyph->x = 17 * sx;
-    itfc->cur_glyph->y = 13 * sy;
+    itfc->cur_glyph->y = 14 * sy;
     itfc->cur_glyph->fg = RED;
     itfc->cur_glyph->index = 1;
     itfc->show_ghost = false;
 
-    Button *b1 = ButtonCreate("quit_button", sx, sy, 2, 40, "Quit", SINGLE,
+    Button *b1 = ButtonCreate("quit_button", sx, sy, 1, 41, "Quit", SINGLE,
                               GREY, LIGHTGREY, true);
-    Button *b2 = ButtonCreate("save_button", sx, sy, 8, 40, "Save", SINGLE,
+    Button *b2 = ButtonCreate("save_button", sx, sy, 7, 41, "Save", SINGLE,
                               GREY, LIGHTGREY, false);
-    Button *b3 = ButtonCreate("load_button", sx, sy, 14, 40, "Load", SINGLE,
+    Button *b3 = ButtonCreate("load_button", sx, sy, 13, 41, "Load", SINGLE,
                               GREY, LIGHTGREY, false);
     ArrayPush(itfc->buttons, b1);
     ArrayPush(itfc->buttons, b2);
     ArrayPush(itfc->buttons, b3);
 
-    Canvas *c1 = CanvasCreate("canvas_main", sx, sy, (SDL_Rect){22, 2, 56, 41},
+    Canvas *c1 = CanvasCreate("canvas_main", sx, sy, (SDL_Rect){21, 1, 58, 43},
                               CANVAS_EDITOR, true);
-    for (i8 i = 0; i < 56; ++i) {
-        for (i8 j = 0; j < 41; ++j) {
+    for (i8 i = 0; i < 58; ++i) {
+        for (i8 j = 0; j < 43; ++j) {
             Glyph *glyph = GlyphCreate();
             glyph->x = (i * sx) + c1->rect.x;
             glyph->y = (j * sy) + c1->rect.y;
@@ -58,7 +58,7 @@ Interface *InterfaceCreate(const u32 sx, const u32 sy) {
     ArrayPush(itfc->canvases, c1);
 
     Canvas *c2 = CanvasCreate("canvas_glyphs", sx, sy,
-                              (SDL_Rect){3, 23, 16, 16}, CANVAS_GLYPH, false);
+                              (SDL_Rect){2, 24, 17, 16}, CANVAS_GLYPH, false);
     for (i8 i = 0; i < 16; ++i) {
         for (i8 j = 0; j < 16; ++j) {
             Glyph *glyph = GlyphCreate();
@@ -71,7 +71,7 @@ Interface *InterfaceCreate(const u32 sx, const u32 sy) {
     }
     ArrayPush(itfc->canvases, c2);
 
-    Canvas *c3 = CanvasCreate("canvas_colors", sx, sy, (SDL_Rect){3, 16, 16, 4},
+    Canvas *c3 = CanvasCreate("canvas_colors", sx, sy, (SDL_Rect){2, 17, 16, 4},
                               CANVAS_COLOR, false);
     for (i8 i = 0; i < 16; ++i) {
         for (i8 j = 0; j < 4; ++j) {
@@ -86,25 +86,25 @@ Interface *InterfaceCreate(const u32 sx, const u32 sy) {
     ArrayPush(itfc->canvases, c3);
 
     Label *l1 =
-        LabelCreate("title", sx, sy, 5, 1, "Karte v0.0.1", DARKGREY, LIGHTGREY);
+        LabelCreate("title", sx, sy, 4, 0, "Karte v0.0.1", DARKGREY, LIGHTGREY);
     Label *l2 =
-        LabelCreate("color_title", sx, sy, 4, 15, "Colours", LIGHTGREY, BLACK);
+        LabelCreate("color_title", sx, sy, 2, 16, "Colours", LIGHTGREY, BLACK);
     Label *l3 =
-        LabelCreate("glyph_title", sx, sy, 4, 22, "Glyphs", LIGHTGREY, BLACK);
-    Label *l4 = LabelCreate("current_glyph", sx, sy, 2, 13,
+        LabelCreate("glyph_title", sx, sy, 2, 23, "Glyphs", LIGHTGREY, BLACK);
+    Label *l4 = LabelCreate("current_glyph", sx, sy, 2, 14,
                             "Current glyph:", LIGHTGREY, BLACK);
     ArrayPush(itfc->labels, l1);
     ArrayPush(itfc->labels, l2);
     ArrayPush(itfc->labels, l3);
     ArrayPush(itfc->labels, l4);
 
-    Panel *p1 = PanelCreate("options", sx, sy, (SDL_Rect){1, 1, 20, 43}, SINGLE,
+    Panel *p1 = PanelCreate("options", sx, sy, (SDL_Rect){0, 0, 20, 45}, SINGLE,
                             LIGHTGREY);
-    Panel *p2 = PanelCreate("editor", sx, sy, (SDL_Rect){21, 1, 58, 43}, SINGLE,
+    Panel *p2 = PanelCreate("editor", sx, sy, (SDL_Rect){20, 0, 60, 45}, SINGLE,
                             LIGHTGREY);
-    Panel *p3 = PanelCreate("color_box", sx, sy, (SDL_Rect){2, 15, 18, 6},
+    Panel *p3 = PanelCreate("color_box", sx, sy, (SDL_Rect){1, 16, 18, 6},
                             SINGLE, LIGHTGREY);
-    Panel *p4 = PanelCreate("glyph_box", sx, sy, (SDL_Rect){2, 22, 18, 18},
+    Panel *p4 = PanelCreate("glyph_box", sx, sy, (SDL_Rect){1, 23, 18, 18},
                             SINGLE, LIGHTGREY);
     ArrayPush(itfc->panels, p1);
     ArrayPush(itfc->panels, p2);
@@ -212,7 +212,7 @@ void InterfaceRender(const Interface *itfc, const Window *wind,
         itfc->cur_glyph->y = InputMouseSnapY(itfc->sy);
         GlyphRender(itfc->cur_glyph, wind, tex);
         itfc->cur_glyph->x = 17 * itfc->sx;
-        itfc->cur_glyph->y = 13 * itfc->sy;
+        itfc->cur_glyph->y = 14 * itfc->sy;
     }
 
     GlyphRender(itfc->cur_glyph, wind, tex);
