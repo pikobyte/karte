@@ -135,7 +135,7 @@ void ApplicationPreFrame(Application *app) {
 void ApplicationPostFrame(Application *app) {
     const u64 ticks = TimerGetTicks(app->limit_timer);
     if (!app->wind->v_sync && ticks < (1000.0 / 60.0)) {
-        SDL_Delay((1000.0 / 60.0) - ticks);
+        SDL_Delay((1000 / 60) - (u32)ticks);
     }
 
     if (app->frames++ % 24 == 0) {
