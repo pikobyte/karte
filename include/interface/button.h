@@ -95,7 +95,7 @@ void ButtonUpdate(Button *button);
  * \param [in] tex Texture to render from.
  * \returns Void.
  */
-void ButtonRender(const Button *panel, const Window *wind, const Texture *tex);
+void ButtonRender(const Button *button, const Window *wind, const Texture *tex);
 
 /**
  * \brief Checks whether a button and chosen ID is pressed.
