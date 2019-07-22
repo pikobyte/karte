@@ -18,7 +18,7 @@
 #include "definitions.h"
 #include "glyph.h"
 #include "input.h"
-#include "interface/interface.h"
+#include "interface.h"
 #include "resourcer.h"
 #include "texture.h"
 #include "utils.h"

@@ -12,7 +12,7 @@
  *
  */
 
-#include "interface/interface.h"
+#include "interface.h"
 
 /**
  * \desc Begins by allocating memory for the interface and assigning glyph

@@ -13,7 +13,7 @@
  *
  */
 
-#include "interface/canvas.h"
+#include "canvas.h"
 
 /**
  * \desc First allocates the memory for the canvas then sets its ID and glyph

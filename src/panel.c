@@ -12,7 +12,7 @@
  *
  */
 
-#include "interface/panel.h"
+#include "panel.h"
 
 /**
  * \desc The memory for the panel is allocated first, and its ID and dimensions

@@ -15,14 +15,14 @@
 #ifndef INTERFACE_H
 #define INTERFACE_H
 
+#include "button.h"
+#include "canvas.h"
 #include "color.h"
 #include "definitions.h"
 #include "glyph.h"
 #include "input.h"
-#include "interface/button.h"
-#include "interface/canvas.h"
-#include "interface/label.h"
-#include "interface/panel.h"
+#include "label.h"
+#include "panel.h"
 #include "utils.h"
 
 /**

@@ -11,7 +11,7 @@
  *
  */
 
-#include "interface/label.h"
+#include "label.h"
 
 /**
  * \desc Creates a label, first by allocating its memory, and then setting the

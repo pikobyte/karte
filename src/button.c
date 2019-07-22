@@ -16,7 +16,7 @@
  *
  */
 
-#include "interface/button.h"
+#include "button.h"
 
 /**
  * \desc First allocates the memory for the button and sets its ID. A check is

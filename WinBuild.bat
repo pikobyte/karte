@@ -13,9 +13,7 @@ CALL %VS%"2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
 :: output folders, as well as external library names.
 SET PROJ = %cd%
 SET SRC=%PROJ%src\*.c
-SET SRC_ITFC=%PROJ%src\interface\*.c
 SET INC=%PROJ%include\
-SET INC_ITFC=%PROJ%include\interface
 SET LIBS=SDL2.lib SDL2main.lib SDL2_image.lib SDL2_mixer.lib SDL2_ttf.lib
 SET BUILD=%PROJ%build\
 SET OUT=%PROJ%bin\karte.exe
@@ -44,5 +42,4 @@ SET FLAGS=/cgthreads8 /Fe%OUT% /Fo%BUILD% /Fd%BUILD% /GS /MP /Od /TC /W4 /WX /Zi
 SET LINK_FLAGS=/LIBPATH:%DEP_LIB% %LIBS% /SUBSYSTEM:CONSOLE
 
 :: Compile the program.
-cl.exe %SRC% %SRC_ITFC% /I%INC% /I%INC_ITFC% /I%DEP_INC% %FLAGS% ^
-       /link %LINK_FLAGS%
+cl.exe %SRC% /I%INC% /I%DEP_INC% %FLAGS% /link %LINK_FLAGS%
