@@ -85,19 +85,19 @@ void Log(const LogCode lc, const char *str, ...) {
 
     switch (lc) {
     case LOG_NOTIFY:
-        sprintf(type, "\x1B[1;32mKARTE LOG\x1B[0;37m");
+        sprintf(type, "KARTE LOG");
         break;
     case LOG_WARNING:
-        sprintf(type, "\x1B[1;33mKARTE WRN\x1B[0;37m");
+        sprintf(type, "KARTE WRN");
         break;
     case LOG_ERROR:
-        sprintf(type, "\x1B[1;31mKARTE ERR\x1B[0;37m");
+        sprintf(type, "KARTE ERR");
         break;
     case LOG_FATAL:
-        sprintf(type, "\x1B[1;45;41mKARTE FTL\x1B[0;37m");
+        sprintf(type, "KARTE FTL");
         break;
     default:
-        sprintf(type, "\x1B[1;32mKARTE LOG\x1B[0;37m");
+        sprintf(type, "KARTE LOG");
         break;
     }
 
