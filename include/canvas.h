@@ -76,9 +76,8 @@ typedef struct Canvas_s {
  * \param [in] writable Sets whether the canvas can be written to.
  * \returns Pointer to a canvas object.
  */
-Canvas *CanvasCreate(const char *id, const u32 sx, const u32 sy,
-                     const SDL_Rect rect, const CanvasType type,
-                     const bool writable);
+Canvas *CanvasCreate(const char *id, u32 sx, u32 sy, SDL_Rect rect,
+                     CanvasType type, bool writable);
 
 /**
  * \brief Frees the canvas memory.

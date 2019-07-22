@@ -61,10 +61,9 @@ typedef struct Button_s {
  * \param [in] active The default active state of the button.
  * \returns Pointer to a panel object.
  */
-Button *ButtonCreate(const char *id, const u32 sx, const u32 sy, const i32 x,
-                     const i32 y, const char *text, const Border border,
-                     const SDL_Color text_col, const SDL_Color bord_col,
-                     const bool active);
+Button *ButtonCreate(const char *id, u32 sx, u32 sy, i32 x, i32 y,
+                     const char *text, Border border, SDL_Color text_col,
+                     SDL_Color bord_col, bool active);
 
 /**
  * \brief Frees the button memory.
@@ -111,7 +110,7 @@ bool ButtonIsPressed(const Button *button, const char *id);
  * \param [in] col The colour to change to.
  * \returns Void.
  */
-void ButtonSetForeColor(Button *button, const SDL_Color col);
+void ButtonSetForeColor(Button *button, SDL_Color col);
 
 /**
  * \brief Changes the background colour of a button.
@@ -119,7 +118,7 @@ void ButtonSetForeColor(Button *button, const SDL_Color col);
  * \param [in] col The colour to change to.
  * \returns Void.
  */
-void ButtonSetBackColor(Button *button, const SDL_Color col);
+void ButtonSetBackColor(Button *button, SDL_Color col);
 
 /**
  * \brief Changes the opacity of a button.
@@ -127,6 +126,6 @@ void ButtonSetBackColor(Button *button, const SDL_Color col);
  * \param [in] opacity The opacity to change to.
  * \returns Void.
  */
-void ButtonSetOpacity(Button *button, const u8 opacity);
+void ButtonSetOpacity(Button *button, u8 opacity);
 
 #endif

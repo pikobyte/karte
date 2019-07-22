@@ -124,7 +124,7 @@ void ApplicationPreFrame(Application *app) {
     app->dt = TimerGetTicks(app->limit_timer) / 1000.0;
     TimerStart(app->limit_timer);
 
-    const f64 seconds = TimerGetTicks(app->fps_timer) / 1000.0;
+    f64 seconds = TimerGetTicks(app->fps_timer) / 1000.0;
     app->fps = app->frames / seconds;
 }
 
@@ -134,7 +134,7 @@ void ApplicationPreFrame(Application *app) {
  * target FPS, provided v-sync is turned off.
  */
 void ApplicationPostFrame(Application *app) {
-    const u64 ticks = TimerGetTicks(app->limit_timer);
+    u64 ticks = TimerGetTicks(app->limit_timer);
     if (!app->wind->v_sync && ticks < (1000.0 / 60.0)) {
         SDL_Delay((1000 / 60) - (u32)ticks);
     }

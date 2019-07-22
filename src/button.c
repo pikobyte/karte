@@ -28,16 +28,15 @@
  * is present. The label and panel (given their own IDs) are created, and the
  * button rectangle is converted to pixels based on glyph dimensions.
  */
-Button *ButtonCreate(const char *id, const u32 sx, const u32 sy, const i32 x,
-                     const i32 y, const char *text, const Border border,
-                     const SDL_Color text_col, const SDL_Color bord_col,
-                     const bool active) {
+Button *ButtonCreate(const char *id, u32 sx, u32 sy, i32 x, i32 y,
+                     const char *text, Border border, SDL_Color text_col,
+                     SDL_Color bord_col, bool active) {
     Button *button = Allocate(sizeof(Button));
     strcpy(button->id, id);
-    const i32 len = (i32)strlen(text);
+    i32 len = (i32)strlen(text);
 
-    const i32 label_x = border == BORDER_NONE ? x : x + 1;
-    const i32 label_y = border == BORDER_NONE ? y : y + 1;
+    i32 label_x = border == BORDER_NONE ? x : x + 1;
+    i32 label_y = border == BORDER_NONE ? y : y + 1;
 
     char label_id[256];
     strcpy(label_id, button->id);
@@ -106,7 +105,7 @@ void ButtonUpdate(Button *button) {
         ButtonSetOpacity(button, 255);
     }
 
-    const SDL_Point mouse = InputMousePos();
+    SDL_Point mouse = InputMousePos();
     if (PanelWithin(button->panel, mouse)) {
         button->hovering = true;
         if (button->impressed) {
@@ -149,7 +148,7 @@ bool ButtonIsPressed(const Button *button, const char *id) {
  * \desc Sets the foreground colour of all glyphs contained by a button,
  * including the label and border (if it exists).
  */
-void ButtonSetForeColor(Button *button, const SDL_Color col) {
+void ButtonSetForeColor(Button *button, SDL_Color col) {
     for (i32 i = 0; i < ArrayCount(button->label->glyphs); ++i) {
         button->label->glyphs[i]->fg = col;
     }
@@ -163,7 +162,7 @@ void ButtonSetForeColor(Button *button, const SDL_Color col) {
  * \desc Sets the background colour of all glyphs contained by a button,
  * including the label and border (if it exists).
  */
-void ButtonSetBackColor(Button *button, const SDL_Color col) {
+void ButtonSetBackColor(Button *button, SDL_Color col) {
     for (i32 i = 0; i < ArrayCount(button->label->glyphs); ++i) {
         button->label->glyphs[i]->bg = col;
     }
@@ -177,7 +176,7 @@ void ButtonSetBackColor(Button *button, const SDL_Color col) {
  * \desc Sets the opacity of all glyphs contained by a button, including the
  * label and border (if it exists).
  */
-void ButtonSetOpacity(Button *button, const u8 opacity) {
+void ButtonSetOpacity(Button *button, u8 opacity) {
     for (i32 i = 0; i < ArrayCount(button->label->glyphs); ++i) {
         button->label->glyphs[i]->fg.a = opacity;
         button->label->glyphs[i]->bg.a = opacity;

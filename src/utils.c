@@ -32,11 +32,11 @@
  * to zero. The size of the array (number of indices) is set in the header, and
  * the pointer to the new memory data (skipping header) is returned.
  */
-void *ArrayGrowBy(const void *arr, const i32 n, const i32 size) {
-    const i32 dbl_cur = arr ? 2 * ArraySize(arr) : 0;
-    const i32 min_req = ArrayCount(arr) + n;
-    const i32 act_req = dbl_cur > min_req ? dbl_cur : min_req;
-    const i32 tot_req = size * act_req + sizeof(i32) * 2;
+void *ArrayGrowBy(const void *arr, i32 n, i32 size) {
+    i32 dbl_cur = arr ? 2 * ArraySize(arr) : 0;
+    i32 min_req = ArrayCount(arr) + n;
+    i32 act_req = dbl_cur > min_req ? dbl_cur : min_req;
+    i32 tot_req = size * act_req + sizeof(i32) * 2;
     i32 *ptr = (i32 *)realloc(arr ? ArrayPtr(arr) : 0, tot_req);
 
     if (ptr) {
@@ -78,7 +78,7 @@ bool FileExists(const char *path) {
  * code. The log is written to the stdout for logs/warnings and stderr for
  * errors/fatals.
  */
-void Log(const LogCode lc, const char *str, ...) {
+void Log(LogCode lc, const char *str, ...) {
     char buff[512] = {0};
     char tod[32] = {0};
     char type[32] = {0};
@@ -127,7 +127,7 @@ void Log(const LogCode lc, const char *str, ...) {
  * number of global memory allocations is increased, and a pointer to the start
  * of the allocated memory is returned.
  */
-void *Allocate(const size_t size) {
+void *Allocate(size_t size) {
     void *mem = calloc(1, size);
     if (mem == NULL) {
         Log(LOG_FATAL, "Could not allocate memory of size %i!", size);

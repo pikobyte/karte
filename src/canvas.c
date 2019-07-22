@@ -20,9 +20,8 @@
  * dimensions. The current glyph is then created and the canvas
  * dimensions are converted to pixel units.S
  */
-Canvas *CanvasCreate(const char *id, const u32 sx, const u32 sy,
-                     const SDL_Rect rect, const CanvasType type,
-                     const bool writable) {
+Canvas *CanvasCreate(const char *id, u32 sx, u32 sy, SDL_Rect rect,
+                     CanvasType type, bool writable) {
     Canvas *canvas = Allocate(sizeof(Canvas));
     strcpy(canvas->id, id);
     canvas->sx = sx;
@@ -62,9 +61,9 @@ void CanvasFree(Canvas *canvas) {
  */
 void CanvasHandleInput(Canvas *canvas, const Input *input) {
     canvas->op = CANVAS_NONE;
-    const SDL_Point mpos = InputMouseSnap(canvas->sx, canvas->sy);
+    SDL_Point mpos = InputMouseSnap(canvas->sx, canvas->sy);
     for (i32 i = 0; i < ArrayCount(canvas->glyphs); ++i) {
-        const Glyph *glyph = canvas->glyphs[i];
+        Glyph *glyph = canvas->glyphs[i];
         SDL_Rect r = {0};
         r.x = (u32)glyph->x;
         r.y = (u32)glyph->y;
@@ -108,7 +107,7 @@ void CanvasHandleInput(Canvas *canvas, const Input *input) {
  * glyph (based on canvas type); erasure just sets a canvas glyph to blank.
  */
 void CanvasUpdate(Canvas *canvas, Glyph *cur_glyph) {
-    const i64 i = canvas->glyph_index;
+    i64 i = canvas->glyph_index;
 
     if (!cur_glyph || i < 0 || i > ArrayCount(canvas->glyphs)) {
         return;

@@ -49,7 +49,7 @@ typedef struct Interface_s {
  * \param [in] sy The height of a glyph.
  * \returns Pointer to an interface object.
  */
-Interface *InterfaceCreate(const u32 sx, const u32 sy);
+Interface *InterfaceCreate(u32 sx, u32 sy);
 
 /**
  * \brief Create a button at a given position with a given colour.

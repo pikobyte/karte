@@ -20,9 +20,8 @@
  * are created, only a border is considered. Glyph indices are set based on
  * corners, horizontal and vertical edges.
  */
-Panel *PanelCreate(const char *id, const u32 sx, const u32 sy,
-                   const SDL_Rect rect, const Border border,
-                   const SDL_Color col) {
+Panel *PanelCreate(const char *id, u32 sx, u32 sy, SDL_Rect rect, Border border,
+                   SDL_Color col) {
     Panel *panel = Allocate(sizeof(Panel));
     strcpy(panel->id, id);
     panel->sx = sx;
@@ -94,7 +93,7 @@ void PanelRender(const Panel *panel, const Window *wind, const Texture *tex) {
  * check pixel boundedness, must be converted to pixel units. The function
  * returns whether a point lies within this pixel unit bounding rectangle.
  */
-bool PanelWithin(const Panel *panel, const SDL_Point point) {
+bool PanelWithin(const Panel *panel, SDL_Point point) {
     SDL_Rect r = panel->rect;
     r.x *= panel->sx;
     r.y *= panel->sy;

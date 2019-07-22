@@ -72,9 +72,8 @@ typedef struct Panel_s {
  * \param [in] col Colour of the border.
  * \returns Pointer to a panel object.
  */
-Panel *PanelCreate(const char *id, const u32 sx, const u32 sy,
-                   const SDL_Rect rect, const Border border,
-                   const SDL_Color col);
+Panel *PanelCreate(const char *id, u32 sx, u32 sy, SDL_Rect rect, Border border,
+                   SDL_Color col);
 
 /**
  * \brief Frees the panel memory.
@@ -99,6 +98,6 @@ void PanelRender(const Panel *panel, const Window *wind, const Texture *tex);
  * \param [in] tex Texture to render from.
  * \returns Void.
  */
-bool PanelWithin(const Panel *panel, const SDL_Point point);
+bool PanelWithin(const Panel *panel, SDL_Point point);
 
 #endif

@@ -49,9 +49,8 @@ typedef struct Label_s {
  * \param [in] bg Background colour of the text.
  * \returns Pointer to a label object.
  */
-Label *LabelCreate(const char *id, const u32 sx, const u32 sy, const i32 x,
-                   const i32 y, const char *text, const SDL_Color fg,
-                   const SDL_Color bg);
+Label *LabelCreate(const char *id, u32 sx, u32 sy, i32 x, i32 y,
+                   const char *text, SDL_Color fg, SDL_Color bg);
 
 /**
  * \brief Frees the label memory.

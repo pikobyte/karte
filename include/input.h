@@ -72,7 +72,7 @@ void InputUpdate(Input *input);
  * \param [in] key A keyboard key code to check.
  * \returns Whether the current key is pressed.
  */
-bool InputKeyPressed(const Input *input, const u32 key);
+bool InputKeyPressed(const Input *input, u32 key);
 
 /**
  * \brief Checks whether a keyboard modifier button is pressed.
@@ -80,7 +80,7 @@ bool InputKeyPressed(const Input *input, const u32 key);
  * \param [in] mod A keyboard modifier combination to check.
  * \returns Whether the current modifier combination is pressed.
  */
-bool InputModPressed(const Input *input, const u16 mod);
+bool InputModPressed(const Input *input, u16 mod);
 
 /**
  * \brief Checks whether a keyboard button is held down.
@@ -88,7 +88,7 @@ bool InputModPressed(const Input *input, const u16 mod);
  * \param [in] key A keyboard key code to check.
  * \returns Whether the current key is held down.
  */
-bool InputKeyDown(const Input *input, const u32 key);
+bool InputKeyDown(const Input *input, u32 key);
 
 /**
  * \brief Checks whether a keyboard modifier button is held down.
@@ -96,7 +96,7 @@ bool InputKeyDown(const Input *input, const u32 key);
  * \param [in] mod A keyboard modifier combination to check.
  * \returns Whether the current modifier combination is held down.
  */
-bool InputModDown(const Input *input, const u16 mod);
+bool InputModDown(const Input *input, u16 mod);
 
 /**
  * \brief Checks whether a keyboard button is released.
@@ -104,7 +104,7 @@ bool InputModDown(const Input *input, const u16 mod);
  * \param [in] key A keyboard key code to check.
  * \returns Whether the current key is released.
  */
-bool InputKeyReleased(const Input *input, const u32 key);
+bool InputKeyReleased(const Input *input, u32 key);
 
 /**
  * \brief Checks whether a keyboard modifier button is released.
@@ -112,7 +112,7 @@ bool InputKeyReleased(const Input *input, const u32 key);
  * \param [in] mod A keyboard modifier combination to check.
  * \returns Whether the current modifier combination is released.
  */
-bool InputModReleased(const Input *input, const u16 mod);
+bool InputModReleased(const Input *input, u16 mod);
 
 /* -----------------------------------------------------------------------------
  * MOUSE
@@ -123,7 +123,7 @@ bool InputModReleased(const Input *input, const u16 mod);
  * \param [in] button A mouse button code to check.
  * \returns Whether the current mouse button is pressed.
  */
-bool InputMousePressed(const Input *input, const u32 button);
+bool InputMousePressed(const Input *input, u32 button);
 
 /**
  * \brief Checks whether a mouse button is held down.
@@ -131,7 +131,7 @@ bool InputMousePressed(const Input *input, const u32 button);
  * \param [in] button A mouse button code to check.
  * \returns Whether the current mouse button is held down.
  */
-bool InputMouseDown(const Input *input, const u32 button);
+bool InputMouseDown(const Input *input, u32 button);
 
 /**
  * \brief Checks whether a mouse button is released.
@@ -139,7 +139,7 @@ bool InputMouseDown(const Input *input, const u32 button);
  * \param [in] button A mouse button code to check.
  * \returns Whether the current mouse button is released.
  */
-bool InputMouseReleased(const Input *input, const u32 button);
+bool InputMouseReleased(const Input *input, u32 button);
 
 /**
  * \brief Gets the x-position of the mouse in pixels.
@@ -164,14 +164,14 @@ SDL_Point InputMousePos(void);
  * \param [in] snap The value to snap to.
  * \returns The snapped x-position of the mouse in pixels.
  */
-u32 InputMouseSnapX(const u32 snap);
+u32 InputMouseSnapX(u32 snap);
 
 /**
  * \brief Snaps the mouse y-position to a given division.
  * \param [in] snap The value to snap to.
  * \returns The snapped y-position of the mouse in pixels.
  */
-u32 InputMouseSnapY(const u32 snap);
+u32 InputMouseSnapY(u32 snap);
 
 /**
  * \brief Snaps the mouse position to a given division.
@@ -180,6 +180,6 @@ u32 InputMouseSnapY(const u32 snap);
  * \returns An x-y pair stored as an SDL_Point storing the snapped position of
  * the mouse in pixels.
  */
-SDL_Point InputMouseSnap(const u32 snap_x, const u32 snap_y);
+SDL_Point InputMouseSnap(u32 snap_x, u32 snap_y);
 
 #endif

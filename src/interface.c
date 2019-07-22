@@ -20,7 +20,7 @@
  * into the interface arrays.
  * TODO: Load from a JSON file or something similar.
  */
-Interface *InterfaceCreate(const u32 sx, const u32 sy) {
+Interface *InterfaceCreate(u32 sx, u32 sy) {
     Interface *itfc = Allocate(sizeof(Interface));
     Log(LOG_NOTIFY, "Created interface at %p.", itfc);
     itfc->sx = sx;
@@ -178,7 +178,7 @@ void InterfaceUpdate(Interface *itfc) {
         CanvasUpdate(itfc->canvases[i], itfc->cur_glyph);
     }
 
-    const SDL_Point mpos = InputMouseSnap(itfc->sx, itfc->sy);
+    SDL_Point mpos = InputMouseSnap(itfc->sx, itfc->sy);
     itfc->show_ghost = SDL_PointInRect(&mpos, &itfc->canvases[0]->rect);
 }
 

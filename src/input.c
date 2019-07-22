@@ -99,7 +99,7 @@ void InputUpdate(Input *input) {
  * range. If it is, then the return is if the current key is currently down and
  * wasn't in the previous frame.
  */
-bool InputKeyPressed(const Input *input, const u32 key) {
+bool InputKeyPressed(const Input *input, u32 key) {
     if (key > NUM_KEYS) {
         return false;
     }
@@ -111,7 +111,7 @@ bool InputKeyPressed(const Input *input, const u32 key) {
  * key is currently down and wasn't in the previous frame, only then return
  * true.
  */
-bool InputModPressed(const Input *input, const u16 mod) {
+bool InputModPressed(const Input *input, u16 mod) {
     return (input->curr_mod_map & mod) && !(input->prev_mod_map & mod);
 }
 
@@ -120,7 +120,7 @@ bool InputModPressed(const Input *input, const u16 mod) {
  * range. If it is, then the return is if the current key is currently down and
  * was also in the previous frame.
  */
-bool InputKeyDown(const Input *input, const u32 key) {
+bool InputKeyDown(const Input *input, u32 key) {
     if (key > NUM_KEYS) {
         return false;
     }
@@ -132,7 +132,7 @@ bool InputKeyDown(const Input *input, const u32 key) {
  * key is currently down and was also in the previous frame, only then return
  * true.
  */
-bool InputModDown(const Input *input, const u16 mod) {
+bool InputModDown(const Input *input, u16 mod) {
     return (input->curr_mod_map & mod) && (input->prev_mod_map & mod);
 }
 
@@ -141,7 +141,7 @@ bool InputModDown(const Input *input, const u16 mod) {
  * range. If it is, then the return is if the current key is not currently down
  * but was in the previous frame.
  */
-bool InputKeyReleased(const Input *input, const u32 key) {
+bool InputKeyReleased(const Input *input, u32 key) {
     if (key > NUM_KEYS) {
         return false;
     }
@@ -153,7 +153,7 @@ bool InputKeyReleased(const Input *input, const u32 key) {
  * key is not currently down but was in the previous frame, only then return
  * true.
  */
-bool InputModReleased(const Input *input, const u16 mod) {
+bool InputModReleased(const Input *input, u16 mod) {
     return !(input->curr_mod_map & mod) && (input->prev_mod_map & mod);
 }
 
@@ -165,7 +165,7 @@ bool InputModReleased(const Input *input, const u16 mod) {
  * range. If it is, then the return is if the current button is currently down
  * and wasn't in the previous frame.
  */
-bool InputMousePressed(const Input *input, const u32 button) {
+bool InputMousePressed(const Input *input, u32 button) {
     if (button > NUM_BUTTONS) {
         return false;
     }
@@ -177,7 +177,7 @@ bool InputMousePressed(const Input *input, const u32 button) {
  * range. If it is, then the return is if the current button is currently down
  * and was also in the previous frame.
  */
-bool InputMouseDown(const Input *input, const u32 button) {
+bool InputMouseDown(const Input *input, u32 button) {
     if (button > NUM_BUTTONS) {
         return false;
     }
@@ -189,7 +189,7 @@ bool InputMouseDown(const Input *input, const u32 button) {
  * range. If it is, then the return is if the current button is not currently
  * down but was in the previous frame.
  */
-bool InputMouseReleased(const Input *input, const u32 button) {
+bool InputMouseReleased(const Input *input, u32 button) {
     if (button > NUM_BUTTONS) {
         return false;
     }
@@ -231,7 +231,7 @@ SDL_Point InputMousePos(void) {
  * \desc Snaps the x-position of the mouse to some division. This essentially
  * rounds the mouse x-position and returns this rounded value.
  */
-u32 InputMouseSnapX(const u32 snap) {
+u32 InputMouseSnapX(u32 snap) {
     i32 x = 0, y = 0;
     SDL_GetMouseState(&x, &y);
     return (u32)((x / snap) * snap);
@@ -241,7 +241,7 @@ u32 InputMouseSnapX(const u32 snap) {
  * \desc Snaps the y-position of the mouse to some division. This essentially
  * rounds the mouse y-position and returns this rounded value.
  */
-u32 InputMouseSnapY(const u32 snap) {
+u32 InputMouseSnapY(u32 snap) {
     i32 x = 0, y = 0;
     SDL_GetMouseState(&x, &y);
     return (u32)((y / snap) * snap);
@@ -252,7 +252,7 @@ u32 InputMouseSnapY(const u32 snap) {
  * rounds the mouse position and returns this rounded position as an x-y pair
  * stored in an SDL_Point.
  */
-SDL_Point InputMouseSnap(const u32 snap_x, const u32 snap_y) {
+SDL_Point InputMouseSnap(u32 snap_x, u32 snap_y) {
     SDL_Point point = {0};
     point.x = InputMouseSnapX(snap_x);
     point.y = InputMouseSnapY(snap_y);

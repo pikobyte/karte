@@ -98,7 +98,7 @@
  * \returns The reallocated array, with a pointer to the data i.e. after the
  * header.
  */
-void *ArrayGrowBy(const void *arr, const i32 n, const i32 size);
+void *ArrayGrowBy(const void *arr, i32 n, i32 size);
 
 /* -------------------------------------------------------------------------- */
 /* I/O                                                                        */
@@ -133,7 +133,7 @@ typedef enum LogCode_e {
  * \param [in] ... Extra parameters required for the formatted string.
  * \returns Void.
  */
-void Log(const LogCode lc, const char *str, ...);
+void Log(LogCode lc, const char *str, ...);
 
 /* -------------------------------------------------------------------------- */
 /* MEMORY                                                                     */
@@ -144,7 +144,7 @@ void Log(const LogCode lc, const char *str, ...);
  * \param [in] size Size of memory to be allocated.
  * \returns Pointer to the allocated memory.
  */
-void *Allocate(const size_t size);
+void *Allocate(size_t size);
 
 /**
  * \brief Deallocates memory and decrements the number of allocations.
