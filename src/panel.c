@@ -15,15 +15,14 @@
 #include "panel.h"
 
 /**
- * \desc The memory for the panel is allocated first, and its ID and dimensions
- * set. If there is no border, then no glyphs have to be created. When glyphs
- * are created, only a border is considered. Glyph indices are set based on
- * corners, horizontal and vertical edges.
+ * \desc The memory for the panel is allocated first and its dimensions set. If
+ * there is no border, then no glyphs have to be created. When glyphs are
+ * created, only a border is considered. Glyph indices are set based on corners,
+ * horizontal and vertical edges.
  */
-Panel *PanelCreate(const char *id, u32 sx, u32 sy, SDL_Rect rect, Border border,
+Panel *PanelCreate(u32 sx, u32 sy, SDL_Rect rect, Border border,
                    SDL_Color col) {
     Panel *panel = Allocate(sizeof(Panel));
-    strcpy(panel->id, id);
     panel->sx = sx;
     panel->sy = sy;
     panel->rect = rect;

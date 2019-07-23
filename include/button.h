@@ -32,13 +32,12 @@
 /**
  * \brief Buttons can be pressed by the user to activate some functionality.
  *
- * A button has an identifier, dimensions, a panel with or without a border, and
- * a text label. A button is either idle, impressed (mouse down) or pressed
- * (mouse released). The colour changes based on this state. A test for a button
- * press is based on its ID and its pressed state,
+ * A button has dimensions, a panel with or without a border, and a text label.
+ * A button is either idle, impressed (mouse down) or pressed (mouse released).
+ * The colour changes based on this state. A test for a button press is based on
+ * its ID and its pressed state,
  */
 typedef struct Button_s {
-    char id[256];   /**< Identifier. */
     Label *label;   /**< Text label. */
     Panel *panel;   /**< Panel encompassing the button. */
     bool active;    /**< Whether the button can be interacted with. */
@@ -49,7 +48,6 @@ typedef struct Button_s {
 
 /**
  * \brief Create a button at a given position with a given colour.
- * \param [in] id Identifier for the button.
  * \param [in] sx The width of a glyph.
  * \param [in] sy The height of a glyph.
  * \param [in] x The x-position of the label in glyph units.
@@ -61,9 +59,9 @@ typedef struct Button_s {
  * \param [in] active The default active state of the button.
  * \returns Pointer to a panel object.
  */
-Button *ButtonCreate(const char *id, u32 sx, u32 sy, i32 x, i32 y,
-                     const char *text, Border border, SDL_Color text_col,
-                     SDL_Color bord_col, bool active);
+Button *ButtonCreate(u32 sx, u32 sy, i32 x, i32 y, const char *text,
+                     Border border, SDL_Color text_col, SDL_Color bord_col,
+                     bool active);
 
 /**
  * \brief Frees the button memory.
@@ -99,10 +97,9 @@ void ButtonRender(const Button *button, const Window *wind, const Texture *tex);
 /**
  * \brief Checks whether a button and chosen ID is pressed.
  * \param [in] button The button to check whether it has been pressed.
- * \param [in] id The ID of the button wishing to be tested.
  * \returns Whether the button is pressed.
  */
-bool ButtonIsPressed(const Button *button, const char *id);
+bool ButtonIsPressed(const Button *button);
 
 /**
  * \brief Changes the foreground colour of a button.

@@ -16,14 +16,13 @@
 #include "canvas.h"
 
 /**
- * \desc First allocates the memory for the canvas then sets its ID and glyph
- * dimensions. The current glyph is then created and the canvas
- * dimensions are converted to pixel units.S
+ * \desc First allocates the memory for the canvas then sets its glyph
+ * dimensions. The current glyph is then created and the canvas dimensions are
+ * converted to pixel units.
  */
-Canvas *CanvasCreate(const char *id, u32 sx, u32 sy, SDL_Rect rect,
-                     CanvasType type, bool writable) {
+Canvas *CanvasCreate(u32 sx, u32 sy, SDL_Rect rect, CanvasType type,
+                     bool writable) {
     Canvas *canvas = Allocate(sizeof(Canvas));
-    strcpy(canvas->id, id);
     canvas->sx = sx;
     canvas->sy = sy;
     canvas->type = type;

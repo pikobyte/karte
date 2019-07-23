@@ -19,10 +19,9 @@
  * created by looping through the string, and their positions are set based on
  * the input parameters as well as the glyph dimensions.
  */
-Label *LabelCreate(const char *id, u32 sx, u32 sy, i32 x, i32 y,
-                   const char *text, SDL_Color fg, SDL_Color bg) {
+Label *LabelCreate(u32 sx, u32 sy, i32 x, i32 y, const char *text, SDL_Color fg,
+                   SDL_Color bg) {
     Label *label = Allocate(sizeof(Label));
-    strcpy(label->id, id);
     label->x = x;
     label->y = y;
     strcpy(label->text, text);

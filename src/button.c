@@ -19,30 +19,26 @@
 #include "button.h"
 
 /**
- * \desc First allocates the memory for the button and sets its ID. A check is
- * made for the label position: if there is no border, the label is placed at
- * (x, y); otherwise, the label is shifted down and right by a glyph to make
- * room for the border. Similarly the width and height of the button are set
- * such that, width is the length of the text and height is a single glyph in
- * the case of no border. These are expanded each way by 2 glyphs when a border
- * is present. The label and panel (given their own IDs) are created, and the
- * button rectangle is converted to pixels based on glyph dimensions.
+ * \desc First allocates the memory for the button. A check is made for the
+ * label position: if there is no border, the label is placed at (x, y);
+ * otherwise, the label is shifted down and right by a glyph to make room for
+ * the border. Similarly the width and height of the button are set such that,
+ * width is the length of the text and height is a single glyph in the case of
+ * no border. These are expanded each way by 2 glyphs when a border is present.
+ * The label and panel (given their own IDs) are created, and the button
+ * rectangle is converted to pixels based on glyph dimensions.
  */
-Button *ButtonCreate(const char *id, u32 sx, u32 sy, i32 x, i32 y,
-                     const char *text, Border border, SDL_Color text_col,
-                     SDL_Color bord_col, bool active) {
+Button *ButtonCreate(u32 sx, u32 sy, i32 x, i32 y, const char *text,
+                     Border border, SDL_Color text_col, SDL_Color bord_col,
+                     bool active) {
     Button *button = Allocate(sizeof(Button));
-    strcpy(button->id, id);
     i32 len = (i32)strlen(text);
 
     i32 label_x = border == BORDER_NONE ? x : x + 1;
     i32 label_y = border == BORDER_NONE ? y : y + 1;
 
-    char label_id[256];
-    strcpy(label_id, button->id);
-    strcat(label_id, "_label");
     button->label =
-        LabelCreate(label_id, sx, sy, label_x, label_y, text, text_col, BLACK);
+        LabelCreate(sx, sy, label_x, label_y, text, text_col, BLACK);
 
     SDL_Rect rect = {0};
     rect.x = x;
@@ -50,10 +46,7 @@ Button *ButtonCreate(const char *id, u32 sx, u32 sy, i32 x, i32 y,
     rect.w = (border == BORDER_NONE ? len : len + 2);
     rect.h = (border == BORDER_NONE ? 1 : 3);
 
-    char panel_id[256];
-    strcpy(panel_id, button->id);
-    strcat(panel_id, "_panel");
-    button->panel = PanelCreate(panel_id, sx, sy, rect, border, bord_col);
+    button->panel = PanelCreate(sx, sy, rect, border, bord_col);
 
     button->active = active;
     button->hovering = false;
@@ -140,8 +133,14 @@ void ButtonRender(const Button *button, const Window *wind,
  * pressed flag as well as a chosen button ID. This allows different buttons to
  * be checked and different behaviour to be issued.
  */
-bool ButtonIsPressed(const Button *button, const char *id) {
-    return button->pressed && !(strcmp(button->id, id));
+bool ButtonIsPressed(const Button *button) {
+    const SDL_Point mpos = InputMousePos();
+    SDL_Rect r = button->panel->rect;
+    r.x *= 16;
+    r.y *= 16;
+    r.w *= 16;
+    r.h *= 16;
+    return button->pressed && SDL_PointInRect(&mpos, &r);
 }
 
 /**

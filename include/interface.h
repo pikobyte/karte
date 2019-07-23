@@ -24,6 +24,7 @@
 #include "label.h"
 #include "panel.h"
 #include "utils.h"
+#include "widget.h"
 
 /**
  * \brief An interface is with what the user interacts with in the program.
@@ -33,14 +34,11 @@
  * currently loaded glyphs.
  */
 typedef struct Interface_s {
-    u32 sx;            /**< Glyph width. */
-    u32 sy;            /**< Glyph height. */
-    Button **buttons;  /**< List of buttons. */
-    Canvas **canvases; /**< List of canvases. */
-    Label **labels;    /**< List of labels. */
-    Panel **panels;    /**< List of panels. */
-    Glyph *cur_glyph;  /**< Currently selected glyph. */
-    bool show_ghost;   /** Flag to show current glyph on a canvas. */
+    u32 sx;           /**< Glyph width. */
+    u32 sy;           /**< Glyph height. */
+    Widget **widgets; /**< List of UI widgets. */
+    Glyph *cur_glyph; /**< Currently selected glyph. */
+    bool show_ghost;  /** Flag to show current glyph on a canvas. */
 } Interface;
 
 /**
@@ -82,5 +80,23 @@ void InterfaceUpdate(Interface *itfc);
  */
 void InterfaceRender(const Interface *itfc, const Window *wind,
                      const Texture *tex);
+
+/**
+ * \brief Sorts a set of widgets by ascending render order.
+ * \param [in] a The first comparator.
+ * \param [in] b The second comparator.
+ * \returns Swap behaviour.
+ */
+static int InterfaceSortByRenderOrder(const void *a, const void *b);
+
+/**
+ * \brief Finds a widget based on its identifier and type.
+ * \param [in] itfc An interface to search the widgets of.
+ * \param [in] id The widget identifier to search against.
+ * \param [in] type The widget type to search against.
+ * \returns A found widget, or otherwise NULL.
+ */
+static Widget *InterfaceRetrieveWidget(const Interface *itfc, const char *id,
+                                       WidgetType type);
 
 #endif

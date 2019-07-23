@@ -16,8 +16,9 @@
 
 /**
  * \desc Begins by allocating memory for the interface and assigning glyph
- * dimensions. The interface components are then created after this and push
- * into the interface arrays.
+ * dimensions. The interface array are then created after this and pushed into
+ * the interface widget array. The widgets are sorted by render order at the end
+ * of the function.
  * TODO: Load from a JSON file or something similar.
  */
 Interface *InterfaceCreate(u32 sx, u32 sy) {
@@ -33,18 +34,23 @@ Interface *InterfaceCreate(u32 sx, u32 sy) {
     itfc->cur_glyph->index = 1;
     itfc->show_ghost = false;
 
-    Button *b1 = ButtonCreate("quit_button", sx, sy, 1, 41, "Quit",
-                              BORDER_SINGLE, GREY, LIGHTGREY, true);
-    Button *b2 = ButtonCreate("save_button", sx, sy, 7, 41, "Save",
-                              BORDER_SINGLE, GREY, LIGHTGREY, false);
-    Button *b3 = ButtonCreate("load_button", sx, sy, 13, 41, "Load",
-                              BORDER_SINGLE, GREY, LIGHTGREY, false);
-    ArrayPush(itfc->buttons, b1);
-    ArrayPush(itfc->buttons, b2);
-    ArrayPush(itfc->buttons, b3);
+    // BUTTONS -----------------------------------------------------------------
+    Button *b1 = ButtonCreate(sx, sy, 1, 41, "Quit", BORDER_SINGLE, GREY,
+                              LIGHTGREY, true);
+    Button *b2 = ButtonCreate(sx, sy, 7, 41, "Save", BORDER_SINGLE, GREY,
+                              LIGHTGREY, false);
+    Button *b3 = ButtonCreate(sx, sy, 13, 41, "Load", BORDER_SINGLE, GREY,
+                              LIGHTGREY, false);
+    ArrayPush(itfc->widgets,
+              WidgetCreate("quit_button", WIDGET_BUTTON, b1, 0, 0));
+    ArrayPush(itfc->widgets,
+              WidgetCreate("save_button", WIDGET_BUTTON, b2, 0, 0));
+    ArrayPush(itfc->widgets,
+              WidgetCreate("load_button", WIDGET_BUTTON, b3, 0, 0));
 
-    Canvas *c1 = CanvasCreate("canvas_main", sx, sy, (SDL_Rect){21, 1, 58, 43},
-                              CANVAS_EDITOR, true);
+    // CANVASES ----------------------------------------------------------------
+    Canvas *c1 =
+        CanvasCreate(sx, sy, (SDL_Rect){21, 1, 58, 43}, CANVAS_EDITOR, true);
     for (i8 i = 0; i < 58; ++i) {
         for (i8 j = 0; j < 43; ++j) {
             Glyph *glyph = GlyphCreate();
@@ -55,10 +61,9 @@ Interface *InterfaceCreate(u32 sx, u32 sy) {
             ArrayPush(c1->glyphs, glyph);
         }
     }
-    ArrayPush(itfc->canvases, c1);
 
-    Canvas *c2 = CanvasCreate("canvas_glyphs", sx, sy,
-                              (SDL_Rect){2, 24, 17, 16}, CANVAS_GLYPH, false);
+    Canvas *c2 =
+        CanvasCreate(sx, sy, (SDL_Rect){2, 24, 17, 16}, CANVAS_GLYPH, false);
     for (i8 i = 0; i < 16; ++i) {
         for (i8 j = 0; j < 16; ++j) {
             Glyph *glyph = GlyphCreate();
@@ -69,10 +74,9 @@ Interface *InterfaceCreate(u32 sx, u32 sy) {
             ArrayPush(c2->glyphs, glyph);
         }
     }
-    ArrayPush(itfc->canvases, c2);
 
-    Canvas *c3 = CanvasCreate("canvas_colors", sx, sy, (SDL_Rect){2, 17, 16, 4},
-                              CANVAS_COLOR, false);
+    Canvas *c3 =
+        CanvasCreate(sx, sy, (SDL_Rect){2, 17, 16, 4}, CANVAS_COLOR, false);
     for (i8 i = 0; i < 16; ++i) {
         for (i8 j = 0; j < 4; ++j) {
             Glyph *glyph = GlyphCreate();
@@ -83,128 +87,107 @@ Interface *InterfaceCreate(u32 sx, u32 sy) {
             ArrayPush(c3->glyphs, glyph);
         }
     }
-    ArrayPush(itfc->canvases, c3);
 
-    Label *l1 =
-        LabelCreate("title", sx, sy, 4, 0, "Karte v0.0.1", DARKGREY, LIGHTGREY);
-    Label *l2 =
-        LabelCreate("color_title", sx, sy, 2, 16, "Colours", LIGHTGREY, BLACK);
-    Label *l3 =
-        LabelCreate("glyph_title", sx, sy, 2, 23, "Glyphs", LIGHTGREY, BLACK);
-    Label *l4 = LabelCreate("current_glyph", sx, sy, 2, 14,
-                            "Current glyph:", LIGHTGREY, BLACK);
-    ArrayPush(itfc->labels, l1);
-    ArrayPush(itfc->labels, l2);
-    ArrayPush(itfc->labels, l3);
-    ArrayPush(itfc->labels, l4);
+    ArrayPush(itfc->widgets,
+              WidgetCreate("canvas_main", WIDGET_CANVAS, c1, 0, 0));
+    ArrayPush(itfc->widgets,
+              WidgetCreate("canvas_glyphs", WIDGET_CANVAS, c2, 0, 0));
+    ArrayPush(itfc->widgets,
+              WidgetCreate("canvas_colors", WIDGET_CANVAS, c3, 0, 0));
 
-    Panel *p1 = PanelCreate("options", sx, sy, (SDL_Rect){0, 0, 20, 45},
-                            BORDER_SINGLE, LIGHTGREY);
-    Panel *p2 = PanelCreate("editor", sx, sy, (SDL_Rect){20, 0, 60, 45},
-                            BORDER_SINGLE, LIGHTGREY);
-    Panel *p3 = PanelCreate("color_box", sx, sy, (SDL_Rect){1, 16, 18, 6},
-                            BORDER_SINGLE, LIGHTGREY);
-    Panel *p4 = PanelCreate("glyph_box", sx, sy, (SDL_Rect){1, 23, 18, 18},
-                            BORDER_SINGLE, LIGHTGREY);
-    ArrayPush(itfc->panels, p1);
-    ArrayPush(itfc->panels, p2);
-    ArrayPush(itfc->panels, p3);
-    ArrayPush(itfc->panels, p4);
+    // LABELS ------------------------------------------------------------------
+    Label *l1 = LabelCreate(sx, sy, 4, 0, "Karte v0.0.1", DARKGREY, LIGHTGREY);
+    Label *l2 = LabelCreate(sx, sy, 2, 16, "Colours", LIGHTGREY, BLACK);
+    Label *l3 = LabelCreate(sx, sy, 2, 23, "Glyphs", LIGHTGREY, BLACK);
+    Label *l4 = LabelCreate(sx, sy, 2, 14, "Current glyph:", LIGHTGREY, BLACK);
+
+    ArrayPush(itfc->widgets, WidgetCreate("title", WIDGET_LABEL, l1, 0, 1));
+    ArrayPush(itfc->widgets,
+              WidgetCreate("color_title", WIDGET_LABEL, l2, 0, 1));
+    ArrayPush(itfc->widgets,
+              WidgetCreate("glyph_title", WIDGET_LABEL, l3, 0, 1));
+    ArrayPush(itfc->widgets,
+              WidgetCreate("current_glyph", WIDGET_LABEL, l4, 0, 1));
+
+    // PANELS ------------------------------------------------------------------
+    Panel *p1 =
+        PanelCreate(sx, sy, (SDL_Rect){0, 0, 20, 45}, BORDER_SINGLE, LIGHTGREY);
+    Panel *p2 = PanelCreate(sx, sy, (SDL_Rect){20, 0, 60, 45}, BORDER_SINGLE,
+                            LIGHTGREY);
+    Panel *p3 =
+        PanelCreate(sx, sy, (SDL_Rect){1, 16, 18, 6}, BORDER_SINGLE, LIGHTGREY);
+    Panel *p4 = PanelCreate(sx, sy, (SDL_Rect){1, 23, 18, 18}, BORDER_SINGLE,
+                            LIGHTGREY);
+
+    ArrayPush(itfc->widgets, WidgetCreate("options", WIDGET_PANEL, p1, 0, 0));
+    ArrayPush(itfc->widgets, WidgetCreate("editor", WIDGET_PANEL, p2, 0, 0));
+    ArrayPush(itfc->widgets, WidgetCreate("color_box", WIDGET_PANEL, p3, 0, 0));
+    ArrayPush(itfc->widgets, WidgetCreate("glyph_box", WIDGET_PANEL, p4, 0, 0));
+
+    qsort(itfc->widgets, ArrayCount(itfc->widgets), sizeof(Widget *),
+          &InterfaceSortByRenderOrder);
 
     return itfc;
 }
 
 /**
- * \desc Frees the interface memory by iterating through the interface
- * components, freeing each, freeing each array and finally the interface
- * pointer.
+ * \desc Frees the interface memory by iterating through the interface widgets,
+ * freeing each, freeing each array and finally the interface pointer.
  */
 void InterfaceFree(Interface *itfc) {
+    for (i32 i = 0; i < ArrayCount(itfc->widgets); ++i) {
+        WidgetFree(itfc->widgets[i]);
+    }
+    ArrayFree(itfc->widgets);
+
     GlyphFree(itfc->cur_glyph);
-
-    for (i32 i = 0; i < ArrayCount(itfc->buttons); ++i) {
-        ButtonFree(itfc->buttons[i]);
-    }
-    ArrayFree(itfc->buttons);
-
-    for (i32 i = 0; i < ArrayCount(itfc->canvases); ++i) {
-        CanvasFree(itfc->canvases[i]);
-    }
-    ArrayFree(itfc->canvases);
-
-    for (i32 i = 0; i < ArrayCount(itfc->labels); ++i) {
-        LabelFree(itfc->labels[i]);
-    }
-    ArrayFree(itfc->labels);
-
-    for (i32 i = 0; i < ArrayCount(itfc->panels); ++i) {
-        PanelFree(itfc->panels[i]);
-    }
-    ArrayFree(itfc->panels);
-
     Free(itfc);
 }
 
 /**
- * \desc Handles the input for interactable UI components. The interactions are
- * based on component state and a provided component identifier which allows for
- * singular component behaviour.
+ * \desc Handles the input for interactable UI widgets. The interactions are
+ * based on widget type. Individual widgets can be tested against by retrieving
+ * their corresponding data.
  */
 void InterfaceHandleInput(Interface *itfc, Input *input) {
-    for (i32 i = 0; i < ArrayCount(itfc->buttons); ++i) {
-        ButtonHandleInput(itfc->buttons[i], input);
-        if (ButtonIsPressed(itfc->buttons[i], "quit_button")) {
-            input->quit = true;
-        }
+    for (i32 i = 0; i < ArrayCount(itfc->widgets); ++i) {
+        WidgetHandleInput(itfc->widgets[i], input);
     }
 
-    for (i32 i = 0; i < ArrayCount(itfc->canvases); ++i) {
-        CanvasHandleInput(itfc->canvases[i], input);
+    Button *quit_button =
+        (Button *)InterfaceRetrieveWidget(itfc, "quit_button", WIDGET_BUTTON)
+            ->data;
+    if (ButtonIsPressed(quit_button)) {
+        input->quit = true;
     }
 }
 
 /**
- * \desc Updates the UI components that need it. This is typically changes in
+ * \desc Updates the UI widgets that need it. This is typically changes in
  * component state as well as visual appearance for user feedback. The current
  * paintable glyph is also set here based on the selected glyph in the options
  * panel.
  */
 void InterfaceUpdate(Interface *itfc) {
-    for (i32 i = 0; i < ArrayCount(itfc->buttons); ++i) {
-        ButtonUpdate(itfc->buttons[i]);
-    }
-
-    for (i32 i = 0; i < ArrayCount(itfc->canvases); ++i) {
-        CanvasUpdate(itfc->canvases[i], itfc->cur_glyph);
+    for (i32 i = 0; i < ArrayCount(itfc->widgets); ++i) {
+        WidgetUpdate(itfc->widgets[i], itfc->cur_glyph);
     }
 
     SDL_Point mpos = InputMouseSnap(itfc->sx, itfc->sy);
-    itfc->show_ghost = SDL_PointInRect(&mpos, &itfc->canvases[0]->rect);
+    Canvas *main_canvas =
+        (Canvas *)InterfaceRetrieveWidget(itfc, "canvas_main", WIDGET_CANVAS)
+            ->data;
+    itfc->show_ghost = SDL_PointInRect(&mpos, &main_canvas->rect);
 }
 
 /**
- * \desc Renders the whole interface by iterating through each component. The UI
- * buttons are rendered first, then canvases, followed by panels and finally
- * labels.
- * TODO: Update given different types of component.
- * TODO: Add z-layer for components and interleave.
+ * \desc Renders the whole interface by iterating through each widget. The
+ * current glyph is also rendered as well as a ghost glyph if the flag is set.
  */
 void InterfaceRender(const Interface *itfc, const Window *wind,
                      const Texture *tex) {
-    for (i32 i = 0; i < ArrayCount(itfc->buttons); ++i) {
-        ButtonRender(itfc->buttons[i], wind, tex);
-    }
-
-    for (i32 i = 0; i < ArrayCount(itfc->canvases); ++i) {
-        CanvasRender(itfc->canvases[i], wind, tex);
-    }
-
-    for (i32 i = 0; i < ArrayCount(itfc->panels); ++i) {
-        PanelRender(itfc->panels[i], wind, tex);
-    }
-
-    for (i32 i = 0; i < ArrayCount(itfc->labels); ++i) {
-        LabelRender(itfc->labels[i], wind, tex);
+    for (i32 i = 0; i < ArrayCount(itfc->widgets); ++i) {
+        WidgetRender(itfc->widgets[i], wind, tex);
     }
 
     if (itfc->show_ghost) {
@@ -216,4 +199,39 @@ void InterfaceRender(const Interface *itfc, const Window *wind,
     }
 
     GlyphRender(itfc->cur_glyph, wind, tex);
+}
+
+/**
+ * \desc A callback function for the sorting of widgets by their render order.
+ * The sorting is ascending: higher render order widgets are rendered last.
+ */
+static i32 InterfaceSortByRenderOrder(const void *a, const void *b) {
+    const Widget *x = *(const Widget **)a;
+    const Widget *y = *(const Widget **)b;
+
+    if (x->z < y->z) {
+        return -1;
+    } else if (x->z > y->z) {
+        return 1;
+    }
+
+    return 0;
+}
+
+/**
+ * \desc Retrieves a widget based on an identifier and a widget type. Only if
+ * these two conform together is the widget returned. Otherwise, the return
+ * value is NULL.
+ */
+static Widget *InterfaceRetrieveWidget(const Interface *itfc, const char *id,
+                                       WidgetType type) {
+    for (i32 i = 0; i < ArrayCount(itfc->widgets); ++i) {
+        const char *cur_id = itfc->widgets[i]->id;
+        const WidgetType cur_type = itfc->widgets[i]->type;
+        if (!strcmp(id, cur_id) && type == cur_type) {
+            return itfc->widgets[i];
+        }
+    }
+
+    return NULL;
 }

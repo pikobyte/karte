@@ -23,12 +23,11 @@
 /**
  * \brief A simple text label formed from ASCII glyphs.
  *
- * A label has a string identifier, position, text as well as foreground and
- * background colours. The label is single-lined: escape control sequences are
- * rendered as the corresponding graphical glyph.
+ * A label has a position, text as well as foreground and background colours.
+ * The label is single-lined: escape control sequences are rendered as the
+ * corresponding graphical glyph.
  */
 typedef struct Label_s {
-    char id[256];   /**< Identifier. */
     Glyph **glyphs; /**< Set of glyphs for label text. */
     i32 x;          /**< x-position of the label. */
     i32 y;          /**< y-position of the label. */
@@ -39,7 +38,6 @@ typedef struct Label_s {
 
 /**
  * \brief Create a label at a given position with a given colour.
- * \param [in] id Identifier for the label.
  * \param [in] sx The width of a glyph.
  * \param [in] sy The height of a glyph.
  * \param [in] x The x-position of the label in glyph units.
@@ -49,8 +47,8 @@ typedef struct Label_s {
  * \param [in] bg Background colour of the text.
  * \returns Pointer to a label object.
  */
-Label *LabelCreate(const char *id, u32 sx, u32 sy, i32 x, i32 y,
-                   const char *text, SDL_Color fg, SDL_Color bg);
+Label *LabelCreate(u32 sx, u32 sy, i32 x, i32 y, const char *text, SDL_Color fg,
+                   SDL_Color bg);
 
 /**
  * \brief Frees the label memory.

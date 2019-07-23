@@ -48,12 +48,11 @@ static const u8 DOUBLE_BORDER[6] = {201, 187, 200, 188, 205, 186};
 /**
  * \brief A simple rectangle to be rendered in ASCII glyphs.
  *
- * A panel has an id, a set of glyphs, dimensions, a border type and a border
- * colour. The inside of the rectangle remains unfilled, but the border is drawn
- * (if set).
+ * A panel has a set of glyphs, dimensions, a border type and a border colour.
+ * The inside of the rectangle remains unfilled, but the border is drawn (if
+ * set).
  */
 typedef struct Panel_s {
-    char id[256];   /**< Identifier. */
     u32 sx;         /**< Glyph width. */
     u32 sy;         /**< Glyph height. */
     Glyph **glyphs; /**< List of glyphs. */
@@ -64,7 +63,6 @@ typedef struct Panel_s {
 
 /**
  * \brief Create a label at a given position with a given colour.
- * \param [in] id Identifier for the panel.
  * \param [in] sx The width of a glyph.
  * \param [in] sy The height of a glyph.
  * \param [in] rect The dimensions of the panel in glyph units.
@@ -72,8 +70,7 @@ typedef struct Panel_s {
  * \param [in] col Colour of the border.
  * \returns Pointer to a panel object.
  */
-Panel *PanelCreate(const char *id, u32 sx, u32 sy, SDL_Rect rect, Border border,
-                   SDL_Color col);
+Panel *PanelCreate(u32 sx, u32 sy, SDL_Rect rect, Border border, SDL_Color col);
 
 /**
  * \brief Frees the panel memory.

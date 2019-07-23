@@ -94,7 +94,7 @@ void ApplicationRun(Application *app) {
  */
 void ApplicationHandleInput(Application *app) {
     InputUpdate(app->input);
-    if (app->input->quit) {
+    if (InputKeyPressed(app->input, SDLK_ESCAPE) || app->input->quit) {
         app->running = false;
     }
 

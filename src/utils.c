@@ -78,6 +78,10 @@ bool FileExists(const char *path) {
  * code. The log is written to the stdout for logs/warnings and stderr for
  * errors/fatals.
  */
+
+/*
+ * FIXME: Occasional egmentation faults in here when on Windows.
+ */
 void Log(LogCode lc, const char *str, ...) {
     char buff[512] = {0};
     char tod[32] = {0};
