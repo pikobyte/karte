@@ -125,3 +125,35 @@ void WidgetRender(const Widget *widget, const Window *wind,
     default: { break; }
     }
 }
+
+/**
+ * \desc A callback function for the sorting of widgets by their render order.
+ * The sorting is ascending: higher render order widgets are rendered last.
+ */
+i32 WidgetSort(const void *a, const void *b) {
+    const Widget *x = *(const Widget **)a;
+    const Widget *y = *(const Widget **)b;
+
+    if (x->z < y->z) {
+        return -1;
+    } else if (x->z > y->z) {
+        return 1;
+    }
+
+    return 0;
+}
+
+/**
+ * \desc Retrieves a widget based on an identifier. If it is found, return it.
+ * Otherwise, the return value is NULL.
+ */
+Widget *WidgetFind(Widget **widgets, const char *id) {
+    for (i32 i = 0; i < ArrayCount(widgets); ++i) {
+        const char *cur_id = widgets[i]->id;
+        if (!strcmp(id, cur_id)) {
+            return widgets[i];
+        }
+    }
+
+    return NULL;
+}

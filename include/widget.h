@@ -90,4 +90,20 @@ void WidgetUpdate(Widget *widget, Glyph *glyph);
  */
 void WidgetRender(const Widget *widget, const Window *wind, const Texture *tex);
 
+/**
+ * \brief Sorts a set of widgets by ascending render order.
+ * \param [in] a The first comparator.
+ * \param [in] b The second comparator.
+ * \returns Swap behaviour.
+ */
+int WidgetSort(const void *a, const void *b);
+
+/**
+ * \brief Finds a widget based on its identifier.
+ * \param [in] widgets An array of widgets to search.
+ * \param [in] id The widget identifier to search against.
+ * \returns A found widget, or otherwise NULL.
+ */
+Widget *WidgetFind(Widget **widgets, const char *id);
+
 #endif

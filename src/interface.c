@@ -125,7 +125,7 @@ Interface *InterfaceCreate(u32 sx, u32 sy) {
     ArrayPush(itfc->widgets, WidgetCreate("glyph_box", WIDGET_PANEL, p4, 0, 0));
 
     qsort(itfc->widgets, ArrayCount(itfc->widgets), sizeof(Widget *),
-          &InterfaceSortByRenderOrder);
+          &WidgetSort);
 
     return itfc;
 }
@@ -155,8 +155,7 @@ void InterfaceHandleInput(Interface *itfc, Input *input) {
     }
 
     Button *quit_button =
-        (Button *)InterfaceRetrieveWidget(itfc, "quit_button", WIDGET_BUTTON)
-            ->data;
+        (Button *)WidgetFind(itfc->widgets, "quit_button")->data;
     if (ButtonIsPressed(quit_button)) {
         input->quit = true;
     }
@@ -175,8 +174,7 @@ void InterfaceUpdate(Interface *itfc) {
 
     SDL_Point mpos = InputMouseSnap(itfc->sx, itfc->sy);
     Canvas *main_canvas =
-        (Canvas *)InterfaceRetrieveWidget(itfc, "canvas_main", WIDGET_CANVAS)
-            ->data;
+        (Canvas *)WidgetFind(itfc->widgets, "canvas_main")->data;
     itfc->show_ghost = SDL_PointInRect(&mpos, &main_canvas->rect);
 }
 
@@ -199,39 +197,4 @@ void InterfaceRender(const Interface *itfc, const Window *wind,
     }
 
     GlyphRender(itfc->cur_glyph, wind, tex);
-}
-
-/**
- * \desc A callback function for the sorting of widgets by their render order.
- * The sorting is ascending: higher render order widgets are rendered last.
- */
-static i32 InterfaceSortByRenderOrder(const void *a, const void *b) {
-    const Widget *x = *(const Widget **)a;
-    const Widget *y = *(const Widget **)b;
-
-    if (x->z < y->z) {
-        return -1;
-    } else if (x->z > y->z) {
-        return 1;
-    }
-
-    return 0;
-}
-
-/**
- * \desc Retrieves a widget based on an identifier and a widget type. Only if
- * these two conform together is the widget returned. Otherwise, the return
- * value is NULL.
- */
-static Widget *InterfaceRetrieveWidget(const Interface *itfc, const char *id,
-                                       WidgetType type) {
-    for (i32 i = 0; i < ArrayCount(itfc->widgets); ++i) {
-        const char *cur_id = itfc->widgets[i]->id;
-        const WidgetType cur_type = itfc->widgets[i]->type;
-        if (!strcmp(id, cur_id) && type == cur_type) {
-            return itfc->widgets[i];
-        }
-    }
-
-    return NULL;
 }
