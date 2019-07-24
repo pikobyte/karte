@@ -163,4 +163,15 @@ void Free(void *mem);
  */
 void DateAndTime(char *dest);
 
+/* -------------------------------------------------------------------------- */
+/* STRING                                                                     */
+/* -------------------------------------------------------------------------- */
+/**
+ * \brief Checks if a character is in a string.
+ * \param [in] str The string to be searched.
+ * \param [in] search The character to be searched for.
+ * \returns Whether the character exists within the string.
+ */
+bool StringContains(const char *str, char search);
+
 #endif

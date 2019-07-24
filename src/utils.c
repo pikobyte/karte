@@ -174,3 +174,17 @@ void DateAndTime(char *dest) {
     strftime(buff, 26, "%Y-%m-%d %H:%M:%S", tm_info);
     strcpy(dest, buff);
 }
+
+/**
+ * \desc Searches through a string and checks whether a character exists within
+ * it.
+ */
+bool StringContains(const char *str, char search) {
+    for (char i = 0; i < strlen(str); ++i) {
+        if (str[i] == search) {
+            return true;
+        }
+    }
+
+    return false;
+}
