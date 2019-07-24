@@ -29,9 +29,10 @@
 /**
  * \brief An interface is with what the user interacts with in the program.
  *
- * The UI contains a various components (labels, buttons etc.) which allow the
- * user to interact with the program. Stored also are the dimensions of the
- * currently loaded glyphs.
+ * The UI contains a various widgets (labels, buttons etc.) which allow the user
+ * to interact with the program. Stored also are the dimensions of the currently
+ * loaded glyphs, whether a ghost glyph should be shown and  the currently
+ * active tab.
  */
 typedef struct Interface_s {
     u32 sx;           /**< Glyph width. */

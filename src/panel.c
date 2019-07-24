@@ -34,6 +34,7 @@ Panel *PanelCreate(u32 sx, u32 sy, SDL_Rect rect, Border border,
     for (i32 i = 0; i < rect.w; ++i) {
         for (i32 j = 0; j < rect.h; ++j) {
             u8 index = 255;
+
             if (i == 0 && j == 0) {
                 index = 0;
             } else if (i == rect.w - 1 && j == 0) {
@@ -48,6 +49,15 @@ Panel *PanelCreate(u32 sx, u32 sy, SDL_Rect rect, Border border,
                 index = 5;
             } else {
                 continue;
+            }
+
+            // Do not draw corner pieces for thin panels.
+            if (rect.w == 1) {
+                index = 5;
+            }
+
+            if (rect.h == 1) {
+                index = 4;
             }
 
             Glyph *glyph = GlyphCreate();
