@@ -234,7 +234,12 @@ SDL_Point InputMousePos(void) {
 u32 InputMouseSnapX(u32 snap) {
     i32 x = 0, y = 0;
     SDL_GetMouseState(&x, &y);
-    return (u32)((x / snap) * snap);
+
+    if (snap) {
+        return (u32)((x / snap) * snap);
+    }
+
+    return 0;
 }
 
 /**
@@ -244,7 +249,12 @@ u32 InputMouseSnapX(u32 snap) {
 u32 InputMouseSnapY(u32 snap) {
     i32 x = 0, y = 0;
     SDL_GetMouseState(&x, &y);
-    return (u32)((y / snap) * snap);
+
+    if (snap) {
+        return (u32)((y / snap) * snap);
+    }
+
+     return 0;
 }
 
 /**

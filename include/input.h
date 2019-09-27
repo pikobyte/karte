@@ -162,14 +162,16 @@ SDL_Point InputMousePos(void);
 /**
  * \brief Snaps the mouse x-position to a given division.
  * \param [in] snap The value to snap to.
- * \returns The snapped x-position of the mouse in pixels.
+ * \returns The snapped x-position of the mouse in pixels, or zero if snap is
+ * zero.
  */
 u32 InputMouseSnapX(u32 snap);
 
 /**
  * \brief Snaps the mouse y-position to a given division.
  * \param [in] snap The value to snap to.
- * \returns The snapped y-position of the mouse in pixels.
+ * \returns The snapped y-position of the mouse in pixels, or zero if snap is
+ * zero.
  */
 u32 InputMouseSnapY(u32 snap);
 
@@ -178,7 +180,8 @@ u32 InputMouseSnapY(u32 snap);
  * \param [in] snap_x The x-position value to snap to.
  * \param [in] snap_y The x-position value to snap to.
  * \returns An x-y pair stored as an SDL_Point storing the snapped position of
- * the mouse in pixels.
+ * the mouse in pixels. If either snap_x or snap_y are zero, a zero'ed point is
+ * returned.
  */
 SDL_Point InputMouseSnap(u32 snap_x, u32 snap_y);
 
