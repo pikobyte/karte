@@ -26,13 +26,16 @@ Interface *InterfaceCreate(Texture *tex) {
     Log(LOG_NOTIFY, "Created interface at %p.", itfc);
 
     itfc->tex = tex;
+
     itfc->cur_glyph = GlyphCreate();
+    itfc->ghost = GlyphCreate();
+
     itfc->cur_glyph->x = 17;
     itfc->cur_glyph->y = 14;
-    itfc->cur_glyph->fg = BLUE;
-    itfc->cur_glyph->index = 1;
+
     itfc->show_ghost = false;
     itfc->active_tab = 1;
+    itfc->drawing_area = (SDL_Rect){21, 1, 58, 43};
 
     InterfaceCreateWidgets(itfc);
 
@@ -53,6 +56,7 @@ void InterfaceFree(Interface *itfc) {
     ArrayFree(itfc->widgets);
 
     GlyphFree(itfc->cur_glyph);
+    GlyphFree(itfc->ghost);
     Free(itfc);
 }
 
@@ -96,6 +100,16 @@ void InterfaceHandleInput(Interface *itfc, Input *input) {
     } else if (InputKeyPressed(input, SDLK_2)) {
         itfc->active_tab = 2;
     }
+
+    itfc->show_ghost = InputMouseWithin(input, itfc->drawing_area);
+    if (itfc->show_ghost) {
+        const SDL_Point snap = InputMouseSnapToGlyph(input);
+        itfc->ghost->index = itfc->cur_glyph->index;
+        itfc->ghost->fg = itfc->cur_glyph->fg;
+        itfc->ghost->bg = itfc->cur_glyph->bg;
+        itfc->ghost->x = snap.x;
+        itfc->ghost->y = snap.y;
+    }
 }
 
 /**
@@ -111,14 +125,6 @@ void InterfaceUpdate(Interface *itfc) {
         if (tab == 0 || tab == itfc->active_tab) {
             WidgetUpdate(itfc->widgets[i], itfc->cur_glyph);
         }
-    }
-
-    Widget *cvs_editor = WidgetFind(itfc->widgets, CANVAS_MAIN);
-    if (cvs_editor) {
-        SDL_Point mpos = InputMouseSnap(itfc->tex->glyph_w, itfc->tex->glyph_h);
-        Canvas *data = (Canvas *)cvs_editor->data;
-        SDL_Rect r = data->rect;
-        itfc->show_ghost = SDL_PointInRect(&mpos, &r);
     }
 }
 
@@ -137,11 +143,7 @@ void InterfaceRender(const Interface *itfc, const Window *wind,
     }
 
     if (itfc->show_ghost) {
-        itfc->cur_glyph->x = InputMouseSnapX(itfc->tex->glyph_w);
-        itfc->cur_glyph->y = InputMouseSnapY(itfc->tex->glyph_h);
-        GlyphRender(itfc->cur_glyph, wind, tex);
-        itfc->cur_glyph->x = 17;
-        itfc->cur_glyph->y = 14;
+        GlyphRender(itfc->ghost, wind, tex);
     }
 
     if (itfc->active_tab == 1) {
@@ -178,10 +180,9 @@ void InterfaceCreateWidgets(Interface *itfc) {
               WidgetCreate("btn_tab2", WIDGET_BUTTON, btn_tab2, 0, 0));
 
     // CANVASES ----------------------------------------------------------------
-    Canvas *cvs_main =
-        CanvasCreate((SDL_Rect){21, 1, 58, 43}, CANVAS_EDITOR, true);
-    for (i8 i = 0; i < 58; ++i) {
-        for (i8 j = 0; j < 43; ++j) {
+    Canvas *cvs_main = CanvasCreate((SDL_Rect){21, 1, 58, 43}, true);
+    for (i32 i = 0; i < 58; ++i) {
+        for (i32 j = 0; j < 43; ++j) {
             Glyph *glyph = GlyphCreate();
             glyph->x = i + cvs_main->rect.x;
             glyph->y = j + cvs_main->rect.y;
@@ -191,38 +192,8 @@ void InterfaceCreateWidgets(Interface *itfc) {
         }
     }
 
-    Canvas *cvs_glyphs =
-        CanvasCreate((SDL_Rect){2, 24, 17, 16}, CANVAS_GLYPH, false);
-    for (i8 i = 0; i < 16; ++i) {
-        for (i8 j = 0; j < 16; ++j) {
-            Glyph *glyph = GlyphCreate();
-            glyph->x = i + cvs_glyphs->rect.x;
-            glyph->y = j + cvs_glyphs->rect.y;
-            glyph->fg = LIGHTGREY;
-            glyph->index = i + j * 16;
-            ArrayPush(cvs_glyphs->glyphs, glyph);
-        }
-    }
-
-    Canvas *cvs_colors =
-        CanvasCreate((SDL_Rect){2, 17, 16, 4}, CANVAS_COLOR, false);
-    for (i8 i = 0; i < 16; ++i) {
-        for (i8 j = 0; j < 4; ++j) {
-            Glyph *glyph = GlyphCreate();
-            glyph->x = i + cvs_colors->rect.x;
-            glyph->y = j + cvs_colors->rect.y;
-            glyph->fg = RED;
-            glyph->index = FILLED;
-            ArrayPush(cvs_colors->glyphs, glyph);
-        }
-    }
-
     ArrayPush(itfc->widgets,
-              WidgetCreate(CANVAS_MAIN, WIDGET_CANVAS, cvs_main, 0, 0));
-    ArrayPush(itfc->widgets,
-              WidgetCreate("cvs_glyphs ", WIDGET_CANVAS, cvs_glyphs, 1, 0));
-    ArrayPush(itfc->widgets,
-              WidgetCreate("cvs_colors", WIDGET_CANVAS, cvs_colors, 1, 0));
+              WidgetCreate("cvs_main", WIDGET_CANVAS, cvs_main, 0, 0));
 
     // LABELS ------------------------------------------------------------------
     Label *lbl_title = LabelCreate(4, 0, "Karte v0.0.1", DARKGREY, LIGHTGREY);
@@ -267,4 +238,36 @@ void InterfaceCreateWidgets(Interface *itfc) {
               WidgetCreate("pnl_glyph_box", WIDGET_PANEL, pnl_glyph_box, 1, 0));
     ArrayPush(itfc->widgets,
               WidgetCreate("pnl_tab", WIDGET_PANEL, pnl_tab, 0, 0));
+
+    // SELECTORS ---------------------------------------------------------------
+    Selector *sct_glyphs =
+        SelectorCreate((SDL_Rect){2, 24, 17, 16}, SELECTOR_INDEX);
+    for (i32 i = 0; i < 16; ++i) {
+        for (i32 j = 0; j < 16; ++j) {
+            Glyph *glyph = GlyphCreate();
+            glyph->x = i + sct_glyphs->rect.x;
+            glyph->y = j + sct_glyphs->rect.y;
+            glyph->fg = LIGHTGREY;
+            glyph->index = i + j * 16;
+            ArrayPush(sct_glyphs->glyphs, glyph);
+        }
+    }
+
+    Selector *sct_colors = SelectorCreate(
+        (SDL_Rect){2, 17, 16, 4}, SELECTOR_FOREGROUND | SELECTOR_BACKGROUND);
+    for (i32 i = 0; i < 16; ++i) {
+        for (i32 j = 0; j < 4; ++j) {
+            Glyph *glyph = GlyphCreate();
+            glyph->x = i + sct_colors->rect.x;
+            glyph->y = j + sct_colors->rect.y;
+            glyph->fg = RED;
+            glyph->index = FILLED;
+            ArrayPush(sct_colors->glyphs, glyph);
+        }
+    }
+
+    ArrayPush(itfc->widgets,
+              WidgetCreate("sct_glyphs ", WIDGET_SELECTOR, sct_glyphs, 1, 0));
+    ArrayPush(itfc->widgets,
+              WidgetCreate("sct_colors", WIDGET_SELECTOR, sct_colors, 1, 0));
 }

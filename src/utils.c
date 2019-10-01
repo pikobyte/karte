@@ -188,3 +188,13 @@ bool StringContains(const char *str, char search) {
 
     return false;
 }
+
+/**
+ * \desc Returns the truth value of a 32-bit integer masked with a bit-field.
+ */
+bool Mask32(i32 src, i32 mask) { return ((src & mask) == mask); }
+
+/**
+ * \desc Returns the truth value of a 64-bit integer masked with a bit-field.
+ */
+bool Mask64(i64 src, i64 mask) { return ((src & mask) == mask); }

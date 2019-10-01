@@ -6,8 +6,7 @@
  * \file canvas.c
  *
  * \brief A canvas allows the retrieval and/or editing of glyphs in a contained
- * area. It can acts a a region for drawing via the use of a set of tools, or as
- * a selection tool.
+ * area. It acts a a region for drawing via the use of a set of tools.
  *
  * \author Anthony Mercer
  *
@@ -16,19 +15,14 @@
 #include "canvas.h"
 
 /**
- * \desc First allocates the memory for the canvas then sets its glyph
- * dimensions. The current glyph is then created and the canvas dimensions are
- * converted to pixel units.
+ * \desc First allocates the memory for the canvas then sets its current
+ * operation, glyph index an dimensions in glyph co-ordinates.
  */
-Canvas *CanvasCreate(SDL_Rect rect, CanvasType type, bool writable) {
+Canvas *CanvasCreate(SDL_Rect rect, bool writable) {
     Canvas *canvas = Allocate(sizeof(Canvas));
-    canvas->type = type;
     canvas->op = CANVAS_NONE;
     canvas->glyph_index = -1;
-    canvas->rect.x = rect.x;
-    canvas->rect.y = rect.y;
-    canvas->rect.w = rect.w;
-    canvas->rect.h = rect.h;
+    canvas->rect = rect;
     canvas->writable = writable;
 
     return canvas;
@@ -57,6 +51,10 @@ void CanvasFree(Canvas *canvas) {
  */
 void CanvasHandleInput(Canvas *canvas, const Input *input) {
     canvas->op = CANVAS_NONE;
+
+    if (!InputMouseWithin(input, canvas->rect)) {
+        return;
+    }
 
     for (i32 i = 0; i < ArrayCount(canvas->glyphs); ++i) {
         Glyph *glyph = canvas->glyphs[i];
@@ -120,16 +118,9 @@ void CanvasUpdate(Canvas *canvas, Glyph *cur_glyph) {
         break;
     }
     case CANVAS_SELECT: {
-        if (canvas->type == CANVAS_EDITOR) {
-            cur_glyph->fg = canvas->glyphs[i]->fg;
-            cur_glyph->bg = canvas->glyphs[i]->bg;
-            cur_glyph->index = canvas->glyphs[i]->index;
-        } else if (canvas->type == CANVAS_COLOR) {
-            cur_glyph->fg = canvas->glyphs[i]->fg;
-            cur_glyph->bg = canvas->glyphs[i]->bg;
-        } else if (canvas->type == CANVAS_GLYPH) {
-            cur_glyph->index = canvas->glyphs[i]->index;
-        }
+        cur_glyph->fg = canvas->glyphs[i]->fg;
+        cur_glyph->bg = canvas->glyphs[i]->bg;
+        cur_glyph->index = canvas->glyphs[i]->index;
         break;
     }
     case CANVAS_ERASE: {

@@ -203,7 +203,6 @@ bool InputMouseReleased(const Input *input, u32 button) {
  */
 bool InputMouseWithin(const Input *input, SDL_Rect rect) {
     const SDL_Point mouse_pos = InputMousePos();
-
     rect.x *= input->conversion.x;
     rect.y *= input->conversion.y;
     rect.w *= input->conversion.x;
@@ -278,7 +277,7 @@ u32 InputMouseSnapY(u32 snap) {
         return (u32)((y / snap) * snap);
     }
 
-     return 0;
+    return 0;
 }
 
 /**
@@ -296,5 +295,11 @@ SDL_Point InputMouseSnap(u32 snap_x, u32 snap_y) {
  * \desc Snaps the position of the mouse to the current conversion dimensions.
  */
 SDL_Point InputMouseSnapToGlyph(const Input *input) {
-    return InputMouseSnap(input->conversion.x, input->conversion.y);
+    const SDL_Point snap =
+        InputMouseSnap(input->conversion.x, input->conversion.y);
+    SDL_Point result = {0};
+    result.x = snap.x / input->conversion.x;
+    result.y = snap.y / input->conversion.y;
+
+    return result;
 }

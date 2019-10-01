@@ -52,6 +52,10 @@ void WidgetFree(Widget *widget) {
         PanelFree((Panel *)widget->data);
         break;
     }
+    case WIDGET_SELECTOR: {
+        SelectorFree((Selector *)widget->data);
+        break;
+    }
     default: { break; }
     }
 
@@ -72,6 +76,8 @@ void WidgetHandleInput(const Widget *widget, const Input *input) {
         CanvasHandleInput((Canvas *)widget->data, input);
         break;
     }
+    case WIDGET_SELECTOR:
+        SelectorHandleInput((Selector *)widget->data, input);
     case WIDGET_LABEL:
     case WIDGET_PANEL:
     default: { break; }
@@ -81,7 +87,7 @@ void WidgetHandleInput(const Widget *widget, const Input *input) {
 /**
  * \desc Updates a widget that requires it. This is done based on the type of
  * the widget and calls the corresponding update function. Additionally, a glyph
- * can be set here, typically when updating a canvas.
+ * can be set here, typically when updating a canvas or selector.
  */
 void WidgetUpdate(Widget *widget, Glyph *glyph) {
     switch (widget->type) {
@@ -93,6 +99,9 @@ void WidgetUpdate(Widget *widget, Glyph *glyph) {
         CanvasUpdate((Canvas *)widget->data, glyph);
         break;
     }
+    case WIDGET_SELECTOR:
+        SelectorUpdate((Selector *)widget->data, glyph);
+        break;
     case WIDGET_LABEL:
     case WIDGET_PANEL:
     default: { break; }
@@ -120,6 +129,10 @@ void WidgetRender(const Widget *widget, const Window *wind,
     }
     case WIDGET_PANEL: {
         PanelRender((Panel *)widget->data, wind, tex);
+        break;
+    }
+    case WIDGET_SELECTOR: {
+        SelectorRender((Selector *)widget->data, wind, tex);
         break;
     }
     default: { break; }

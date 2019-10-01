@@ -6,8 +6,7 @@
  * \file canvas.h
  *
  * \brief A canvas allows the retrieval and/or editing of glyphs in a contained
- * area. It can acts a a region for drawing via the use of a set of tools, or as
- * a selection tool.
+ * area. It acts a a region for drawing via the use of a set of tools.
  *
  * \author Anthony Mercer
  *
@@ -25,27 +24,13 @@
 #include "window.h"
 
 /**
- * \brief Describes the type of canvas.
- *
- * Canvases can either be read or written to based on their type, which also
- * influences input. Editor canvases are read and write where glyphs can be
- * placed, erased and selected. Selection canvases are read only and glyphs can
- * only be selected.
- */
-typedef enum CanvasType_s {
-    CANVAS_EDITOR = 0,
-    CANVAS_COLOR = 1,
-    CANVAS_GLYPH = 2
-} CanvasType;
-
-/**
  * \brief Describes a canvas operation.
  *
  * Canvas operations are determined by the input applied to them by the user.
  * This then governs how the canvas is updated. The operations include glyph
  * placing, glyph selection and glyph erasure.
  */
-typedef enum CanvasOperation_s {
+typedef enum CanvasOperation_e {
     CANVAS_NONE = 0,
     CANVAS_PLACE = 1,
     CANVAS_SELECT = 2,
@@ -54,7 +39,6 @@ typedef enum CanvasOperation_s {
 
 typedef struct Canvas_s {
     Glyph **glyphs;     /**< List of glyphs within the canvas. */
-    CanvasType type;    /**< Canvas type. */
     CanvasOperation op; /**< Current canvas operation. */
     i32 glyph_index;    /**< Index of glyph to perform operation. */
     SDL_Rect rect;      /**< Canvas dimensions in pixel units. */
@@ -64,13 +48,12 @@ typedef struct Canvas_s {
 } Canvas;
 
 /**
- * \brief Create a canvas with initial glyph and physical dimensions.
+ * \brief Create a canvas with initial dimensions.
  * \param [in] rect The dimensions of the canvas in glyph units.
- * \param [in] type The type of canvas to be created.
  * \param [in] writable Sets whether the canvas can be written to.
  * \returns Pointer to a canvas object.
  */
-Canvas *CanvasCreate(SDL_Rect rect, CanvasType type, bool writable);
+Canvas *CanvasCreate(SDL_Rect rect, bool writable);
 
 /**
  * \brief Frees the canvas memory.

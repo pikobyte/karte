@@ -23,6 +23,7 @@
 #include "input.h"
 #include "label.h"
 #include "panel.h"
+#include "selector.h"
 #include "utils.h"
 
 typedef enum WidgetType_e {
@@ -30,6 +31,7 @@ typedef enum WidgetType_e {
     WIDGET_CANVAS,
     WIDGET_LABEL,
     WIDGET_PANEL,
+    WIDGET_SELECTOR,
 } WidgetType;
 
 /**
