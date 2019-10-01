@@ -20,11 +20,8 @@
  * created, only a border is considered. Glyph indices are set based on corners,
  * horizontal and vertical edges.
  */
-Panel *PanelCreate(u32 sx, u32 sy, SDL_Rect rect, Border border,
-                   SDL_Color col) {
+Panel *PanelCreate(SDL_Rect rect, Border border, SDL_Color col) {
     Panel *panel = Allocate(sizeof(Panel));
-    panel->sx = sx;
-    panel->sy = sy;
     panel->rect = rect;
 
     if (border == BORDER_NONE) {
@@ -61,8 +58,8 @@ Panel *PanelCreate(u32 sx, u32 sy, SDL_Rect rect, Border border,
             }
 
             Glyph *glyph = GlyphCreate();
-            glyph->x = (rect.x + i) * sx;
-            glyph->y = (rect.y + j) * sy;
+            glyph->x = rect.x + i;
+            glyph->y = rect.y + j;
             glyph->fg = col;
             glyph->bg = BLANK;
             glyph->index = border == BORDER_SINGLE ? SINGLE_BORDER[index]
@@ -95,19 +92,4 @@ void PanelRender(const Panel *panel, const Window *wind, const Texture *tex) {
     for (i32 i = 0; i < ArrayCount(panel->glyphs); ++i) {
         GlyphRender(panel->glyphs[i], wind, tex);
     }
-}
-
-/**
- * \desc The panel bounding rectangle is given in glyph units, and as such, to
- * check pixel boundedness, must be converted to pixel units. The function
- * returns whether a point lies within this pixel unit bounding rectangle.
- */
-bool PanelWithin(const Panel *panel, SDL_Point point) {
-    SDL_Rect r = panel->rect;
-    r.x *= panel->sx;
-    r.y *= panel->sy;
-    r.w *= panel->sx;
-    r.h *= panel->sy;
-
-    return SDL_PointInRect(&point, &r);
 }

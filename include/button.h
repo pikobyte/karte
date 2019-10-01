@@ -48,8 +48,6 @@ typedef struct Button_s {
 
 /**
  * \brief Create a button at a given position with a given colour.
- * \param [in] sx The width of a glyph.
- * \param [in] sy The height of a glyph.
  * \param [in] x The x-position of the label in glyph units.
  * \param [in] y The y-position of the label in glyph units.
  * \param [in] text The button text to display.
@@ -59,9 +57,8 @@ typedef struct Button_s {
  * \param [in] active The default active state of the button.
  * \returns Pointer to a panel object.
  */
-Button *ButtonCreate(u32 sx, u32 sy, i32 x, i32 y, const char *text,
-                     Border border, SDL_Color text_col, SDL_Color bord_col,
-                     bool active);
+Button *ButtonCreate(i32 x, i32 y, const char *text, Border border,
+                     SDL_Color text_col, SDL_Color bord_col, bool active);
 
 /**
  * \brief Frees the button memory.

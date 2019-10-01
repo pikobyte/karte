@@ -19,8 +19,7 @@
  * created by looping through the string, and their positions are set based on
  * the input parameters as well as the glyph dimensions.
  */
-Label *LabelCreate(u32 sx, u32 sy, i32 x, i32 y, const char *text, SDL_Color fg,
-                   SDL_Color bg) {
+Label *LabelCreate(i32 x, i32 y, const char *text, SDL_Color fg, SDL_Color bg) {
     Label *label = Allocate(sizeof(Label));
     label->x = x;
     label->y = y;
@@ -30,8 +29,8 @@ Label *LabelCreate(u32 sx, u32 sy, i32 x, i32 y, const char *text, SDL_Color fg,
 
     for (u32 i = 0; i < strlen(text); ++i) {
         Glyph *glyph = GlyphCreate();
-        glyph->x = (x + i) * sx;
-        glyph->y = y * sy;
+        glyph->x = x + i;
+        glyph->y = y;
         glyph->index = text[i];
         glyph->fg = fg;
         glyph->bg = bg;

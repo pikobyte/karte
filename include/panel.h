@@ -53,8 +53,6 @@ static const u8 DOUBLE_BORDER[6] = {201, 187, 200, 188, 205, 186};
  * set).
  */
 typedef struct Panel_s {
-    u32 sx;         /**< Glyph width. */
-    u32 sy;         /**< Glyph height. */
     Glyph **glyphs; /**< List of glyphs. */
     SDL_Rect rect;  /**< Bounding rectangle in glyph units. */
     Border border;  /**< Border type. */
@@ -63,14 +61,12 @@ typedef struct Panel_s {
 
 /**
  * \brief Create a label at a given position with a given colour.
- * \param [in] sx The width of a glyph.
- * \param [in] sy The height of a glyph.
  * \param [in] rect The dimensions of the panel in glyph units.
  * \param [in] border The border type.
  * \param [in] col Colour of the border.
  * \returns Pointer to a panel object.
  */
-Panel *PanelCreate(u32 sx, u32 sy, SDL_Rect rect, Border border, SDL_Color col);
+Panel *PanelCreate(SDL_Rect rect, Border border, SDL_Color col);
 
 /**
  * \brief Frees the panel memory.
@@ -87,14 +83,5 @@ void PanelFree(Panel *panel);
  * \returns Void.
  */
 void PanelRender(const Panel *panel, const Window *wind, const Texture *tex);
-
-/**
- * \brief Checks whether a point is within the pixel boundaries of a panel.
- * \param [in] panel Panel to check within.
- * \param [in] point The x-y co-ordinates to consider in pixels.
- * \param [in] tex Texture to render from.
- * \returns Void.
- */
-bool PanelWithin(const Panel *panel, SDL_Point point);
 
 #endif

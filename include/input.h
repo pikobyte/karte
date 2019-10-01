@@ -41,13 +41,14 @@ typedef struct Input_s {
     f64 mouse_dy;                     /**< Change in mouse y-position. */
     i32 mouse_wheel;                  /**< Mouse wheel change. */
     bool quit;                        /**< Flag to quit application. */
+    SDL_Point conversion;             /**< Conversion to pixel co-ordinates. */
 } Input;
 
 /**
  * \brief Allocates memory for the input.
  * \returns A pointer to an input object.
  */
-Input *InputCreate(void);
+Input *InputCreate();
 
 /**
  * \brief Frees the input memory.
@@ -142,6 +143,15 @@ bool InputMouseDown(const Input *input, u32 button);
 bool InputMouseReleased(const Input *input, u32 button);
 
 /**
+ * \brief Determines if the mouse is within a rectangle in glyph co-ordinates.
+ * \param [in] input A pointer to an input handler.
+ * \param [in] rect The rectangle to check with position and dimensions in glyph
+ * co-ordinates.
+ * \returns Whether the mouse is within the rectangle.
+ */
+bool InputMouseWithin(const Input *input, SDL_Rect rect);
+
+/**
  * \brief Gets the x-position of the mouse in pixels.
  * \returns The x-position of the mouse in pixels.
  */
@@ -184,5 +194,14 @@ u32 InputMouseSnapY(u32 snap);
  * returned.
  */
 SDL_Point InputMouseSnap(u32 snap_x, u32 snap_y);
+
+/**
+ * \brief Snaps the mouse position to glyph dimensions.
+ * \param [in] input A pointer to an input handler.
+ * \returns An x-y pair stored as an SDL_Point storing the snapped position of
+ * the mouse in pixels. If either snap_x or snap_y are zero, a zero'ed point is
+ * returned.
+ */
+SDL_Point InputMouseSnapToGlyph(const Input *input);
 
 #endif

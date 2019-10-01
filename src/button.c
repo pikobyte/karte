@@ -28,17 +28,15 @@
  * The label and panel (given their own IDs) are created, and the button
  * rectangle is converted to pixels based on glyph dimensions.
  */
-Button *ButtonCreate(u32 sx, u32 sy, i32 x, i32 y, const char *text,
-                     Border border, SDL_Color text_col, SDL_Color bord_col,
-                     bool active) {
+Button *ButtonCreate(i32 x, i32 y, const char *text, Border border,
+                     SDL_Color text_col, SDL_Color bord_col, bool active) {
     Button *button = Allocate(sizeof(Button));
     i32 len = (i32)strlen(text);
 
     i32 label_x = border == BORDER_NONE ? x : x + 1;
     i32 label_y = border == BORDER_NONE ? y : y + 1;
 
-    button->label =
-        LabelCreate(sx, sy, label_x, label_y, text, text_col, BLACK);
+    button->label = LabelCreate(label_x, label_y, text, text_col, BLACK);
 
     SDL_Rect rect = {0};
     rect.x = x;
@@ -46,7 +44,7 @@ Button *ButtonCreate(u32 sx, u32 sy, i32 x, i32 y, const char *text,
     rect.w = (border == BORDER_NONE ? len : len + 2);
     rect.h = (border == BORDER_NONE ? 1 : 3);
 
-    button->panel = PanelCreate(sx, sy, rect, border, bord_col);
+    button->panel = PanelCreate(rect, border, bord_col);
 
     button->active = active;
     button->hovering = false;
@@ -77,6 +75,19 @@ void ButtonHandleInput(Button *button, const Input *input) {
         return;
     }
 
+    if (InputMouseWithin(input, button->panel->rect)) {
+        button->hovering = true;
+        if (button->impressed) {
+            ButtonSetBackColor(button, BEIGE);
+        } else {
+            ButtonSetBackColor(button, DARKGREY);
+        }
+    } else {
+        button->hovering = false;
+        button->impressed = false;
+        ButtonSetBackColor(button, BLACK);
+    }
+
     if (button->hovering) {
         button->impressed = InputMouseDown(input, SDL_BUTTON_LEFT) ||
                             InputMousePressed(input, SDL_BUTTON_LEFT);
@@ -96,20 +107,6 @@ void ButtonUpdate(Button *button) {
         return;
     } else {
         ButtonSetOpacity(button, 255);
-    }
-
-    SDL_Point mouse = InputMousePos();
-    if (PanelWithin(button->panel, mouse)) {
-        button->hovering = true;
-        if (button->impressed) {
-            ButtonSetBackColor(button, BEIGE);
-        } else {
-            ButtonSetBackColor(button, DARKGREY);
-        }
-    } else {
-        button->hovering = false;
-        button->impressed = false;
-        ButtonSetBackColor(button, BLACK);
     }
 }
 

@@ -36,8 +36,8 @@ void GlyphRender(const Glyph *glyph, const Window *wind, const Texture *tex) {
     SDL_Rect fsrc = tex->rects[glyph->index];
     SDL_Rect bsrc = tex->rects[FILLED];
     SDL_Rect dest = {0};
-    dest.x = (u32)glyph->x;
-    dest.y = (u32)glyph->y;
+    dest.x = (u32)glyph->x * tex->glyph_w;
+    dest.y = (u32)glyph->y * tex->glyph_h;
     dest.w = tex->glyph_w;
     dest.h = tex->glyph_h;
 

@@ -17,17 +17,17 @@
 #define DEFINITIONS_H
 
 #if _WIN32
-    #define _CRT_SECURE_NO_WARNINGS
-    #include <SDL.h>
-    #include <SDL_image.h>
-    #include <SDL_ttf.h>
-    #include <io.h>
-    #include <windows.h>
+#define _CRT_SECURE_NO_WARNINGS
+#include <SDL.h>
+#include <SDL_image.h>
+#include <SDL_ttf.h>
+#include <io.h>
+#include <windows.h>
 #else
-    #include <SDL2/SDL.h>
-    #include <SDL2/SDL_image.h>
-    #include <SDL2/SDL_ttf.h>
-    #include <unistd.h>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <SDL2/SDL_ttf.h>
+#include <unistd.h>
 #endif
 
 #include <math.h>
@@ -61,6 +61,12 @@ typedef double f64;
  * release.
  */
 static const char CWD[] = "/Documents/pikobyte/karte/";
+
+/**
+ * \desc The default conversion sizes from glyph co-ordinates to pixel
+ * co-ordinates.
+ */
+static const SDL_Point DEFAULT_CONVERSION = {16, 16};
 
 /**
  * \desc The number of memory allocations that have been made during program

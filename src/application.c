@@ -43,6 +43,10 @@ Application *ApplicationCreate(void) {
     app->res = ResourcerCreate();
     app->wind = WindowCreate();
     app->editor = EditorCreate(app->wind, app->res);
+
+    app->input->conversion.x = app->editor->tex->glyph_w;
+    app->input->conversion.y = app->editor->tex->glyph_h;
+
     app->running = true;
 
     return app;

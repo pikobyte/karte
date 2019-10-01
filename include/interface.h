@@ -26,6 +26,8 @@
 #include "utils.h"
 #include "widget.h"
 
+#define CANVAS_MAIN "cvs_main"
+
 /**
  * \brief An interface is with what the user interacts with in the program.
  *
@@ -35,8 +37,7 @@
  * active tab.
  */
 typedef struct Interface_s {
-    u32 sx;           /**< Glyph width. */
-    u32 sy;           /**< Glyph height. */
+    Texture *tex;     /**< Texture to obtain glyph dimensions. */
     Widget **widgets; /**< List of UI widgets. */
     Glyph *cur_glyph; /**< Currently selected glyph. */
     bool show_ghost;  /**< Flag to show current glyph on a canvas. */
@@ -45,11 +46,10 @@ typedef struct Interface_s {
 
 /**
  * \brief Create a user interface.
- * \param [in] sx The width of a glyph.
- * \param [in] sy The height of a glyph.
+ * \param [in] tex A pointer to a textrure.
  * \returns Pointer to an interface object.
  */
-Interface *InterfaceCreate(u32 sx, u32 sy);
+Interface *InterfaceCreate(Texture *tex);
 
 /**
  * \brief Create a button at a given position with a given colour.
@@ -82,5 +82,12 @@ void InterfaceUpdate(Interface *itfc);
  */
 void InterfaceRender(const Interface *itfc, const Window *wind,
                      const Texture *tex);
+
+/**
+ * \brief Creates a set of widgets for an interface based on hard-coded values.
+ * \param [in] itfc The interface to have the widgets created for.
+ * \returns Void.
+ */
+void InterfaceCreateWidgets(Interface *itfc);
 
 #endif

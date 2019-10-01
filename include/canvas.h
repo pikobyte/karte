@@ -53,29 +53,24 @@ typedef enum CanvasOperation_s {
 } CanvasOperation;
 
 typedef struct Canvas_s {
-    u32 sx;             /**< Glyph width. */
-    u32 sy;             /**< Glyph height. */
     Glyph **glyphs;     /**< List of glyphs within the canvas. */
     CanvasType type;    /**< Canvas type. */
     CanvasOperation op; /**< Current canvas operation. */
-    i64 glyph_index;    /**< Index of glyph to perform operation. */
+    i32 glyph_index;    /**< Index of glyph to perform operation. */
     SDL_Rect rect;      /**< Canvas dimensions in pixel units. */
-    u32 offset_x;       /**< Offset of the canvas in the x-direction. */
-    u32 offset_y;       /**< Offset of the canvas in the y-direction. */
+    i32 offset_x;       /**< Offset of the canvas in the x-direction. */
+    i32 offset_y;       /**< Offset of the canvas in the y-direction. */
     bool writable;      /**< Determines whether the canvas can be edited. */
 } Canvas;
 
 /**
  * \brief Create a canvas with initial glyph and physical dimensions.
- * \param [in] sx The width of a glyph.
- * \param [in] sy The height of a glyph.
  * \param [in] rect The dimensions of the canvas in glyph units.
  * \param [in] type The type of canvas to be created.
  * \param [in] writable Sets whether the canvas can be written to.
  * \returns Pointer to a canvas object.
  */
-Canvas *CanvasCreate(u32 sx, u32 sy, SDL_Rect rect, CanvasType type,
-                     bool writable);
+Canvas *CanvasCreate(SDL_Rect rect, CanvasType type, bool writable);
 
 /**
  * \brief Frees the canvas memory.

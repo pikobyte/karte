@@ -20,18 +20,15 @@
  * dimensions. The current glyph is then created and the canvas dimensions are
  * converted to pixel units.
  */
-Canvas *CanvasCreate(u32 sx, u32 sy, SDL_Rect rect, CanvasType type,
-                     bool writable) {
+Canvas *CanvasCreate(SDL_Rect rect, CanvasType type, bool writable) {
     Canvas *canvas = Allocate(sizeof(Canvas));
-    canvas->sx = sx;
-    canvas->sy = sy;
     canvas->type = type;
     canvas->op = CANVAS_NONE;
     canvas->glyph_index = -1;
-    canvas->rect.x = rect.x * sx;
-    canvas->rect.y = rect.y * sy;
-    canvas->rect.w = rect.w * sx;
-    canvas->rect.h = rect.h * sy;
+    canvas->rect.x = rect.x;
+    canvas->rect.y = rect.y;
+    canvas->rect.w = rect.w;
+    canvas->rect.h = rect.h;
     canvas->writable = writable;
 
     return canvas;
@@ -60,16 +57,16 @@ void CanvasFree(Canvas *canvas) {
  */
 void CanvasHandleInput(Canvas *canvas, const Input *input) {
     canvas->op = CANVAS_NONE;
-    SDL_Point mpos = InputMouseSnap(canvas->sx, canvas->sy);
+
     for (i32 i = 0; i < ArrayCount(canvas->glyphs); ++i) {
         Glyph *glyph = canvas->glyphs[i];
-        SDL_Rect r = {0};
-        r.x = (u32)glyph->x;
-        r.y = (u32)glyph->y;
-        r.w = canvas->sx;
-        r.h = canvas->sy;
+        SDL_Rect rect = {0};
+        rect.x = (u32)glyph->x;
+        rect.y = (u32)glyph->y;
+        rect.w = 1;
+        rect.h = 1;
 
-        if (!SDL_PointInRect(&mpos, &r)) {
+        if (!InputMouseWithin(input, rect)) {
             continue;
         }
 

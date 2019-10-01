@@ -38,8 +38,6 @@ typedef struct Label_s {
 
 /**
  * \brief Create a label at a given position with a given colour.
- * \param [in] sx The width of a glyph.
- * \param [in] sy The height of a glyph.
  * \param [in] x The x-position of the label in glyph units.
  * \param [in] y The y-position of the label in glyph units.
  * \param [in] text The label text to display.
@@ -47,8 +45,7 @@ typedef struct Label_s {
  * \param [in] bg Background colour of the text.
  * \returns Pointer to a label object.
  */
-Label *LabelCreate(u32 sx, u32 sy, i32 x, i32 y, const char *text, SDL_Color fg,
-                   SDL_Color bg);
+Label *LabelCreate(i32 x, i32 y, const char *text, SDL_Color fg, SDL_Color bg);
 
 /**
  * \brief Frees the label memory.

@@ -21,6 +21,7 @@
 Input *InputCreate(void) {
     Input *input = Allocate(sizeof(Input));
     Log(LOG_NOTIFY, "Created input at %p.", input);
+    input->conversion = DEFAULT_CONVERSION;
     input->quit = false;
     return input;
 }
@@ -197,6 +198,29 @@ bool InputMouseReleased(const Input *input, u32 button) {
 }
 
 /**
+ * \desc Determines whether the mouse cursor is within a rectangle with position
+ * and dimensions that are in glyph co-ordinates.
+ */
+bool InputMouseWithin(const Input *input, SDL_Rect rect) {
+    const SDL_Point mouse_pos = InputMousePos();
+
+    rect.x *= input->conversion.x;
+    rect.y *= input->conversion.y;
+    rect.w *= input->conversion.x;
+    rect.h *= input->conversion.y;
+
+    if (mouse_pos.x < rect.x || mouse_pos.x > rect.x + rect.w) {
+        return false;
+    }
+
+    if (mouse_pos.y < rect.y || mouse_pos.y > rect.y + rect.h) {
+        return false;
+    }
+
+    return true;
+}
+
+/**
  * \desc Returns the x-position of the mouse in pixels, where (0, 0) corresponds
  * to the top left of the screen.
  */
@@ -267,4 +291,10 @@ SDL_Point InputMouseSnap(u32 snap_x, u32 snap_y) {
     point.x = InputMouseSnapX(snap_x);
     point.y = InputMouseSnapY(snap_y);
     return point;
+}
+/**
+ * \desc Snaps the position of the mouse to the current conversion dimensions.
+ */
+SDL_Point InputMouseSnapToGlyph(const Input *input) {
+    return InputMouseSnap(input->conversion.x, input->conversion.y);
 }
