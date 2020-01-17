@@ -89,8 +89,7 @@ void ButtonHandleInput(Button *button, const Input *input) {
     }
 
     if (button->hovering) {
-        button->impressed = InputMouseDown(input, SDL_BUTTON_LEFT) ||
-                            InputMousePressed(input, SDL_BUTTON_LEFT);
+        button->impressed = InputMouseDown(input, SDL_BUTTON_LEFT);
         button->pressed = InputMouseReleased(input, SDL_BUTTON_LEFT);
     }
 }

@@ -69,24 +69,20 @@ void CanvasHandleInput(Canvas *canvas, const Input *input) {
         }
 
         if (!canvas->writable) {
-            if (InputMouseDown(input, SDL_BUTTON_LEFT) ||
-                InputMousePressed(input, SDL_BUTTON_LEFT)) {
+            if (InputMouseDown(input, SDL_BUTTON_LEFT)) {
                 canvas->op = CANVAS_SELECT;
                 canvas->glyph_index = i;
             }
             continue;
         }
 
-        if (InputMouseDown(input, SDL_BUTTON_LEFT) ||
-            InputMousePressed(input, SDL_BUTTON_LEFT)) {
+        if (InputMouseDown(input, SDL_BUTTON_LEFT)) {
             canvas->op = CANVAS_PLACE;
             canvas->glyph_index = i;
-        } else if (InputMouseDown(input, SDL_BUTTON_RIGHT) ||
-                   InputMousePressed(input, SDL_BUTTON_RIGHT)) {
+        } else if (InputMouseDown(input, SDL_BUTTON_RIGHT)) {
             canvas->op = CANVAS_ERASE;
             canvas->glyph_index = i;
-        } else if (InputMouseDown(input, SDL_BUTTON_MIDDLE) ||
-                   InputMousePressed(input, SDL_BUTTON_MIDDLE)) {
+        } else if (InputMouseDown(input, SDL_BUTTON_MIDDLE)) {
             canvas->op = CANVAS_SELECT;
             canvas->glyph_index = i;
         }
