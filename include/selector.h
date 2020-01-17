@@ -17,6 +17,7 @@
 #define SELECTOR_H
 
 #include "color.h"
+#include "common.h"
 #include "glyph.h"
 #include "input.h"
 #include "utils.h"

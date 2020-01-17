@@ -16,7 +16,7 @@
 #ifndef TEXTURE_H
 #define TEXTURE_H
 
-#include "definitions.h"
+#include "common.h"
 #include "utils.h"
 #include "window.h"
 

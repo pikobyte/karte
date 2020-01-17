@@ -15,7 +15,7 @@
 #ifndef UTILS_H
 #define UTILS_H
 
-#include "definitions.h"
+#include "common.h"
 
 /* -------------------------------------------------------------------------- */
 /* ARRAYS                                                                     */

@@ -14,7 +14,7 @@
 #ifndef SDL_COLOR_H
 #define SDL_COLOR_H
 
-#include "definitions.h"
+#include "common.h"
 
 #define LIGHTGREY                                                              \
     (SDL_Color) { 200, 200, 200, 255 }

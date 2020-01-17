@@ -16,7 +16,7 @@
 #define CANVAS_H
 
 #include "color.h"
-#include "definitions.h"
+#include "common.h"
 #include "glyph.h"
 #include "input.h"
 #include "texture.h"

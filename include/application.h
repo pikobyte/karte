@@ -15,7 +15,7 @@
 #ifndef APPLICATION_H
 #define APPLICATION_H
 
-#include "definitions.h"
+#include "common.h"
 #include "editor.h"
 #include "input.h"
 #include "resourcer.h"

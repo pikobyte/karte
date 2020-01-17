@@ -17,7 +17,7 @@
  */
 
 #include "application.h"
-#include "definitions.h"
+#include "common.h"
 #include "utils.h"
 
 int main(int argc, char *argv[]) {

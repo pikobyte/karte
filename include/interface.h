@@ -18,7 +18,7 @@
 #include "button.h"
 #include "canvas.h"
 #include "color.h"
-#include "definitions.h"
+#include "common.h"
 #include "glyph.h"
 #include "input.h"
 #include "label.h"
@@ -35,12 +35,12 @@
  * active tab.
  */
 typedef struct Interface_s {
-    Texture *tex;          /**< Texture to obtain glyph dimensions. */
-    Widget **widgets;      /**< List of UI widgets. */
-    Glyph *cur_glyph;      /**< Currently selected glyph. */
-    Glyph *ghost;          /**< Ghost glyph to be used as a visual aid. */
-    bool show_ghost;       /**< Flag to show current glyph on a canvas. */
-    u32 active_tab;        /**< Currently activated tab. */
+    Texture *tex;     /**< Texture to obtain glyph dimensions. */
+    Widget **widgets; /**< List of UI widgets. TODO: Replace with a hashmap. */
+    Glyph *cur_glyph; /**< Currently selected glyph. */
+    Glyph *ghost;     /**< Ghost glyph to be used as a visual aid. */
+    bool show_ghost;  /**< Flag to show current glyph on a canvas. */
+    u32 active_tab;   /**< Currently activated tab. */
     SDL_Rect drawing_area; /**< The drawing area of the interface. */
 } Interface;
 

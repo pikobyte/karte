@@ -14,7 +14,7 @@
 #ifndef LABEL_H
 #define LABEL_H
 
-#include "definitions.h"
+#include "common.h"
 #include "glyph.h"
 #include "texture.h"
 #include "utils.h"

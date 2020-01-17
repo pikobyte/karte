@@ -15,7 +15,7 @@
 #ifndef WINDOW_H
 #define WINDOW_H
 
-#include "definitions.h"
+#include "common.h"
 #include "utils.h"
 
 /**

@@ -15,7 +15,7 @@
 #ifndef GLYPH_H
 #define GLYPH_H
 
-#include "definitions.h"
+#include "common.h"
 #include "texture.h"
 #include "window.h"
 

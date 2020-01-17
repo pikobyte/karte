@@ -18,7 +18,7 @@
 #include "button.h"
 #include "canvas.h"
 #include "color.h"
-#include "definitions.h"
+#include "common.h"
 #include "glyph.h"
 #include "input.h"
 #include "label.h"

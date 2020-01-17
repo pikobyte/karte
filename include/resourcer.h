@@ -15,7 +15,7 @@
 #ifndef RESOURCER_H
 #define RESOURCER_H
 
-#include "definitions.h"
+#include "common.h"
 #include "texture.h"
 #include "utils.h"
 #include "window.h"

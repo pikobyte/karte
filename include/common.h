@@ -3,18 +3,18 @@
  * ========================================================================== */
 
 /**
- * \file definitions.h
+ * \file common.h
  *
- * \brief Definitions of types, structs, macros, constants and global variables
- * for the Karte program. This is where all common standard and external library
- * includes are stated.
+ * \brief Common definitions of types, structs, macros, constants and global
+ * variables for the Karte program. This is where all common standard and
+ * external library includes are stated.
  *
  * \author Anthony Mercer
  *
  */
 
-#ifndef DEFINITIONS_H
-#define DEFINITIONS_H
+#ifndef COMMON_H
+#define COMMON_H
 
 #if _WIN32
 #define _CRT_SECURE_NO_WARNINGS

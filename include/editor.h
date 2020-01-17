@@ -15,7 +15,7 @@
 #ifndef EDITOR_H
 #define EDITOR_H
 
-#include "definitions.h"
+#include "common.h"
 #include "glyph.h"
 #include "input.h"
 #include "interface.h"

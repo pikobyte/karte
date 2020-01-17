@@ -16,7 +16,7 @@
 #ifndef INPUT_H
 #define INPUT_H
 
-#include "definitions.h"
+#include "common.h"
 #include "utils.h"
 
 #define NUM_KEYS 256

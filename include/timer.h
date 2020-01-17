@@ -15,7 +15,7 @@
 #ifndef TIMER_H
 #define TIMER_H
 
-#include "definitions.h"
+#include "common.h"
 #include "utils.h"
 
 /**
