@@ -67,7 +67,7 @@
 
 // TODO: This is not at all robust. For example, custom palettes. Only for
 // testing purposes.
-static const SDL_Color COLORS[32] = {
+static const SDL_Color COLORS[24] = {
     { 200, 200, 200, 255 },
     { 130, 130, 130, 255 },
     { 80, 80, 80, 255 },

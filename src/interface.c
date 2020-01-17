@@ -187,7 +187,8 @@ void InterfaceCreateWidgets(Interface *itfc) {
             glyph->x = i + cvs_main->rect.x;
             glyph->y = j + cvs_main->rect.y;
             glyph->fg = LIGHTGREY;
-            glyph->index = 1;
+            glyph->bg = BLACK;
+            glyph->index = 250;
             ArrayPush(cvs_main->glyphs, glyph);
         }
     }
@@ -248,6 +249,7 @@ void InterfaceCreateWidgets(Interface *itfc) {
             glyph->x = i + sct_glyphs->rect.x;
             glyph->y = j + sct_glyphs->rect.y;
             glyph->fg = LIGHTGREY;
+            glyph->bg = BLACK;
             glyph->index = i + j * 16;
             ArrayPush(sct_glyphs->glyphs, glyph);
         }
@@ -255,15 +257,26 @@ void InterfaceCreateWidgets(Interface *itfc) {
 
     Selector *sct_colors = SelectorCreate(
         (SDL_Rect){2, 17, 16, 4}, SELECTOR_FOREGROUND | SELECTOR_BACKGROUND);
+    i32 x = 0, y = 0;
+    const i32 dx[4] = {0, 1, 0, 1};
+    const i32 dy[4] = {0, 0, 1, 1};
     for (i32 i = 0; i < 16; ++i) {
+        if (i > 0 && i % 8 == 0) {
+            x = 0;
+            y += 2;
+        }
+
         for (i32 j = 0; j < 4; ++j) {
             Glyph *glyph = GlyphCreate();
-            glyph->x = i + sct_colors->rect.x;
-            glyph->y = j + sct_colors->rect.y;
-            glyph->fg = RED;
+            glyph->x = sct_colors->rect.x + x + dx[j];
+            glyph->y = sct_colors->rect.y + y + dy[j];
+            glyph->fg = COLORS[i];
+            glyph->bg = COLORS[i];
             glyph->index = FILLED;
             ArrayPush(sct_colors->glyphs, glyph);
         }
+
+        x += 2;
     }
 
     ArrayPush(itfc->widgets,
