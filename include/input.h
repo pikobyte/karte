@@ -89,7 +89,15 @@ bool InputModPressed(const Input *input, u16 mod);
  * \param [in] key A keyboard key code to check.
  * \returns Whether the current key is held down.
  */
-bool InputKeyDown(const Input *input, u32 key);
+bool InputKeyHeld(const Input *input, u32 key);
+
+/**
+ * \brief Checks whether a keyboard key was pressed or was held down.
+ * \param [in] input A pointer to an input handler.
+ * \param [in] button A keyboard key code to check.
+ * \returns Whether the current keyboard key was pressed or is held down.
+ */
+bool InputKeyDown(const Input *input, u32 button);
 
 /**
  * \brief Checks whether a keyboard modifier button is held down.
@@ -131,6 +139,14 @@ bool InputMousePressed(const Input *input, u32 button);
  * \param [in] input A pointer to an input handler.
  * \param [in] button A mouse button code to check.
  * \returns Whether the current mouse button is held down.
+ */
+bool InputMouseHeld(const Input *input, u32 button);
+
+/**
+ * \brief Checks whether a mouse button was pressed or was held down.
+ * \param [in] input A pointer to an input handler.
+ * \param [in] button A mouse button code to check.
+ * \returns Whether the current mouse button was pressed or is held down.
  */
 bool InputMouseDown(const Input *input, u32 button);
 

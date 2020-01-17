@@ -121,11 +121,18 @@ bool InputModPressed(const Input *input, u16 mod) {
  * range. If it is, then the return is if the current key is currently down and
  * was also in the previous frame.
  */
-bool InputKeyDown(const Input *input, u32 key) {
+bool InputKeyHeld(const Input *input, u32 key) {
     if (key > NUM_KEYS) {
         return false;
     }
     return (input->curr_key_map[key] && input->prev_key_map[key]);
+}
+
+/**
+ * \desc Checks whether a keyboard key was pressed or is being held down.
+ */
+bool InputKeyDown(const Input *input, u32 button) {
+    return InputKeyPressed(input, button) || InputKeyHeld(input, button);
 }
 
 /**
@@ -175,14 +182,21 @@ bool InputMousePressed(const Input *input, u32 button) {
 
 /**
  * \desc First a check is performed to see if the provided mouse button is in
- * range. If it is, then the return is if the current button is currently down
- * and was also in the previous frame.
+ * range. If it is, then the return is if the current button is currently held
+ * down and was also in the previous frame.
  */
-bool InputMouseDown(const Input *input, u32 button) {
+bool InputMouseHeld(const Input *input, u32 button) {
     if (button > NUM_BUTTONS) {
         return false;
     }
     return (input->curr_mouse_map[button] && input->prev_mouse_map[button]);
+}
+
+/**
+ * \desc Checks whether a mouse button was pressed or is being held down.
+ */
+bool InputMouseDown(const Input *input, u32 button) {
+    return InputMousePressed(input, button) || InputMouseHeld(input, button);
 }
 
 /**
