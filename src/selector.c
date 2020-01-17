@@ -21,9 +21,12 @@
  */
 Selector *SelectorCreate(SDL_Rect rect, SelectorType type) {
     Selector *selector = Allocate(sizeof(Selector));
+    selector->cur_glyph = GlyphCreate();
+    selector->cur_glyph->index = 250;
+    selector->cur_glyph->fg = LIGHTGREY;
+    selector->cur_glyph->bg = BLACK;
     selector->type = type;
     selector->rect = rect;
-    selector->cur_index = 1;
 
     return selector;
 }
@@ -37,6 +40,7 @@ void SelectorFree(Selector *selector) {
         GlyphFree(selector->glyphs[i]);
     }
     ArrayFree(selector->glyphs);
+    GlyphFree(selector->cur_glyph);
     Free(selector);
 }
 
@@ -62,9 +66,22 @@ void SelectorHandleInput(Selector *selector, const Input *input) {
             continue;
         }
 
-        if (InputMousePressed(input, SDL_BUTTON_LEFT) ||
-            InputMouseDown(input, SDL_BUTTON_LEFT)) {
-            selector->cur_index = i;
+        if (InputMouseDown(input, SDL_BUTTON_LEFT)) {
+            SelectorSetCurrentGlyph(selector, glyph,
+                                    SELECTOR_INDEX | SELECTOR_FOREGROUND);
+            return;
+        }
+
+        if (InputMouseDown(input, SDL_BUTTON_RIGHT)) {
+            SelectorSetCurrentGlyph(selector, glyph, SELECTOR_BACKGROUND);
+            return;
+        }
+
+        if (InputMouseDown(input, SDL_BUTTON_MIDDLE)) {
+            SelectorSetCurrentGlyph(selector, glyph,
+                                    SELECTOR_INDEX | SELECTOR_FOREGROUND |
+                                        SELECTOR_BACKGROUND);
+            return;
         }
     }
 }
@@ -75,23 +92,11 @@ void SelectorHandleInput(Selector *selector, const Input *input) {
  * colour are set based on the flags.
  */
 void SelectorUpdate(Selector *selector, Glyph *cur_glyph) {
-    i64 i = selector->cur_index;
-
-    if (!cur_glyph || i < 0 || i > ArrayCount(selector->glyphs)) {
+    if (!cur_glyph) {
         return;
     }
 
-    if (Mask32(selector->type, SELECTOR_INDEX)) {
-        cur_glyph->index = selector->glyphs[i]->index;
-    }
-
-    if (Mask32(selector->type, SELECTOR_FOREGROUND)) {
-        cur_glyph->fg = selector->glyphs[i]->fg;
-    }
-
-    if (Mask32(selector->type, SELECTOR_BACKGROUND)) {
-        cur_glyph->bg = selector->glyphs[i]->bg;
-    }
+    SelectorGetCurrentGlyph(selector, cur_glyph);
 }
 
 /**
@@ -102,5 +107,53 @@ void SelectorRender(const Selector *selector, const Window *wind,
                     const Texture *tex) {
     for (i32 i = 0; i < ArrayCount(selector->glyphs); ++i) {
         GlyphRender(selector->glyphs[i], wind, tex);
+    }
+}
+
+/**
+ * \desc Sets the current glyph properties of a selector to those of a passed in
+ * glyph. The properties are set subject to a selector type. For each type (of
+ * which can be combined), the corresponding selector glyph properties are set.
+ */
+void SelectorSetCurrentGlyph(Selector *selector, const Glyph *glyph,
+                             SelectorType type) {
+    if (!glyph) {
+        return;
+    }
+
+    if (Mask32(type, SELECTOR_INDEX)) {
+        selector->cur_glyph->index = glyph->index;
+    }
+
+    if (Mask32(type, SELECTOR_FOREGROUND)) {
+        selector->cur_glyph->fg = glyph->fg;
+    }
+
+    if (Mask32(type, SELECTOR_BACKGROUND)) {
+        selector->cur_glyph->bg = glyph->bg;
+    }
+}
+
+/**
+ * \desc Sets the properties of a passed in glyph to those of a selector's
+ * current glyph. The properties are set subject to the type of the passed in
+ * selector. For each type (of which can be combined), the corresponding
+ * selector glyph properties are set.
+ */
+void SelectorGetCurrentGlyph(const Selector *selector, Glyph *glyph) {
+    if (!glyph) {
+        return;
+    }
+    
+    if (Mask32(selector->type, SELECTOR_INDEX)) {
+        glyph->index = selector->cur_glyph->index;
+    }
+
+    if (Mask32(selector->type, SELECTOR_FOREGROUND)) {
+        glyph->fg = selector->cur_glyph->fg;
+    }
+
+    if (Mask32(selector->type, SELECTOR_BACKGROUND)) {
+        glyph->bg = selector->cur_glyph->bg;
     }
 }

@@ -16,6 +16,7 @@
 #ifndef SELECTOR_H
 #define SELECTOR_H
 
+#include "color.h"
 #include "glyph.h"
 #include "input.h"
 #include "utils.h"
@@ -36,9 +37,9 @@ typedef enum SelectorType_e {
 
 typedef struct Selector_s {
     Glyph **glyphs;    /**< The glyphs representing the selector. */
+    Glyph *cur_glyph;  /**< Currently selected glyph. */
     SelectorType type; /**< The type of selection that will be utilised. */
     SDL_Rect rect;     /**< Dimensions of the selector in glyph dimensions. */
-    i64 cur_index;     /**< Current index of the selected glyph. */
 } Selector;
 
 /**
@@ -81,5 +82,23 @@ void SelectorUpdate(Selector *selector, Glyph *cur_glyph);
  */
 void SelectorRender(const Selector *selector, const Window *wind,
                     const Texture *tex);
+
+/**
+ * \brief Sets the current glyph based on a type of selector.
+ * \param [in, out] selector Selector to set the current glyph of.
+ * \param [in] glyph Glyph to take the properties from.
+ * \param [in] type The type of selector.
+ * \returns Void.
+ */
+void SelectorSetCurrentGlyph(Selector *selector, const Glyph *glyph,
+                             SelectorType type);
+
+/**
+ * \brief Assign glyph properties based on a selector's current glyph.
+ * \param [in] selector Selector to get the current glyph from.
+ * \param [in, out] glyph Glyph to set the properties to.
+ * \returns Void.
+ */
+void SelectorGetCurrentGlyph(const Selector *selector, Glyph *glyph);
 
 #endif
