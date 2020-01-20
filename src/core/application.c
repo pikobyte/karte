@@ -21,7 +21,6 @@
  */
 Application *ApplicationCreate(void) {
     Application *app = Allocate(sizeof(Application));
-    Log(LOG_NOTIFY, "Created application at %p.", app);
 
     if (SDL_Init(SDL_INIT_EVERYTHING)) {
         Log(LOG_FATAL, "Could not initialise SDL2: %s", SDL_GetError());

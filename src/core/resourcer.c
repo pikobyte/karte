@@ -20,7 +20,6 @@
 Resourcer *ResourcerCreate(void) {
     Resourcer *res = Allocate(sizeof(Resourcer));
     res->textures = HashmapCreate(HASHMAP_INITIAL_BASE_SIZE, TextureFree);
-    Log(LOG_NOTIFY, "Created resourcer at %p.", res);
     return res;
 }
 

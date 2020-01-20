@@ -23,7 +23,6 @@
  */
 Interface *InterfaceCreate(Texture *tex) {
     Interface *itfc = Allocate(sizeof(Interface));
-    Log(LOG_NOTIFY, "Created interface at %p.", itfc);
 
     itfc->tex = tex;
 

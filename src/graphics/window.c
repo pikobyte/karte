@@ -22,7 +22,6 @@
  */
 Window *WindowCreate(void) {
     Window *wind = Allocate(sizeof(Window));
-    Log(LOG_NOTIFY, "Created window at %p.", wind);
 
     wind->width = 1280;
     wind->height = 720;

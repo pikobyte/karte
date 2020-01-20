@@ -20,7 +20,6 @@
  */
 Texture *TextureCreate(void) {
     Texture *tex = Allocate(sizeof(Texture));
-    Log(LOG_NOTIFY, "Created texture at %p.", tex);
     return tex;
 }
 

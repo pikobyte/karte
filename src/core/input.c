@@ -20,7 +20,6 @@
  */
 Input *InputCreate(void) {
     Input *input = Allocate(sizeof(Input));
-    Log(LOG_NOTIFY, "Created input at %p.", input);
     input->conversion = DEFAULT_CONVERSION;
     input->quit = false;
     return input;
