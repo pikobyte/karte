@@ -120,7 +120,15 @@ void HashmapResize(Hashmap *hashmap, size_t base_size);
  */
 void HashmapInsert(Hashmap *hashmap, const char *key, void *value);
 
+/**
+ * \brief Searches through a hashmap and returns a value if it is associated
+ * with the provided key.
+ * \param [in] hashmap The hashmap to search.
+ * \param [in] key The key used for the search.
+ * \returns A value (if found) associated with the given key.
+ */
 void *HashmapSearch(const Hashmap *hashmap, const char *key);
+
 void HashmapDelete(Hashmap *hashmap, const char *key);
 
 /**

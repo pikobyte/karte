@@ -22,6 +22,7 @@
  */
 HashRecord *HashRecordCreate(const char *key, void *value) {
     HashRecord *record = Allocate(sizeof(HashRecord));
+    record->key = "";
     strcpy(record->key, key);
     record->value = value;
     return record;
@@ -150,6 +151,34 @@ void HashmapInsert(Hashmap *hashmap, const char *key, void *value) {
 
     hashmap->records[index] = record;
     hashmap->count++;
+}
+
+/**
+ * \desc Iterates through the records in hashmap and compares the record key to
+ * the provided key. If the keys match, then the associated value is returned.
+ * Otherwise the next record is checked, and a null value is returned if the
+ * associated value was not obtained.
+ */
+void *HashmapSearch(const Hashmap *hashmap, const char *key) {
+    size_t index = HashGet(key, hashmap->size, 0);
+    HashRecord *record = hashmap->records[index];
+
+    i32 i = 1;
+    while (record != NULL) {
+        if (record != &HASHMAP_DELETED_ITEM) {
+            if (strcmp(record->key, key) == 0) {
+                return record->value;
+            }
+        }
+
+        index = HashGet(key, hashmap->size, i);
+        record = hashmap->records[index];
+
+        i++;
+    }
+
+    Log(LOG_NOTIFY, "No value associated to key %s in hashmap!", key);
+    return NULL;
 }
 
 /**
