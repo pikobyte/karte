@@ -31,7 +31,7 @@ Window *WindowCreate(void) {
 
     wind->sdl_window = SDL_CreateWindow(
         wind->title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-        wind->width, wind->height, SDL_WINDOW_OPENGL | SDL_WINDOW_BORDERLESS);
+        wind->width, wind->height, SDL_WINDOW_ALLOW_HIGHDPI);
 
     if (wind->sdl_window == NULL) {
         Log(LOG_FATAL, "Could not initialise SDL_Window!");
