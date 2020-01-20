@@ -19,83 +19,85 @@
 #include "core/utils.h"
 
 /**
- * \desc Given an array, it is checked for validity, and if it is, is freed.
+ * \desc Given a vector, it is checked for validity, and if it is, is freed.
  */
-#define ArrayFree(arr) (arr ? free(ArrayPtr(arr)), 0 : 0)
+#define VectorFree(vec) (vec ? free(VectorPtr(vec)), 0 : 0)
 
 /**
- * \desc Pushes a value to an array. If the array needs to grow given this
+ * \desc Pushes a value to a vector. If the vector needs to grow given this
  * single item push, it does so. Otherwise, the used element count is
  * incremented, and that index is set to the desired pointer.
  */
-#define ArrayPush(arr, v) (ArrayQueryGrow(arr, 1), arr[ArrayUsed(arr)++] = v)
+#define VectorPush(vec, v) (VectorQueryGrow(vec, 1), vec[VectorUsed(vec)++] = v)
 
 /**
- * \desc Returns the number of used elements in array if it is valid.
+ * \desc Returns the number of used elements in a vector if it is valid.
  */
-#define ArrayCount(arr) (arr ? ArrayUsed(arr) : 0)
+#define VectorCount(vec) (vec ? VectorUsed(vec) : 0)
 
 /**
- * \desc Returns the last used member within an array.
+ * \desc Returns the last used member within a vector.
  */
-#define ArrayLast(arr) (arr ? arr[ArrayUsed(arr) - 1] : 0)
+#define VectorLast(vec) (vec ? vec[VectorUsed(vec) - 1] : 0)
 
 /**
- * \desc Removes the first member of an array and shrinks the array to
+ * \desc Removes the first member of a vector and shrinks the vector to
  * compensate.
  */
-#define ArrayPopFront(arr) (arr = ArrayShrink(arr, 0, sizeof(*arr)))
+#define VectorPopFront(vec) (vec = VectorShrink(vec, 0, sizeof(*vec)))
 
 /**
- * \desc Removes the last member of an array and shrinks the array to
+ * \desc Removes the last member of a vector and shrinks the vector to
  * compensate.
  */
-#define ArrayPopBack(arr) (arr = ArrayShrink(arr, ArrayLast(arr), sizeof(*arr)))
+#define VectorPopBack(vec)                                                     \
+    (vec = VectorShrink(vec, vecayLast(vec), sizeof(*vec)))
 
 /**
- * \desc Returns the pointer to an array data. The header includes two 32-bit
- * integers, the first holding the array size, the second the number of used
+ * \desc Returns the pointer to a vector data. The header includes two 32-bit
+ * integers, the first holding the vector size, the second the number of used
  * elements.
  */
-#define ArrayPtr(arr) ((i32 *)(arr)-2)
+#define VectorPtr(vec) ((i32 *)(vec)-2)
 
 /**
- * \desc Returns the size of the array which is stored in the first part of the
- * array header.
+ * \desc Returns the size of the vector which is stored in the first part of the
+ * vector header.
  */
-#define ArraySize(arr) ArrayPtr(arr)[0]
+#define VectorSize(vec) VectorPtr(vec)[0]
 
 /**
- * \desc Returns the used members of an array which is stored in the second part
- * of the array header.
+ * \desc Returns the used members of a vector which is stored in the second part
+ * of the vector header.
  */
-#define ArrayUsed(arr) ArrayPtr(arr)[1]
+#define VectorUsed(vec) VectorPtr(vec)[1]
 
 /**
- * \desc Checks if the array size is zero or if the current used elements plus
- * the desired elements is larger than the array size.
+ * \desc Checks if the vector size is zero or if the current used elements plus
+ * the desired elements is larger than the vector size.
  */
-#define ArrayReqGrow(arr, n) (arr == 0 || ArrayUsed(arr) + n >= ArraySize(arr))
+#define VectorReqGrow(vec, n)                                                  \
+    (vec == 0 || VectorUsed(vec) + n >= VectorSize(vec))
 
 /**
- * \desc Queries the array to see if the requirement to grow is true. If it is,
+ * \desc Queries the vector to see if the requirement to grow is true. If it is,
  * then the size is increased.
  */
-#define ArrayQueryGrow(arr, n) (ArrayReqGrow(arr, n) ? ArrayGrow(arr, n) : 0)
+#define VectorQueryGrow(vec, n) (VectorReqGrow(vec, n) ? VectorGrow(vec, n) : 0)
 
 /**
- * \desc Sets an array size to that required to fit in required elements.
+ * \desc Sets a vector size to that required to fit in required elements.
  */
-#define ArrayGrow(arr, n) (arr = ArrayGrowBy(arr, n, sizeof(*arr)))
+#define VectorGrow(vec, n) (vec = VectorGrowBy(vec, n, sizeof(*vec)))
 
 /**
- * \brief Grows an array by increasing its size.
- * \param [in] arr Array to increase the size of.
- * \param [in] n The number of elements to grow the array by.
- * \param [in] size The size of object which populates the array.
- * \returns The reallocated array, with a pointer to the data i.e. after the
+ * \brief Grows a vector by increasing its size.
+ * \param [in] vec Vector to increase the size of.
+ * \param [in] n The number of elements to grow the vector by.
+ * \param [in] size The size of object which populates the vector.
+ * \returns The reallocated vector, with a pointer to the data i.e. after the
  * header.
  */
-void *ArrayGrowBy(const void *arr, i32 n, i32 size);
+void *VectorGrowBy(const void *vec, i32 n, i32 size);
 
 #endif

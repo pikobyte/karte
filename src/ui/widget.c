@@ -161,7 +161,7 @@ i32 WidgetSort(const void *a, const void *b) {
  * Otherwise, the return value is NULL.
  */
 Widget *WidgetFind(Widget **widgets, const char *id) {
-    for (i32 i = 0; i < ArrayCount(widgets); ++i) {
+    for (i32 i = 0; i < VectorCount(widgets); ++i) {
         const char *cur_id = widgets[i]->id;
         if (!strcmp(id, cur_id)) {
             return widgets[i];

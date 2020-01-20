@@ -36,10 +36,10 @@ Selector *SelectorCreate(SDL_Rect rect, SelectorType type) {
  * glyph.
  */
 void SelectorFree(Selector *selector) {
-    for (i32 i = 0; i < ArrayCount(selector->glyphs); ++i) {
+    for (i32 i = 0; i < VectorCount(selector->glyphs); ++i) {
         GlyphFree(selector->glyphs[i]);
     }
-    ArrayFree(selector->glyphs);
+    VectorFree(selector->glyphs);
     GlyphFree(selector->cur_glyph);
     Free(selector);
 }
@@ -54,7 +54,7 @@ void SelectorHandleInput(Selector *selector, const Input *input) {
         return;
     }
 
-    for (i32 i = 0; i < ArrayCount(selector->glyphs); ++i) {
+    for (i32 i = 0; i < VectorCount(selector->glyphs); ++i) {
         Glyph *glyph = selector->glyphs[i];
         SDL_Rect rect = {0};
         rect.x = (u32)glyph->x;
@@ -105,7 +105,7 @@ void SelectorUpdate(Selector *selector, Glyph *cur_glyph) {
  */
 void SelectorRender(const Selector *selector, const Window *wind,
                     const Texture *tex) {
-    for (i32 i = 0; i < ArrayCount(selector->glyphs); ++i) {
+    for (i32 i = 0; i < VectorCount(selector->glyphs); ++i) {
         GlyphRender(selector->glyphs[i], wind, tex);
     }
 }
@@ -144,7 +144,7 @@ void SelectorGetCurrentGlyph(const Selector *selector, Glyph *glyph) {
     if (!glyph) {
         return;
     }
-    
+
     if (Mask32(selector->type, SELECTOR_INDEX)) {
         glyph->index = selector->cur_glyph->index;
     }

@@ -16,9 +16,9 @@
 
 /**
  * \desc Begins by allocating memory for the interface and assigning glyph
- * dimensions. The interface array are then created after this and pushed into
- * the interface widget array. The widgets are sorted by render order at the end
- * of the function.
+ * dimensions. The interface componentes are then created after this and pushed
+ * into the widget vector. The widgets are sorted by render order at the end of
+ * the function.
  * TODO: Load from a JSON file or something similar.
  */
 Interface *InterfaceCreate(Texture *tex) {
@@ -39,7 +39,7 @@ Interface *InterfaceCreate(Texture *tex) {
 
     InterfaceCreateWidgets(itfc);
 
-    qsort(itfc->widgets, ArrayCount(itfc->widgets), sizeof(Widget *),
+    qsort(itfc->widgets, VectorCount(itfc->widgets), sizeof(Widget *),
           &WidgetSort);
 
     return itfc;
@@ -47,13 +47,13 @@ Interface *InterfaceCreate(Texture *tex) {
 
 /**
  * \desc Frees the interface memory by iterating through the interface widgets,
- * freeing each, freeing each array and finally the interface pointer.
+ * freeing each, freeing each vector and finally the interface pointer.
  */
 void InterfaceFree(Interface *itfc) {
-    for (i32 i = 0; i < ArrayCount(itfc->widgets); ++i) {
+    for (i32 i = 0; i < VectorCount(itfc->widgets); ++i) {
         WidgetFree(itfc->widgets[i]);
     }
-    ArrayFree(itfc->widgets);
+    VectorFree(itfc->widgets);
 
     GlyphFree(itfc->cur_glyph);
     GlyphFree(itfc->ghost);
@@ -67,7 +67,7 @@ void InterfaceFree(Interface *itfc) {
  * current tab have their input handled.
  */
 void InterfaceHandleInput(Interface *itfc, Input *input) {
-    for (i32 i = 0; i < ArrayCount(itfc->widgets); ++i) {
+    for (i32 i = 0; i < VectorCount(itfc->widgets); ++i) {
         const u32 tab = itfc->widgets[i]->tab;
         if (tab == 0 || tab == itfc->active_tab) {
             WidgetHandleInput(itfc->widgets[i], input);
@@ -120,7 +120,7 @@ void InterfaceHandleInput(Interface *itfc, Input *input) {
  * panel.
  */
 void InterfaceUpdate(Interface *itfc) {
-    for (i32 i = 0; i < ArrayCount(itfc->widgets); ++i) {
+    for (i32 i = 0; i < VectorCount(itfc->widgets); ++i) {
         const u32 tab = itfc->widgets[i]->tab;
         if (tab == 0 || tab == itfc->active_tab) {
             WidgetUpdate(itfc->widgets[i], itfc->cur_glyph);
@@ -135,7 +135,7 @@ void InterfaceUpdate(Interface *itfc) {
  */
 void InterfaceRender(const Interface *itfc, const Window *wind,
                      const Texture *tex) {
-    for (i32 i = 0; i < ArrayCount(itfc->widgets); ++i) {
+    for (i32 i = 0; i < VectorCount(itfc->widgets); ++i) {
         const u32 tab = itfc->widgets[i]->tab;
         if (tab == 0 || tab == itfc->active_tab) {
             WidgetRender(itfc->widgets[i], wind, tex);
@@ -168,16 +168,16 @@ void InterfaceCreateWidgets(Interface *itfc) {
     Button *btn_tab2 =
         ButtonCreate(4, 3, "2", BORDER_NONE, LIGHTGREY, BLANK, true);
 
-    ArrayPush(itfc->widgets,
-              WidgetCreate("btn_quit", WIDGET_BUTTON, btn_quit, 1, 0));
-    ArrayPush(itfc->widgets,
-              WidgetCreate("btn_save", WIDGET_BUTTON, btn_save, 1, 0));
-    ArrayPush(itfc->widgets,
-              WidgetCreate("btn_load", WIDGET_BUTTON, btn_load, 1, 0));
-    ArrayPush(itfc->widgets,
-              WidgetCreate("btn_tab1", WIDGET_BUTTON, btn_tab1, 0, 0));
-    ArrayPush(itfc->widgets,
-              WidgetCreate("btn_tab2", WIDGET_BUTTON, btn_tab2, 0, 0));
+    VectorPush(itfc->widgets,
+               WidgetCreate("btn_quit", WIDGET_BUTTON, btn_quit, 1, 0));
+    VectorPush(itfc->widgets,
+               WidgetCreate("btn_save", WIDGET_BUTTON, btn_save, 1, 0));
+    VectorPush(itfc->widgets,
+               WidgetCreate("btn_load", WIDGET_BUTTON, btn_load, 1, 0));
+    VectorPush(itfc->widgets,
+               WidgetCreate("btn_tab1", WIDGET_BUTTON, btn_tab1, 0, 0));
+    VectorPush(itfc->widgets,
+               WidgetCreate("btn_tab2", WIDGET_BUTTON, btn_tab2, 0, 0));
 
     // CANVASES ----------------------------------------------------------------
     Canvas *cvs_main = CanvasCreate((SDL_Rect){21, 1, 58, 43}, true);
@@ -189,12 +189,12 @@ void InterfaceCreateWidgets(Interface *itfc) {
             glyph->fg = LIGHTGREY;
             glyph->bg = BLACK;
             glyph->index = 250;
-            ArrayPush(cvs_main->glyphs, glyph);
+            VectorPush(cvs_main->glyphs, glyph);
         }
     }
 
-    ArrayPush(itfc->widgets,
-              WidgetCreate("cvs_main", WIDGET_CANVAS, cvs_main, 0, 0));
+    VectorPush(itfc->widgets,
+               WidgetCreate("cvs_main", WIDGET_CANVAS, cvs_main, 0, 0));
 
     // LABELS ------------------------------------------------------------------
     Label *lbl_title = LabelCreate(4, 0, "Karte v0.0.1", DARKGREY, LIGHTGREY);
@@ -204,18 +204,18 @@ void InterfaceCreateWidgets(Interface *itfc) {
     Label *lbl_tab1 = LabelCreate(2, 2, "Main", LIGHTGREY, BLACK);
     Label *lbl_tab2 = LabelCreate(2, 2, "Tools", LIGHTGREY, BLACK);
 
-    ArrayPush(itfc->widgets,
-              WidgetCreate("lbl_title", WIDGET_LABEL, lbl_title, 0, 1));
-    ArrayPush(itfc->widgets,
-              WidgetCreate("lbl_color", WIDGET_LABEL, lbl_color, 1, 1));
-    ArrayPush(itfc->widgets,
-              WidgetCreate("lbl_glyph", WIDGET_LABEL, lb_glyph, 1, 1));
-    ArrayPush(itfc->widgets,
-              WidgetCreate("lbl_current", WIDGET_LABEL, lbl_current, 1, 1));
-    ArrayPush(itfc->widgets,
-              WidgetCreate("lbl_tab1", WIDGET_LABEL, lbl_tab1, 1, 1));
-    ArrayPush(itfc->widgets,
-              WidgetCreate("lbl_tab2", WIDGET_LABEL, lbl_tab2, 2, 1));
+    VectorPush(itfc->widgets,
+               WidgetCreate("lbl_title", WIDGET_LABEL, lbl_title, 0, 1));
+    VectorPush(itfc->widgets,
+               WidgetCreate("lbl_color", WIDGET_LABEL, lbl_color, 1, 1));
+    VectorPush(itfc->widgets,
+               WidgetCreate("lbl_glyph", WIDGET_LABEL, lb_glyph, 1, 1));
+    VectorPush(itfc->widgets,
+               WidgetCreate("lbl_current", WIDGET_LABEL, lbl_current, 1, 1));
+    VectorPush(itfc->widgets,
+               WidgetCreate("lbl_tab1", WIDGET_LABEL, lbl_tab1, 1, 1));
+    VectorPush(itfc->widgets,
+               WidgetCreate("lbl_tab2", WIDGET_LABEL, lbl_tab2, 2, 1));
 
     // PANELS ------------------------------------------------------------------
     Panel *pnl_options =
@@ -229,16 +229,16 @@ void InterfaceCreateWidgets(Interface *itfc) {
     Panel *pnl_tab =
         PanelCreate((SDL_Rect){1, 2, 18, 3}, BORDER_SINGLE, LIGHTGREY);
 
-    ArrayPush(itfc->widgets,
-              WidgetCreate("pnl_options", WIDGET_PANEL, pnl_options, 0, 0));
-    ArrayPush(itfc->widgets,
-              WidgetCreate("pnl_editor", WIDGET_PANEL, pnl_editor, 0, 0));
-    ArrayPush(itfc->widgets,
-              WidgetCreate("pnl_color_box", WIDGET_PANEL, pnl_color_box, 1, 0));
-    ArrayPush(itfc->widgets,
-              WidgetCreate("pnl_glyph_box", WIDGET_PANEL, pnl_glyph_box, 1, 0));
-    ArrayPush(itfc->widgets,
-              WidgetCreate("pnl_tab", WIDGET_PANEL, pnl_tab, 0, 0));
+    VectorPush(itfc->widgets,
+               WidgetCreate("pnl_options", WIDGET_PANEL, pnl_options, 0, 0));
+    VectorPush(itfc->widgets,
+               WidgetCreate("pnl_editor", WIDGET_PANEL, pnl_editor, 0, 0));
+    VectorPush(itfc->widgets, WidgetCreate("pnl_color_box", WIDGET_PANEL,
+                                           pnl_color_box, 1, 0));
+    VectorPush(itfc->widgets, WidgetCreate("pnl_glyph_box", WIDGET_PANEL,
+                                           pnl_glyph_box, 1, 0));
+    VectorPush(itfc->widgets,
+               WidgetCreate("pnl_tab", WIDGET_PANEL, pnl_tab, 0, 0));
 
     // SELECTORS ---------------------------------------------------------------
     Selector *sct_glyphs =
@@ -251,7 +251,7 @@ void InterfaceCreateWidgets(Interface *itfc) {
             glyph->fg = LIGHTGREY;
             glyph->bg = BLACK;
             glyph->index = i + j * 16;
-            ArrayPush(sct_glyphs->glyphs, glyph);
+            VectorPush(sct_glyphs->glyphs, glyph);
         }
     }
 
@@ -273,14 +273,14 @@ void InterfaceCreateWidgets(Interface *itfc) {
             glyph->fg = COLORS[i];
             glyph->bg = COLORS[i];
             glyph->index = FILLED;
-            ArrayPush(sct_colors->glyphs, glyph);
+            VectorPush(sct_colors->glyphs, glyph);
         }
 
         x += 2;
     }
 
-    ArrayPush(itfc->widgets,
-              WidgetCreate("sct_glyphs ", WIDGET_SELECTOR, sct_glyphs, 1, 0));
-    ArrayPush(itfc->widgets,
-              WidgetCreate("sct_colors", WIDGET_SELECTOR, sct_colors, 1, 0));
+    VectorPush(itfc->widgets,
+               WidgetCreate("sct_glyphs ", WIDGET_SELECTOR, sct_glyphs, 1, 0));
+    VectorPush(itfc->widgets,
+               WidgetCreate("sct_colors", WIDGET_SELECTOR, sct_colors, 1, 0));
 }

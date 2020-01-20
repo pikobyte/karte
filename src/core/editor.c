@@ -40,7 +40,7 @@ Editor *EditorCreate(const Window *wind, Resourcer *res) {
  */
 void EditorFree(Editor *editor) {
     InterfaceFree(editor->itfc);
-    ArrayFree(editor->glyphs);
+    VectorFree(editor->glyphs);
     Free(editor);
 }
 

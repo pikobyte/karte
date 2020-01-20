@@ -103,7 +103,7 @@ int WidgetSort(const void *a, const void *b);
 
 /**
  * \brief Finds a widget based on its identifier.
- * \param [in] widgets An array of widgets to search.
+ * \param [in] widgets A vector of widgets to search.
  * \param [in] id The widget identifier to search against.
  * \returns A found widget, or otherwise NULL.
  */

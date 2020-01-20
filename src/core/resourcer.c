@@ -28,15 +28,15 @@ Resourcer *ResourcerCreate(void) {
  * memory outside of the resourcer!
  */
 void ResourcerFree(Resourcer *res) {
-    for (i32 i = 0; i < ArrayCount(res->textures); ++i) {
+    for (i32 i = 0; i < VectorCount(res->textures); ++i) {
         TextureFree(res->textures[i]);
     }
-    ArrayFree(res->textures);
+    VectorFree(res->textures);
     Free(res);
 }
 
 /**
- * \desc Loads a texture into the resourcer texture array. This requires a
+ * \desc Loads a texture into the resourcer texture vector. This requires a
  * Window with an SDL rendering context, and of course, a filepath to the
  * texture.
  */
@@ -47,6 +47,6 @@ Texture *ResourcerLoadTexture(Resourcer *res, const Window *wind,
         return NULL;
     }
 
-    ArrayPush(res->textures, tex);
+    VectorPush(res->textures, tex);
     return tex;
 }

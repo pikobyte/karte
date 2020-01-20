@@ -115,11 +115,11 @@ void ButtonUpdate(Button *button) {
  */
 void ButtonRender(const Button *button, const Window *wind,
                   const Texture *tex) {
-    for (i32 i = 0; i < ArrayCount(button->panel->glyphs); ++i) {
+    for (i32 i = 0; i < VectorCount(button->panel->glyphs); ++i) {
         GlyphRender(button->panel->glyphs[i], wind, tex);
     }
 
-    for (i32 i = 0; i < ArrayCount(button->label->glyphs); ++i) {
+    for (i32 i = 0; i < VectorCount(button->label->glyphs); ++i) {
         GlyphRender(button->label->glyphs[i], wind, tex);
     }
 }
@@ -144,11 +144,11 @@ bool ButtonIsPressed(const Button *button) {
  * including the label and border (if it exists).
  */
 void ButtonSetForeColor(Button *button, SDL_Color col) {
-    for (i32 i = 0; i < ArrayCount(button->label->glyphs); ++i) {
+    for (i32 i = 0; i < VectorCount(button->label->glyphs); ++i) {
         button->label->glyphs[i]->fg = col;
     }
 
-    for (i32 i = 0; i < ArrayCount(button->panel->glyphs); ++i) {
+    for (i32 i = 0; i < VectorCount(button->panel->glyphs); ++i) {
         button->panel->glyphs[i]->fg = col;
     }
 }
@@ -158,11 +158,11 @@ void ButtonSetForeColor(Button *button, SDL_Color col) {
  * including the label and border (if it exists).
  */
 void ButtonSetBackColor(Button *button, SDL_Color col) {
-    for (i32 i = 0; i < ArrayCount(button->label->glyphs); ++i) {
+    for (i32 i = 0; i < VectorCount(button->label->glyphs); ++i) {
         button->label->glyphs[i]->bg = col;
     }
 
-    for (i32 i = 0; i < ArrayCount(button->panel->glyphs); ++i) {
+    for (i32 i = 0; i < VectorCount(button->panel->glyphs); ++i) {
         button->panel->glyphs[i]->bg = col;
     }
 }
@@ -172,12 +172,12 @@ void ButtonSetBackColor(Button *button, SDL_Color col) {
  * label and border (if it exists).
  */
 void ButtonSetOpacity(Button *button, u8 opacity) {
-    for (i32 i = 0; i < ArrayCount(button->label->glyphs); ++i) {
+    for (i32 i = 0; i < VectorCount(button->label->glyphs); ++i) {
         button->label->glyphs[i]->fg.a = opacity;
         button->label->glyphs[i]->bg.a = opacity;
     }
 
-    for (i32 i = 0; i < ArrayCount(button->panel->glyphs); ++i) {
+    for (i32 i = 0; i < VectorCount(button->panel->glyphs); ++i) {
         button->panel->glyphs[i]->fg.a = opacity;
         button->panel->glyphs[i]->bg.a = opacity;
     }

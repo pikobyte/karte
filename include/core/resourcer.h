@@ -21,12 +21,14 @@
 #include "graphics/window.h"
 #include "memory/vector.h"
 
+// TODO: Use hashmaps for resources.
+
 /**
  * \brief Handles all resources (who would've guessed) to be used within the
  * program.
  *
- * The resourcer stores either an array or array of pointer to certain key
- * resources.
+ * The resourcer stores vectors of different resources such as textures. Other
+ * types of resource can be added if required.
  */
 typedef struct Resourcer_s {
     Texture **textures; /**< Textures used by the program. */

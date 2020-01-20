@@ -33,10 +33,10 @@ Canvas *CanvasCreate(SDL_Rect rect, bool writable) {
  * glyph.
  */
 void CanvasFree(Canvas *canvas) {
-    for (i32 i = 0; i < ArrayCount(canvas->glyphs); ++i) {
+    for (i32 i = 0; i < VectorCount(canvas->glyphs); ++i) {
         GlyphFree(canvas->glyphs[i]);
     }
-    ArrayFree(canvas->glyphs);
+    VectorFree(canvas->glyphs);
     Free(canvas);
 }
 
@@ -56,7 +56,7 @@ void CanvasHandleInput(Canvas *canvas, const Input *input) {
         return;
     }
 
-    for (i32 i = 0; i < ArrayCount(canvas->glyphs); ++i) {
+    for (i32 i = 0; i < VectorCount(canvas->glyphs); ++i) {
         Glyph *glyph = canvas->glyphs[i];
         SDL_Rect rect = {0};
         rect.x = (u32)glyph->x;
@@ -99,7 +99,7 @@ void CanvasHandleInput(Canvas *canvas, const Input *input) {
 void CanvasUpdate(Canvas *canvas, Glyph *cur_glyph) {
     i64 i = canvas->glyph_index;
 
-    if (!cur_glyph || i < 0 || i > ArrayCount(canvas->glyphs)) {
+    if (!cur_glyph || i < 0 || i > VectorCount(canvas->glyphs)) {
         return;
     }
 
@@ -136,7 +136,7 @@ void CanvasUpdate(Canvas *canvas, Glyph *cur_glyph) {
  */
 void CanvasRender(const Canvas *canvas, const Window *wind,
                   const Texture *tex) {
-    for (i32 i = 0; i < ArrayCount(canvas->glyphs); ++i) {
+    for (i32 i = 0; i < VectorCount(canvas->glyphs); ++i) {
         GlyphRender(canvas->glyphs[i], wind, tex);
     }
 }
