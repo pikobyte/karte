@@ -37,7 +37,7 @@
  */
 typedef struct Interface_s {
     Texture *tex;     /**< Texture to obtain glyph dimensions. */
-    Widget **widgets; /**< List of UI widgets. TODO: Replace with a hashmap. */
+    Vector *widgets;  /**< List of UI widgets. TODO: Replace with a hashmap. */
     Glyph *cur_glyph; /**< Currently selected glyph. */
     Glyph *ghost;     /**< Ghost glyph to be used as a visual aid. */
     bool show_ghost;  /**< Flag to show current glyph on a canvas. */

@@ -20,8 +20,9 @@
  */
 Canvas *CanvasCreate(SDL_Rect rect, bool writable) {
     Canvas *canvas = Allocate(sizeof(Canvas));
+    canvas->glyphs = VectorCreate();
     canvas->op = CANVAS_NONE;
-    canvas->glyph_index = -1;
+    canvas->glyph_index = 0;
     canvas->rect = rect;
     canvas->writable = writable;
 
@@ -33,8 +34,9 @@ Canvas *CanvasCreate(SDL_Rect rect, bool writable) {
  * glyph.
  */
 void CanvasFree(Canvas *canvas) {
-    for (i32 i = 0; i < VectorCount(canvas->glyphs); ++i) {
-        GlyphFree(canvas->glyphs[i]);
+    for (size_t i = 0; i < VectorLength(canvas->glyphs); ++i) {
+        Glyph *glyph = VectorAt(canvas->glyphs, i);
+        GlyphFree(glyph);
     }
     VectorFree(canvas->glyphs);
     Free(canvas);
@@ -56,8 +58,8 @@ void CanvasHandleInput(Canvas *canvas, const Input *input) {
         return;
     }
 
-    for (i32 i = 0; i < VectorCount(canvas->glyphs); ++i) {
-        Glyph *glyph = canvas->glyphs[i];
+    for (size_t i = 0; i < VectorLength(canvas->glyphs); ++i) {
+        Glyph *glyph = VectorAt(canvas->glyphs, i);
         SDL_Rect rect = {0};
         rect.x = (u32)glyph->x;
         rect.y = (u32)glyph->y;
@@ -97,9 +99,9 @@ void CanvasHandleInput(Canvas *canvas, const Input *input) {
  * glyph (based on canvas type); erasure just sets a canvas glyph to blank.
  */
 void CanvasUpdate(Canvas *canvas, Glyph *cur_glyph) {
-    i64 i = canvas->glyph_index;
+    Glyph *glyph = VectorAt(canvas->glyphs, canvas->glyph_index);
 
-    if (!cur_glyph || i < 0 || i > VectorCount(canvas->glyphs)) {
+    if (!cur_glyph) {
         return;
     }
 
@@ -108,21 +110,21 @@ void CanvasUpdate(Canvas *canvas, Glyph *cur_glyph) {
         break;
     }
     case CANVAS_PLACE: {
-        canvas->glyphs[i]->fg = cur_glyph->fg;
-        canvas->glyphs[i]->bg = cur_glyph->bg;
-        canvas->glyphs[i]->index = cur_glyph->index;
+        glyph->fg = cur_glyph->fg;
+        glyph->bg = cur_glyph->bg;
+        glyph->index = cur_glyph->index;
         break;
     }
     case CANVAS_SELECT: {
-        cur_glyph->fg = canvas->glyphs[i]->fg;
-        cur_glyph->bg = canvas->glyphs[i]->bg;
-        cur_glyph->index = canvas->glyphs[i]->index;
+        cur_glyph->fg = glyph->fg;
+        cur_glyph->bg = glyph->bg;
+        cur_glyph->index = glyph->index;
         break;
     }
     case CANVAS_ERASE: {
-        canvas->glyphs[i]->index = 0;
-        canvas->glyphs[i]->fg = BLANK;
-        canvas->glyphs[i]->bg = BLANK;
+        glyph->index = 0;
+        glyph->fg = BLANK;
+        glyph->bg = BLANK;
         break;
     }
     default:
@@ -136,7 +138,8 @@ void CanvasUpdate(Canvas *canvas, Glyph *cur_glyph) {
  */
 void CanvasRender(const Canvas *canvas, const Window *wind,
                   const Texture *tex) {
-    for (i32 i = 0; i < VectorCount(canvas->glyphs); ++i) {
-        GlyphRender(canvas->glyphs[i], wind, tex);
+    for (size_t i = 0; i < VectorLength(canvas->glyphs); ++i) {
+        const Glyph *glyph = VectorAt(canvas->glyphs, i);
+        GlyphRender(glyph, wind, tex);
     }
 }

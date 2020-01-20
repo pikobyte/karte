@@ -160,11 +160,12 @@ i32 WidgetSort(const void *a, const void *b) {
  * \desc Retrieves a widget based on an identifier. If it is found, return it.
  * Otherwise, the return value is NULL.
  */
-Widget *WidgetFind(Widget **widgets, const char *id) {
-    for (i32 i = 0; i < VectorCount(widgets); ++i) {
-        const char *cur_id = widgets[i]->id;
+Widget *WidgetFind(Vector *widgets, const char *id) {
+    for (size_t i = 0; i < VectorLength(widgets); ++i) {
+        Widget *widget = VectorAt(widgets, i);
+        const char *cur_id = widget->id;
         if (!strcmp(id, cur_id)) {
-            return widgets[i];
+            return widget;
         }
     }
 

@@ -107,6 +107,6 @@ int WidgetSort(const void *a, const void *b);
  * \param [in] id The widget identifier to search against.
  * \returns A found widget, or otherwise NULL.
  */
-Widget *WidgetFind(Widget **widgets, const char *id);
+Widget *WidgetFind(Vector *widgets, const char *id);
 
 #endif

@@ -15,36 +15,135 @@
 #include "memory/vector.h"
 
 /**
- * \desc The growth of an vector involves the increasing of its size and
- * consequent reallocation. If reallocation fails, an error is issued and only
- * vector header is allocated. The first calculation is the double current size,
- * which is zero if the vector is NULL. The minimum required memory is the
- * current usage plus the number of required elements. A decision is then made:
- * whether the double size is greater than that required, the smaller of the two
- * is the actual required. The total space required for reallocation is the
- * number of actual required elements, multiplied by the size of object within
- * the vector, plus the 2 32-bit integer header. If the reallocated memory not
- * given, an error is logged and only vector header memory is allocated.
- * Otherwise, if the vector is currently NULL, the number of used elements is
- * set to zero. The size of the vector (number of indices) is set in the header,
- * and the pointer to the new memory data (skipping header) is returned.
+ * \desc The creation of a vector involves setting the initial capacity and
+ * allocating the actual memory correspondant to that capacity. Initially,
+ * vectors have no content.
  */
-void *VectorGrowBy(const void *arr, i32 n, i32 size) {
-    const i32 dbl_cur = arr ? 2 * VectorSize(arr) : 0;
-    const i32 min_req = VectorCount(arr) + n;
-    const i32 act_req = dbl_cur > min_req ? dbl_cur : min_req;
-    const i32 tot_req = size * act_req + sizeof(i32) * 2;
+Vector *VectorCreate(void) {
+    Vector *vec = Allocate(sizeof(Vector));
+    vec->capacity = VECTOR_INITIAL_CAPACITY;
+    vec->size = 0;
+    vec->data = Allocate(sizeof(void *) * vec->capacity);
+    return vec;
+}
 
-    i32 *ptr = (i32 *)realloc(arr ? VectorPtr(arr) : 0, tot_req);
+/**
+ * \desc Freeing a vector simply involves freeing the data within.
+ */
+void VectorFree(Vector *vec) { Free(vec->data); }
 
-    if (ptr) {
-        if (!arr) {
-            ptr[1] = 0;
-        }
-        ptr[0] = act_req;
-        return ptr + 2;
-    } else {
-        Log(LOG_ERROR, "Could not allocate Vector of size %i!", tot_req);
-        return (void *)(2 * sizeof(i32));
+/**
+ * \desc The length of a vector is the number of actual objects within it. This
+ * function clears the confusion between size and capacity.
+ */
+size_t VectorLength(const Vector *vec) { return vec->size; }
+
+/**
+ * \desc Resizes a vector provided the capacity is at least unity. The vector
+ * data is reallocated to the new capacity and the data are set accordingly.
+ */
+void VectorResize(Vector *vec, size_t capacity) {
+    if (capacity < 1) {
+        return;
+    }
+
+    void **data = realloc(vec->data, sizeof(void *) * capacity);
+    if (!data) {
+        Log(LOG_ERROR, "Could not resize vector to %u!", capacity);
+        return;
+    }
+
+    vec->data = data;
+    vec->capacity = capacity;
+}
+
+/**
+ * \desc Performs a check as to whether the vector capacity should be expanded
+ * and then appends data to the end of the current set. The vector size is also
+ * incremented. If a resize is triggered, the vector capacity is doubled.
+ */
+void VectorPush(Vector *vec, void *data) {
+    if (vec->capacity == vec->size) {
+        VectorResize(vec, vec->capacity << 1);
+    }
+
+    vec->data[vec->size++] = data;
+}
+
+/**
+ * \desc Performs a check as to whether the index provided is within the vector
+ * bounds. If it is, the data at that index are set based on the given input.
+ */
+void VectorSet(Vector *vec, size_t index, void *data) {
+    if (index < 0 || index > vec->size - 1) {
+        Log(LOG_ERROR, "VectorSet: index %u out of bounds!", index);
+        return;
+    }
+
+    vec->data[index] = data;
+}
+
+/**
+ * \desc Performs a check as to whether the index provided is within the vector
+ * bounds. If it is, the data at that index are returned.
+ */
+void *VectorAt(const Vector *vec, size_t index) {
+    if (index < 0 || index > vec->size - 1) {
+        Log(LOG_ERROR, "VectorAt: index %u out of bounds!", index);
+        return NULL;
+    }
+
+    return vec->data[index];
+}
+
+/**
+ * \desc Performs a check as to whether the data at the front of the vector are
+ * valid and returns it if it is.
+ */
+void *VectorFront(const Vector *vec) {
+    void *data = vec->data[0];
+    if (!data) {
+        Log(LOG_ERROR, "VectorFront: no data at front of vector!");
+        return NULL;
+    }
+    return data;
+}
+
+/**
+ * \desc Performs a check as to whether the data at the back of the vector are
+ * valid and returns it if it is.
+ */
+void *VectorBack(const Vector *vec) {
+    void *data = vec->data[vec->size - 1];
+    if (!data) {
+        Log(LOG_ERROR, "VectorBack: no data at back of vector!");
+        return NULL;
+    }
+    return data;
+}
+
+/**
+ * \desc Performs a check as to whether the index provided is within the vector
+ * bounds. If it is, the data at that position is set to null. The data in the
+ * vector are then compacted and the size decremented. If the new size of the
+ * vector is a quarter of its capacity, it halves the capacity of the vector.
+ */
+void VectorDelete(Vector *vec, size_t index) {
+    if (index < 0 || index > vec->size - 1) {
+        Log(LOG_ERROR, "VectorDelete: index %u out of bounds!", index);
+        return;
+    }
+
+    vec->data[index] = NULL;
+
+    for (size_t i = 0; i < vec->size - 1; ++i) {
+        vec->data[i] = vec->data[i + 1];
+        vec->data[i + 1] = NULL;
+    }
+
+    vec->size--;
+
+    if (vec->size > 0 && vec->size <= vec->capacity / 4) {
+        VectorResize(vec, vec->capacity >> 1);
     }
 }

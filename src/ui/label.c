@@ -21,6 +21,7 @@
  */
 Label *LabelCreate(i32 x, i32 y, const char *text, SDL_Color fg, SDL_Color bg) {
     Label *label = Allocate(sizeof(Label));
+    label->glyphs = VectorCreate();
     label->x = x;
     label->y = y;
     strcpy(label->text, text);
@@ -45,8 +46,9 @@ Label *LabelCreate(i32 x, i32 y, const char *text, SDL_Color fg, SDL_Color bg) {
  * label pointer itself.
  */
 void LabelFree(Label *label) {
-    for (i32 i = 0; i < VectorCount(label->glyphs); ++i) {
-        GlyphFree(label->glyphs[i]);
+    for (size_t i = 0; i < VectorLength(label->glyphs); ++i) {
+        Glyph *glyph = VectorAt(label->glyphs, i);
+        GlyphFree(glyph);
     }
     VectorFree(label->glyphs);
     Free(label);
@@ -57,7 +59,8 @@ void LabelFree(Label *label) {
  * through its glyphs.
  */
 void LabelRender(const Label *label, const Window *wind, const Texture *tex) {
-    for (i32 i = 0; i < VectorCount(label->glyphs); ++i) {
-        GlyphRender(label->glyphs[i], wind, tex);
+    for (size_t i = 0; i < VectorLength(label->glyphs); ++i) {
+        const Glyph *glyph = VectorAt(label->glyphs, i);
+        GlyphRender(glyph, wind, tex);
     }
 }

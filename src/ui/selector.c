@@ -21,6 +21,7 @@
  */
 Selector *SelectorCreate(SDL_Rect rect, SelectorType type) {
     Selector *selector = Allocate(sizeof(Selector));
+    selector->glyphs = VectorCreate();
     selector->cur_glyph = GlyphCreate();
     selector->cur_glyph->index = 250;
     selector->cur_glyph->fg = LIGHTGREY;
@@ -36,8 +37,9 @@ Selector *SelectorCreate(SDL_Rect rect, SelectorType type) {
  * glyph.
  */
 void SelectorFree(Selector *selector) {
-    for (i32 i = 0; i < VectorCount(selector->glyphs); ++i) {
-        GlyphFree(selector->glyphs[i]);
+    for (size_t i = 0; i < VectorLength(selector->glyphs); ++i) {
+        Glyph *glyph = VectorAt(selector->glyphs, i);
+        GlyphFree(glyph);
     }
     VectorFree(selector->glyphs);
     GlyphFree(selector->cur_glyph);
@@ -54,8 +56,8 @@ void SelectorHandleInput(Selector *selector, const Input *input) {
         return;
     }
 
-    for (i32 i = 0; i < VectorCount(selector->glyphs); ++i) {
-        Glyph *glyph = selector->glyphs[i];
+    for (size_t i = 0; i < VectorLength(selector->glyphs); ++i) {
+        Glyph *glyph = VectorAt(selector->glyphs, i);
         SDL_Rect rect = {0};
         rect.x = (u32)glyph->x;
         rect.y = (u32)glyph->y;
@@ -105,8 +107,9 @@ void SelectorUpdate(Selector *selector, Glyph *cur_glyph) {
  */
 void SelectorRender(const Selector *selector, const Window *wind,
                     const Texture *tex) {
-    for (i32 i = 0; i < VectorCount(selector->glyphs); ++i) {
-        GlyphRender(selector->glyphs[i], wind, tex);
+    for (size_t i = 0; i < VectorLength(selector->glyphs); ++i) {
+        const Glyph *glyph = VectorAt(selector->glyphs, i);
+        GlyphRender(glyph, wind, tex);
     }
 }
 

@@ -22,6 +22,7 @@
  */
 Panel *PanelCreate(SDL_Rect rect, Border border, SDL_Color col) {
     Panel *panel = Allocate(sizeof(Panel));
+    panel->glyphs = VectorCreate();
     panel->rect = rect;
 
     if (border == BORDER_NONE) {
@@ -77,8 +78,9 @@ Panel *PanelCreate(SDL_Rect rect, Border border, SDL_Color col) {
  * the panel pointer itself.
  */
 void PanelFree(Panel *panel) {
-    for (i32 i = 0; i < VectorCount(panel->glyphs); ++i) {
-        GlyphFree(panel->glyphs[i]);
+    for (size_t i = 0; i < VectorLength(panel->glyphs); ++i) {
+        Glyph *glyph = VectorAt(panel->glyphs, i);
+        GlyphFree(glyph);
     }
     VectorFree(panel->glyphs);
     Free(panel);
@@ -89,7 +91,8 @@ void PanelFree(Panel *panel) {
  * through its glyphs.
  */
 void PanelRender(const Panel *panel, const Window *wind, const Texture *tex) {
-    for (i32 i = 0; i < VectorCount(panel->glyphs); ++i) {
-        GlyphRender(panel->glyphs[i], wind, tex);
+    for (size_t i = 0; i < VectorLength(panel->glyphs); ++i) {
+        const Glyph *glyph = VectorAt(panel->glyphs, i);
+        GlyphRender(glyph, wind, tex);
     }
 }

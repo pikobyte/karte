@@ -38,7 +38,7 @@ typedef enum SelectorType_e {
 } SelectorType;
 
 typedef struct Selector_s {
-    Glyph **glyphs;    /**< The glyphs representing the selector. */
+    Vector *glyphs;    /**< The glyphs representing the selector. */
     Glyph *cur_glyph;  /**< Currently selected glyph. */
     SelectorType type; /**< The type of selection that will be utilised. */
     SDL_Rect rect;     /**< Dimensions of the selector in glyph dimensions. */

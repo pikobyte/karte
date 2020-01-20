@@ -36,9 +36,10 @@ Interface *InterfaceCreate(Texture *tex) {
     itfc->active_tab = 1;
     itfc->drawing_area = (SDL_Rect){21, 1, 58, 43};
 
+    itfc->widgets = VectorCreate();
     InterfaceCreateWidgets(itfc);
 
-    qsort(itfc->widgets, VectorCount(itfc->widgets), sizeof(Widget *),
+    qsort(itfc->widgets->data, VectorLength(itfc->widgets), sizeof(Widget *),
           &WidgetSort);
 
     return itfc;
@@ -49,8 +50,9 @@ Interface *InterfaceCreate(Texture *tex) {
  * freeing each, freeing each vector and finally the interface pointer.
  */
 void InterfaceFree(Interface *itfc) {
-    for (i32 i = 0; i < VectorCount(itfc->widgets); ++i) {
-        WidgetFree(itfc->widgets[i]);
+    for (size_t i = 0; i < VectorLength(itfc->widgets); ++i) {
+        Widget *widget = VectorAt(itfc->widgets, i);
+        WidgetFree(widget);
     }
     VectorFree(itfc->widgets);
 
@@ -66,10 +68,11 @@ void InterfaceFree(Interface *itfc) {
  * current tab have their input handled.
  */
 void InterfaceHandleInput(Interface *itfc, Input *input) {
-    for (i32 i = 0; i < VectorCount(itfc->widgets); ++i) {
-        const u32 tab = itfc->widgets[i]->tab;
+    for (size_t i = 0; i < VectorLength(itfc->widgets); ++i) {
+        const Widget *widget = VectorAt(itfc->widgets, i);
+        const u32 tab = widget->tab;
         if (tab == 0 || tab == itfc->active_tab) {
-            WidgetHandleInput(itfc->widgets[i], input);
+            WidgetHandleInput(widget, input);
         }
     }
 
@@ -119,10 +122,11 @@ void InterfaceHandleInput(Interface *itfc, Input *input) {
  * panel.
  */
 void InterfaceUpdate(Interface *itfc) {
-    for (i32 i = 0; i < VectorCount(itfc->widgets); ++i) {
-        const u32 tab = itfc->widgets[i]->tab;
+    for (size_t i = 0; i < VectorLength(itfc->widgets); ++i) {
+        Widget *widget = VectorAt(itfc->widgets, i);
+        const u32 tab = widget->tab;
         if (tab == 0 || tab == itfc->active_tab) {
-            WidgetUpdate(itfc->widgets[i], itfc->cur_glyph);
+            WidgetUpdate(widget, itfc->cur_glyph);
         }
     }
 }
@@ -134,10 +138,11 @@ void InterfaceUpdate(Interface *itfc) {
  */
 void InterfaceRender(const Interface *itfc, const Window *wind,
                      const Texture *tex) {
-    for (i32 i = 0; i < VectorCount(itfc->widgets); ++i) {
-        const u32 tab = itfc->widgets[i]->tab;
+    for (size_t i = 0; i < VectorLength(itfc->widgets); ++i) {
+        const Widget *widget = VectorAt(itfc->widgets, i);
+        const u32 tab = widget->tab;
         if (tab == 0 || tab == itfc->active_tab) {
-            WidgetRender(itfc->widgets[i], wind, tex);
+            WidgetRender(widget, wind, tex);
         }
     }
 
@@ -199,7 +204,7 @@ void InterfaceCreateWidgets(Interface *itfc) {
     Label *lbl_title = LabelCreate(4, 0, "Karte v0.0.1", DARKGREY, LIGHTGREY);
     Label *lbl_color = LabelCreate(2, 16, "Colours", LIGHTGREY, BLACK);
     Label *lb_glyph = LabelCreate(2, 23, "Glyphs", LIGHTGREY, BLACK);
-    Label *lbl_current = LabelCreate(2, 14, "CurrentGlyph:", LIGHTGREY, BLACK);
+    Label *lbl_current = LabelCreate(2, 14, "Current glyph:", LIGHTGREY, BLACK);
     Label *lbl_tab1 = LabelCreate(2, 2, "Main", LIGHTGREY, BLACK);
     Label *lbl_tab2 = LabelCreate(2, 2, "Tools", LIGHTGREY, BLACK);
 

@@ -19,85 +19,97 @@
 #include "core/utils.h"
 
 /**
- * \desc Given a vector, it is checked for validity, and if it is, is freed.
+ * \desc The initial capacity of a vector. As long as this value is somewhat
+ * small it should not affect performance or memory usage.
  */
-#define VectorFree(vec) (vec ? free(VectorPtr(vec)), 0 : 0)
+#define VECTOR_INITIAL_CAPACITY 4
 
 /**
- * \desc Pushes a value to a vector. If the vector needs to grow given this
- * single item push, it does so. Otherwise, the used element count is
- * incremented, and that index is set to the desired pointer.
+ * \brief A vector contains size metadata as well as the data themselves.
+ *
+ * The capacity of a vector is the actual memory set aside for it. Some of the
+ * memory within may be unitialised until new data are pushed. The size of the
+ * vector is the actual used spaced. The data within the vector are represented
+ * as an array of pointers.
  */
-#define VectorPush(vec, v) (VectorQueryGrow(vec, 1), vec[VectorUsed(vec)++] = v)
+typedef struct Vector_s {
+    size_t capacity;
+    size_t size;
+    void **data;
+} Vector;
 
 /**
- * \desc Returns the number of used elements in a vector if it is valid.
+ * \brief Creates an empty vector.
+ * \returns Pointer to an empty vector.
  */
-#define VectorCount(vec) (vec ? VectorUsed(vec) : 0)
+Vector *VectorCreate(void);
 
 /**
- * \desc Returns the last used member within a vector.
+ * \brief Frees the memory of a vector.
+ * \param [out] vec The vector to be freed.
+ * \returns Void.
  */
-#define VectorLast(vec) (vec ? vec[VectorUsed(vec) - 1] : 0)
+void VectorFree(Vector *vec);
 
 /**
- * \desc Removes the first member of a vector and shrinks the vector to
- * compensate.
+ * \brief Finds the actual used space of a vector.
+ * \param [in] vec The vector to find the length of.
+ * \returns The length of the vector.
  */
-#define VectorPopFront(vec) (vec = VectorShrink(vec, 0, sizeof(*vec)))
+size_t VectorLength(const Vector *vec);
 
 /**
- * \desc Removes the last member of a vector and shrinks the vector to
- * compensate.
+ * \brief Resizes a vector to a given capacity.
+ * \param [out] vec The vector to be resized.
+ * \param [in] capacity The capacity to resize to.
+ * \returns Void.
  */
-#define VectorPopBack(vec)                                                     \
-    (vec = VectorShrink(vec, vecayLast(vec), sizeof(*vec)))
+void VectorResize(Vector *vec, size_t capacity);
 
 /**
- * \desc Returns the pointer to a vector data. The header includes two 32-bit
- * integers, the first holding the vector size, the second the number of used
- * elements.
+ * \brief Pushes an object to the end of the vector.
+ * \param [out] vec The vector to push an object to.
+ * \param [in] data The data to push.
+ * \returns Void.
  */
-#define VectorPtr(vec) ((i32 *)(vec)-2)
+void VectorPush(Vector *vec, void *data);
 
 /**
- * \desc Returns the size of the vector which is stored in the first part of the
- * vector header.
+ * \brief Puts data into a given position within a vector.
+ * \param [out] vec The vector to assign data to.
+ * \param [in] index The index to where the data should be assigned.
+ * \param [in] data The data to assign.
+ * \returns Void.
  */
-#define VectorSize(vec) VectorPtr(vec)[0]
+void VectorSet(Vector *vec, size_t index, void *data);
 
 /**
- * \desc Returns the used members of a vector which is stored in the second part
- * of the vector header.
+ * \brief Returns an object at a given index within a vector.
+ * \param [in] vec The vector to return data from.
+ * \param [in] index The index in the vector to get the data from.
+ * \returns The data at a given index.
  */
-#define VectorUsed(vec) VectorPtr(vec)[1]
+void *VectorAt(const Vector *vec, size_t index);
 
 /**
- * \desc Checks if the vector size is zero or if the current used elements plus
- * the desired elements is larger than the vector size.
+ * \brief Returns the data at the front of a vector.
+ * \param [in] vec The vector to return data from.
+ * \returns The data at the front of a vector.
  */
-#define VectorReqGrow(vec, n)                                                  \
-    (vec == 0 || VectorUsed(vec) + n >= VectorSize(vec))
+void *VectorFront(const Vector *vec);
 
 /**
- * \desc Queries the vector to see if the requirement to grow is true. If it is,
- * then the size is increased.
+ * \brief Returns the data at the back of a vector.
+ * \param [in] vec The vector to return data from.
+ * \returns The data at the back of a vector.
  */
-#define VectorQueryGrow(vec, n) (VectorReqGrow(vec, n) ? VectorGrow(vec, n) : 0)
+void *VectorBack(const Vector *vec);
 
 /**
- * \desc Sets a vector size to that required to fit in required elements.
+ * \brief Deletes data at a given index within a vector.
+ * \param [out] vec The vector to delete data from.
+ * \returns Void.
  */
-#define VectorGrow(vec, n) (vec = VectorGrowBy(vec, n, sizeof(*vec)))
-
-/**
- * \brief Grows a vector by increasing its size.
- * \param [in] vec Vector to increase the size of.
- * \param [in] n The number of elements to grow the vector by.
- * \param [in] size The size of object which populates the vector.
- * \returns The reallocated vector, with a pointer to the data i.e. after the
- * header.
- */
-void *VectorGrowBy(const void *vec, i32 n, i32 size);
+void VectorDelete(Vector *vec, size_t index);
 
 #endif

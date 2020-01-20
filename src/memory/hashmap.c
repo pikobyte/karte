@@ -17,7 +17,7 @@
 #include "memory/hashmap.h"
 
 /**
- * \desc The creation of hashmap record first allocates the required amount of
+ * \desc The creation of a hashmap record first allocates the required amount of
  * memory and then sets the key and values of that record.
  */
 HashRecord *HashRecordCreate(const char *key, void *value) {
@@ -29,7 +29,7 @@ HashRecord *HashRecordCreate(const char *key, void *value) {
 }
 
 /**
- * \desc The creation of hashmap requires a base size represented by a prime
+ * \desc The creation of a hashmap requires a base size represented by a prime
  * number. The actual size is larger than this and is the next prime number up
  * from the base size. The hashmap records are allocated using this new size. A
  * free function is also passed in so that the hashmap can free its data later.

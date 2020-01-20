@@ -54,7 +54,7 @@ static const u8 DOUBLE_BORDER[6] = {201, 187, 200, 188, 205, 186};
  * set).
  */
 typedef struct Panel_s {
-    Glyph **glyphs; /**< List of glyphs. */
+    Vector *glyphs; /**< List of glyphs. */
     SDL_Rect rect;  /**< Bounding rectangle in glyph units. */
     Border border;  /**< Border type. */
     SDL_Color col;  /**< Border colour. */

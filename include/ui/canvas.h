@@ -39,9 +39,9 @@ typedef enum CanvasOperation_e {
 } CanvasOperation;
 
 typedef struct Canvas_s {
-    Glyph **glyphs;     /**< List of glyphs within the canvas. */
+    Vector *glyphs;     /**< List of glyphs within the canvas. */
     CanvasOperation op; /**< Current canvas operation. */
-    i32 glyph_index;    /**< Index of glyph to perform operation. */
+    size_t glyph_index; /**< Index of glyph to perform operation. */
     SDL_Rect rect;      /**< Canvas dimensions in pixel units. */
     i32 offset_x;       /**< Offset of the canvas in the x-direction. */
     i32 offset_y;       /**< Offset of the canvas in the y-direction. */

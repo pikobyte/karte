@@ -36,7 +36,6 @@
 typedef struct Editor_s {
     bool visible;    /**< Visible components flag. */
     Interface *itfc; /**< The user interface. */
-    Glyph **glyphs;  /**< Set of renderable glyphs. */
     Texture *tex;    /**< Texture for the glyphs. */
 } Editor;
 

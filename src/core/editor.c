@@ -21,7 +21,8 @@
 Editor *EditorCreate(const Window *wind, Resourcer *res) {
     Editor *editor = Allocate(sizeof(Editor));
 
-    ResourcerLoadTexture(res, wind, "./res/textures/boxy_16x16.png", "main_texture");
+    ResourcerLoadTexture(res, wind, "./res/textures/boxy_16x16.png",
+                         "main_texture");
 
     editor->tex = ResourcerGetTexture(res, "main_texture");
     editor->itfc = InterfaceCreate(editor->tex);
@@ -36,7 +37,6 @@ Editor *EditorCreate(const Window *wind, Resourcer *res) {
  */
 void EditorFree(Editor *editor) {
     InterfaceFree(editor->itfc);
-    VectorFree(editor->glyphs);
     Free(editor);
 }
 

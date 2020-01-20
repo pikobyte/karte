@@ -29,7 +29,7 @@
  * corresponding graphical glyph.
  */
 typedef struct Label_s {
-    Glyph **glyphs; /**< Set of glyphs for label text. */
+    Vector *glyphs; /**< Set of glyphs for label text. */
     i32 x;          /**< x-position of the label. */
     i32 y;          /**< y-position of the label. */
     char text[128]; /**< Stored label text. */
