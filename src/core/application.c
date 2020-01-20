@@ -23,8 +23,6 @@ Application *ApplicationCreate(void) {
     Application *app = Allocate(sizeof(Application));
     Log(LOG_NOTIFY, "Created application at %p.", app);
 
-    strcpy(g_dir, ApplicationDir());
-
     if (SDL_Init(SDL_INIT_EVERYTHING)) {
         Log(LOG_FATAL, "Could not initialise SDL2: %s", SDL_GetError());
     }
@@ -148,18 +146,4 @@ void ApplicationPostFrame(Application *app) {
     }
 
     app->exec_time += app->dt;
-}
-
-/**
- * \desc Concatenates the home directory (Linux) with the absolute path of the
- * project directory.
- * FIXME: The absolute directory (CWD) needs to adapt to user/install path in
- * release mode.
- */
-char *ApplicationDir(void) {
-    char *home = getenv("HOME");
-    if (home) {
-        strcat(home, CWD);
-    }
-    return home;
 }

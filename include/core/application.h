@@ -101,10 +101,4 @@ void ApplicationPreFrame(Application *app);
  */
 void ApplicationPostFrame(Application *app);
 
-/**
- * \brief Retrieves the directory that the project lives in.
- * \returns The path to the project directory.
- */
-char *ApplicationDir(void);
-
 #endif

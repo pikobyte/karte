@@ -22,12 +22,9 @@ Editor *EditorCreate(const Window *wind, Resourcer *res) {
     Editor *editor = Allocate(sizeof(Editor));
     Log(LOG_NOTIFY, "Created editor at %p.", editor);
 
-    char tex_file[512] = {0};
-    strcat(tex_file, g_dir);
-    strcat(tex_file, "/res/textures/boxy_16x16.png");
-    ResourcerLoadTexture(res, wind, tex_file);
+    ResourcerLoadTexture(res, wind, "./res/textures/boxy_16x16.png", "main_texture");
 
-    editor->tex = res->textures[0];
+    editor->tex = ResourcerGetTexture(res, "main_texture");
     editor->itfc = InterfaceCreate(editor->tex);
     editor->visible = true;
 

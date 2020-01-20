@@ -73,6 +73,6 @@ static const SDL_Point DEFAULT_CONVERSION = {16, 16};
  * executions. Provided fatal issues do not occur, the number of allocations are
  * reported at the end of program execution for debugging purposes.
  */
-u32 g_mem_allocs;
+static i32 g_mem_allocs = 0;
 
 #endif

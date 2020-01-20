@@ -19,9 +19,7 @@
 #include "core/utils.h"
 #include "graphics/texture.h"
 #include "graphics/window.h"
-#include "memory/vector.h"
-
-// TODO: Use hashmaps for resources.
+#include "memory/hashmap.h"
 
 /**
  * \brief Handles all resources (who would've guessed) to be used within the
@@ -31,7 +29,7 @@
  * types of resource can be added if required.
  */
 typedef struct Resourcer_s {
-    Texture **textures; /**< Textures used by the program. */
+    Hashmap *textures; /**< Textures used by the program. */
 } Resourcer;
 
 /**
@@ -52,9 +50,17 @@ void ResourcerFree(Resourcer *res);
  * \param [out] res The resourcer to load the texture into.
  * \param [in] wind The window with SDL surface to load to.
  * \param [in] path The filepath of the texture.
- * \returns The loaded texture.
+ * \param [in] key An associated key for later look-up.
+ * \returns Void.
  */
-Texture *ResourcerLoadTexture(Resourcer *res, const Window *wind,
-                              const char *path);
+void ResourcerLoadTexture(Resourcer *res, const Window *wind, const char *path,
+                          const char *key);
+
+/**
+ * \brief Retrieves a texture from the resourcer.
+ * \param [in] res The resourcer to retrieve the texture from.
+ * \param [in] key The name of the texture to retrieve.
+ */
+Texture *ResourcerGetTexture(const Resourcer *res, const char *key);
 
 #endif
