@@ -42,6 +42,7 @@ typedef struct Selector_s {
     Glyph *cur_glyph;  /**< Currently selected glyph. */
     SelectorType type; /**< The type of selection that will be utilised. */
     SDL_Rect rect;     /**< Dimensions of the selector in glyph dimensions. */
+    bool changed;      /**< Flag to check if selected glyph has changed. */
 } Selector;
 
 /**

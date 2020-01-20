@@ -28,6 +28,7 @@ Selector *SelectorCreate(SDL_Rect rect, SelectorType type) {
     selector->cur_glyph->bg = BLACK;
     selector->type = type;
     selector->rect = rect;
+    selector->changed = false;
 
     return selector;
 }
@@ -71,11 +72,13 @@ void SelectorHandleInput(Selector *selector, const Input *input) {
         if (InputMouseDown(input, SDL_BUTTON_LEFT)) {
             SelectorSetCurrentGlyph(selector, glyph,
                                     SELECTOR_INDEX | SELECTOR_FOREGROUND);
+            selector->changed = true;
             return;
         }
 
         if (InputMouseDown(input, SDL_BUTTON_RIGHT)) {
             SelectorSetCurrentGlyph(selector, glyph, SELECTOR_BACKGROUND);
+            selector->changed = true;
             return;
         }
 
@@ -83,6 +86,7 @@ void SelectorHandleInput(Selector *selector, const Input *input) {
             SelectorSetCurrentGlyph(selector, glyph,
                                     SELECTOR_INDEX | SELECTOR_FOREGROUND |
                                         SELECTOR_BACKGROUND);
+            selector->changed = true;
             return;
         }
     }
@@ -91,14 +95,18 @@ void SelectorHandleInput(Selector *selector, const Input *input) {
 /**
  * \desc The data to confer over to the current interface glyph is based on the
  * flags set for a given selector. Glyph index, background colour and foreground
- * colour are set based on the flags.
+ * colour are set based on the flags, and are only changed if input was provided
+ * on the last frame.
  */
 void SelectorUpdate(Selector *selector, Glyph *cur_glyph) {
     if (!cur_glyph) {
         return;
     }
 
-    SelectorGetCurrentGlyph(selector, cur_glyph);
+    if (selector->changed) {
+        SelectorGetCurrentGlyph(selector, cur_glyph);
+        selector->changed = false;
+    }
 }
 
 /**

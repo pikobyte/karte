@@ -109,24 +109,28 @@ void CanvasUpdate(Canvas *canvas, Glyph *cur_glyph) {
     case CANVAS_NONE: {
         break;
     }
+
     case CANVAS_PLACE: {
         glyph->fg = cur_glyph->fg;
         glyph->bg = cur_glyph->bg;
         glyph->index = cur_glyph->index;
         break;
     }
+
     case CANVAS_SELECT: {
         cur_glyph->fg = glyph->fg;
         cur_glyph->bg = glyph->bg;
         cur_glyph->index = glyph->index;
         break;
     }
+
     case CANVAS_ERASE: {
         glyph->index = 0;
         glyph->fg = BLANK;
         glyph->bg = BLANK;
         break;
     }
+    
     default:
         break;
     }
