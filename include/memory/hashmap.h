@@ -41,8 +41,13 @@
  * \desc Percentage based limits to determine whether a hashmap should be
  * resized.
  */
-#define HASHMAP_LOAD_INCREASE 0.7
-#define HASHMAP_LOAD_DECREASE 0.3
+#define HASHMAP_LOAD_INCREASE 70
+#define HASHMAP_LOAD_DECREASE 10
+
+/**
+ * \desc A function pointer which is used for freeing hashmap data.
+ */
+#define FreeFunction (void (*free)())
 
 /**
  * \brief Holds a key-value pair.
@@ -90,9 +95,11 @@ void HashRecordFree(HashRecord *record);
 
 /**
  * \brief Creates an empty hashmap.
+ * \param [in] base_size The initial size of the hashmap.
+ * \pararm [in] free A function pointer to a memory free function.
  * \returns Pointer to an empty hashmap.
  */
-Hashmap *HashmapCreate(size_t base_size);
+Hashmap *HashmapCreate(size_t base_size, void (*free)());
 
 /**
  * \brief Frees the memory of a hashmap and data within if recursive is set.
@@ -129,6 +136,12 @@ void HashmapInsert(Hashmap *hashmap, const char *key, void *value);
  */
 void *HashmapSearch(const Hashmap *hashmap, const char *key);
 
+/**
+ * \brief Deletes a record within a hashmap if the key is found.
+ * \param [in] hashmap The hashmap to delete a record from.
+ * \param [in] key The key of the record to delete.
+ * \returns Void.
+ */
 void HashmapDelete(Hashmap *hashmap, const char *key);
 
 /**

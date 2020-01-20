@@ -22,7 +22,7 @@
  */
 HashRecord *HashRecordCreate(const char *key, void *value) {
     HashRecord *record = Allocate(sizeof(HashRecord));
-    record->key = "";
+    record->key = calloc(strlen(key), sizeof(char));
     strcpy(record->key, key);
     record->value = value;
     return record;
@@ -31,13 +31,15 @@ HashRecord *HashRecordCreate(const char *key, void *value) {
 /**
  * \desc The creation of hashmap requires a base size represented by a prime
  * number. The actual size is larger than this and is the next prime number up
- * from the base size. The hashmap records are allocated using this new size.
+ * from the base size. The hashmap records are allocated using this new size. A
+ * free function is also passed in so that the hashmap can free its data later.
  */
-Hashmap *HashmapCreate(size_t base_size) {
+Hashmap *HashmapCreate(size_t base_size, void (*free)()) {
     Hashmap *hashmap = Allocate(sizeof(Hashmap));
     hashmap->base_size = base_size;
     hashmap->size = (size_t)NextPrime((u32)hashmap->base_size);
     hashmap->count = 0;
+    hashmap->functions.free = free;
     hashmap->records = Allocate(sizeof(HashRecord *) * hashmap->size);
     return hashmap;
 }
@@ -58,17 +60,22 @@ void HashRecordFree(HashRecord *record) { Free(record); }
 void HashmapFree(Hashmap *hashmap, bool recursive) {
     for (size_t i = 0; i < (size_t)hashmap->size; ++i) {
         HashRecord *record = hashmap->records[i];
-        if (record != NULL && record != &HASHMAP_DELETED_ITEM) {
-            if (recursive) {
-                if (hashmap->functions.free) {
-                    (*hashmap->functions.free)(record->value);
-                } else {
-                    Free(record->value);
-                }
-            }
-            Free(record->key);
-            HashRecordFree(record);
+        if (record == NULL || record == &HASHMAP_DELETED_ITEM ||
+            !strcmp(record->key, "")) {
+            continue;
         }
+
+        if (recursive) {
+            if (hashmap->functions.free) {
+                (*hashmap->functions.free)(record->value);
+            } else {
+                Log(LOG_NOTIFY, "No free function was provided for hashmap!");
+                Free(record->value);
+            }
+        }
+
+        Free(record->key);
+        HashRecordFree(record);
     }
 
     Free(hashmap->records);
@@ -85,11 +92,10 @@ void HashmapFree(Hashmap *hashmap, bool recursive) {
  */
 void HashmapResize(Hashmap *hashmap, size_t base_size) {
     if (base_size < HASHMAP_INITIAL_BASE_SIZE) {
-        Log(LOG_ERROR, "Could not resize a hashmap to %u!", base_size);
         return;
     }
 
-    Hashmap *new_hashmap = HashmapCreate(base_size);
+    Hashmap *new_hashmap = HashmapCreate(base_size, hashmap->functions.free);
     for (size_t i = 0; i < hashmap->size; ++i) {
         HashRecord *record = hashmap->records[i];
         if (record != NULL && record != &HASHMAP_DELETED_ITEM) {
@@ -108,7 +114,7 @@ void HashmapResize(Hashmap *hashmap, size_t base_size) {
     hashmap->records = new_hashmap->records;
     new_hashmap->records = tmp_records;
 
-    HashmapFree(new_hashmap, 1);
+    HashmapFree(new_hashmap, false);
 }
 
 /**
@@ -117,7 +123,7 @@ void HashmapResize(Hashmap *hashmap, size_t base_size) {
  * record.
  */
 void HashmapInsert(Hashmap *hashmap, const char *key, void *value) {
-    const f32 load = (f32)(hashmap->count / hashmap->size);
+    const size_t load = hashmap->count / hashmap->size;
     if (load > HASHMAP_LOAD_INCREASE) {
         HashmapResize(hashmap, hashmap->base_size << 1);
     }
@@ -128,19 +134,22 @@ void HashmapInsert(Hashmap *hashmap, const char *key, void *value) {
 
     u32 i = 1;
     while (last_record != NULL && last_record) {
-        if (last_record != &HASHMAP_DELETED_ITEM) {
-            if (strcmp(last_record->key, key) == 0) {
-                if (hashmap->functions.free) {
-                    (*hashmap->functions.free)(last_record->value);
-                } else {
-                    Free(last_record->value);
-                }
-                Free(last_record->key);
-                HashRecordFree(last_record);
-                hashmap->records[index] = record;
+        if (last_record == &HASHMAP_DELETED_ITEM) {
+            continue;
+        }
 
-                return;
+        if (strcmp(last_record->key, key) == 0) {
+            if (hashmap->functions.free) {
+                (*hashmap->functions.free)(last_record->value);
+            } else {
+                Free(last_record->value);
             }
+
+            Free(last_record->key);
+            HashRecordFree(last_record);
+            hashmap->records[index] = record;
+
+            return;
         }
 
         index = HashGet(record->key, hashmap->size, i);
@@ -179,6 +188,45 @@ void *HashmapSearch(const Hashmap *hashmap, const char *key) {
 
     Log(LOG_NOTIFY, "No value associated to key %s in hashmap!", key);
     return NULL;
+}
+
+void HashmapDelete(Hashmap *hashmap, const char *key) {
+    const size_t load = hashmap->count / hashmap->size;
+    if (load < HASHMAP_LOAD_DECREASE) {
+        HashmapResize(hashmap, hashmap->base_size >> 1);
+    }
+
+    i32 index = HashGet(key, hashmap->size, 0);
+    HashRecord *record = hashmap->records[index];
+
+    i32 i = 0;
+    while (record != NULL) {
+        if (record == &HASHMAP_DELETED_ITEM) {
+            continue;
+        }
+
+        if (strcmp(record->key, key) == 0) {
+            if (hashmap->functions.free) {
+                (*hashmap->functions.free)(record->value);
+            } else {
+                Free(record->value);
+            }
+
+            free(record->key);
+            HashRecordFree(record);
+            hashmap->records[index] = &HASHMAP_DELETED_ITEM;
+            hashmap->count--;
+
+            return;
+        }
+
+        index = HashGet(key, hashmap->size, i);
+        record = hashmap->records[index];
+
+        i++;
+    }
+
+    Log(LOG_NOTIFY, "Could not delete record with key %s from hashmap!", key);
 }
 
 /**

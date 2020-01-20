@@ -75,9 +75,4 @@ static const SDL_Point DEFAULT_CONVERSION = {16, 16};
  */
 u32 g_mem_allocs;
 
-/**
- * \desc Absolute path to the application directory.
- */
-char g_dir[1024];
-
 #endif
