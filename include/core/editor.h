@@ -22,6 +22,7 @@
 #include "graphics/glyph.h"
 #include "graphics/texture.h"
 #include "graphics/window.h"
+#include "memory/vector.h"
 #include "ui/interface.h"
 
 /**

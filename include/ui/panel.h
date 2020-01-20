@@ -21,6 +21,7 @@
 #include "graphics/glyph.h"
 #include "graphics/texture.h"
 #include "graphics/window.h"
+#include "memory/vector.h"
 
 /**
  * \desc Border types. None does what it says on the tin, and is used as a

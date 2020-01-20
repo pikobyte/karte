@@ -19,6 +19,7 @@
 #include "core/utils.h"
 #include "graphics/texture.h"
 #include "graphics/window.h"
+#include "memory/vector.h"
 
 /**
  * \brief Handles all resources (who would've guessed) to be used within the

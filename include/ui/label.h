@@ -19,6 +19,7 @@
 #include "graphics/glyph.h"
 #include "graphics/texture.h"
 #include "graphics/window.h"
+#include "memory/vector.h"
 
 /**
  * \brief A simple text label formed from ASCII glyphs.

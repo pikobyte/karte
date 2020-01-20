@@ -21,6 +21,7 @@
 #include "core/utils.h"
 #include "graphics/color.h"
 #include "graphics/glyph.h"
+#include "memory/vector.h"
 
 /**
  * \brief Describes the type of selector.

@@ -15,13 +15,14 @@
 #ifndef CANVAS_H
 #define CANVAS_H
 
-#include "graphics/color.h"
 #include "core/common.h"
-#include "graphics/glyph.h"
 #include "core/input.h"
-#include "graphics/texture.h"
 #include "core/utils.h"
+#include "graphics/color.h"
+#include "graphics/glyph.h"
+#include "graphics/texture.h"
 #include "graphics/window.h"
+#include "memory/vector.h"
 
 /**
  * \brief Describes a canvas operation.

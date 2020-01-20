@@ -20,6 +20,7 @@
 #include "core/utils.h"
 #include "graphics/color.h"
 #include "graphics/glyph.h"
+#include "memory/vector.h"
 #include "ui/button.h"
 #include "ui/canvas.h"
 #include "ui/label.h"

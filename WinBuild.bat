@@ -12,7 +12,8 @@ CALL %VS%"2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
 :: Define the project path (via current directory), source, include, build and
 :: output folders, as well as external library names.
 SET PROJ = %cd%
-SET SRC=%PROJ%src\core\*.c %PROJ%src\graphics\*.c %PROJ%src\ui\*.c
+SET SRC=%PROJ%src\core\*.c %PROJ%src\graphics\*.c %PROJ%src\memory\*.c ^
+        %PROJ%src\ui\*.c
 SET INC=%PROJ%include\
 SET LIBS=SDL2.lib SDL2main.lib SDL2_image.lib SDL2_mixer.lib SDL2_ttf.lib
 SET BUILD=%PROJ%build\

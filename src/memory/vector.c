@@ -30,10 +30,11 @@
  * the pointer to the new memory data (skipping header) is returned.
  */
 void *ArrayGrowBy(const void *arr, i32 n, i32 size) {
-    i32 dbl_cur = arr ? 2 * ArraySize(arr) : 0;
-    i32 min_req = ArrayCount(arr) + n;
-    i32 act_req = dbl_cur > min_req ? dbl_cur : min_req;
-    i32 tot_req = size * act_req + sizeof(i32) * 2;
+    const i32 dbl_cur = arr ? 2 * ArraySize(arr) : 0;
+    const i32 min_req = ArrayCount(arr) + n;
+    const i32 act_req = dbl_cur > min_req ? dbl_cur : min_req;
+    const i32 tot_req = size * act_req + sizeof(i32) * 2;
+    
     i32 *ptr = (i32 *)realloc(arr ? ArrayPtr(arr) : 0, tot_req);
 
     if (ptr) {
