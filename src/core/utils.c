@@ -153,6 +153,47 @@ bool StringContains(const char *str, char search) {
 }
 
 /**
+ * \desc Checks against the value to see if it is: firstly less than 2, meaning
+ * it is not prime; secondly equal to 3 and hence prime; thirdly is equal to an
+ * even number thus not prime; and finally iterates from 3 up to the square root
+ * of the value, and if the value is cleanly divisible by any of the iterants,
+ * shows that the value is not prime.
+ */
+i32 IsPrime(u32 value) {
+    if (value < 2) {
+        return false;
+    }
+
+    if (value == 3) {
+        return true;
+    }
+
+    if ((value % 2) == 0) {
+        return false;
+    }
+
+    for (i32 i = 3; i < floor(sqrt((f64)value)) - 1; i += 2) {
+        if ((value % i) == 0) {
+            return false;
+        }
+    }
+
+    return true;
+}
+
+/**
+ * \desc Increments the value passed in and checks if the incremented value is a
+ * prime. Only when the value is prime does it return that value.
+ */
+u32 NextPrime(u32 value) {
+    while (!IsPrime(value)) {
+        value++;
+    }
+
+    return value;
+}
+
+/**
  * \desc Returns the truth value of a 32-bit integer masked with a bit-field.
  */
 bool Mask32(i32 src, i32 mask) { return ((src & mask) == mask); }
