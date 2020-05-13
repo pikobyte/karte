@@ -12,6 +12,7 @@
  *
  */
 
+#include "core/common.h"
 #include "core/utils.h"
 
 /* -------------------------------------------------------------------------- */
@@ -143,8 +144,8 @@ void DateAndTime(char *dest) {
  * it.
  */
 bool StringContains(const char *str, char search) {
-    for (char i = 0; i < strlen(str); ++i) {
-        if (str[i] == search) {
+    for (size_t i = 0; i < strlen(str); ++i) {
+        if ((char)str[i] == search) {
             return true;
         }
     }

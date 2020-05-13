@@ -75,7 +75,7 @@ void VectorPush(Vector *vec, void *data) {
  * bounds. If it is, the data at that index are set based on the given input.
  */
 void VectorSet(Vector *vec, size_t index, void *data) {
-    if (index < 0 || index > vec->size - 1) {
+    if (index > vec->size - 1) {
         Log(LOG_ERROR, "VectorSet: index %u out of bounds!", index);
         return;
     }
@@ -88,7 +88,7 @@ void VectorSet(Vector *vec, size_t index, void *data) {
  * bounds. If it is, the data at that index are returned.
  */
 void *VectorAt(const Vector *vec, size_t index) {
-    if (index < 0 || index > vec->size - 1) {
+    if (index > vec->size - 1) {
         Log(LOG_ERROR, "VectorAt: index %u out of bounds!", index);
         return NULL;
     }
@@ -129,7 +129,7 @@ void *VectorBack(const Vector *vec) {
  * vector is a quarter of its capacity, it halves the capacity of the vector.
  */
 void VectorDelete(Vector *vec, size_t index) {
-    if (index < 0 || index > vec->size - 1) {
+    if (index > vec->size - 1) {
         Log(LOG_ERROR, "VectorDelete: index %u out of bounds!", index);
         return;
     }

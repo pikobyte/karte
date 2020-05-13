@@ -84,7 +84,7 @@ typedef struct Hashmap_s {
  * \param [in] value The actual data associated with that key.
  * \returns Pointer to a hashmap record.
  */
-HashRecord *HashRecordCreate(const char *key, const void *value);
+HashRecord *HashRecordCreate(const char *key, void *value);
 
 /**
  * \brief Frees the memory of a hashmap record.

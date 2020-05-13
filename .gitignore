@@ -11,7 +11,8 @@
 bin/*
 
 # Build files
-build/*
+build/**/*.o
+build/**/*.d
 
 # Documentation
 docs/html/*
