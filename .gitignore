@@ -1,6 +1,9 @@
 # Visual studio code
 .vscode/*
 
+# Include launch file for VS code.
+!.vscode/launch.json
+
 # Nvidia nonsense.
 .nv/*
 
