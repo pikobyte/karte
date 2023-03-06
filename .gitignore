@@ -15,7 +15,9 @@ bin/*
 
 # Build files
 build/**/*.o
+build/**/*.obj
 build/**/*.d
+build/**/*.pdb
 
 # Documentation
 docs/html/*

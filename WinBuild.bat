@@ -6,8 +6,8 @@
 :: =============================================================================
 
 :: Enable the use of the Microsoft compiler.
-SET VS="C:\Program Files (x86)\Microsoft Visual Studio\"
-CALL %VS%"2019\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
+SET VS=C:\Program Files\Microsoft Visual Studio\
+CALL "%VS%2022\Enterprise\VC\Auxiliary\Build\vcvarsall.bat" amd64
 
 :: Define the project path (via current directory), source, include, build and
 :: output folders, as well as external library names.
@@ -35,7 +35,7 @@ SET DEP_LIB=%PROJ%deps\lib\x64\
 ::  > /W4 - enable level 4 warnings.
 ::  > /WX - treat warnings as errors.
 ::  > /Zi - generates complete debugging information.
-SET FLAGS=/cgthreads8 /Fe%OUT% /Fo%BUILD% /Fd%BUILD% /GS /MP /Od /TC /W4 /WX /Zi
+SET FLAGS=/std:c17 /cgthreads8 /Fe%OUT% /Fo%BUILD% /Fd%BUILD% /GS /MP /Od /TC /W3 /WX /Zi
 
 :: Link flags listed as thus:
 ::  > /LIBPATH - additional library folders to search.
