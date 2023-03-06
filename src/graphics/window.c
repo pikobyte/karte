@@ -20,7 +20,8 @@
  * renderer, where the clear colour is set to black. Finally, a pointer to the
  * window is returned.
  */
-Window *WindowCreate(void) {
+Window *WindowCreate(void)
+{
     Window *wind = Allocate(sizeof(Window));
 
     wind->width = 1280;
@@ -29,20 +30,23 @@ Window *WindowCreate(void) {
     wind->v_sync = true;
     strcpy(wind->title, "Karte");
 
-    wind->sdl_window = SDL_CreateWindow(
-        wind->title, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
-        wind->width, wind->height, SDL_WINDOW_ALLOW_HIGHDPI);
+    wind->sdl_window = SDL_CreateWindow(wind->title, SDL_WINDOWPOS_UNDEFINED,
+                                        SDL_WINDOWPOS_UNDEFINED, wind->width,
+                                        wind->height, SDL_WINDOW_ALLOW_HIGHDPI);
 
-    if (wind->sdl_window == NULL) {
+    if (wind->sdl_window == NULL)
+    {
         Log(LOG_FATAL, "Could not initialise SDL_Window!");
     }
 
     wind->sdl_renderer = SDL_CreateRenderer(wind->sdl_window, -1,
                                             SDL_RENDERER_ACCELERATED |
                                                 SDL_RENDERER_PRESENTVSYNC);
-    if (wind->sdl_renderer == NULL) {
+    if (wind->sdl_renderer == NULL)
+    {
         Log(LOG_FATAL, "Could not initialise SDL_Renderer!");
     }
+
     SDL_SetRenderDrawColor(wind->sdl_renderer, 0x00, 0x00, 0x00, 0x00);
 
     return wind;
@@ -52,7 +56,8 @@ Window *WindowCreate(void) {
  * \desc Frees the memory pointed to by a window. The SDL context memory is also
  * freed here.
  */
-void WindowFree(Window *wind) {
+void WindowFree(Window *wind)
+{
     SDL_DestroyRenderer(wind->sdl_renderer);
     SDL_DestroyWindow(wind->sdl_window);
     Free(wind);
@@ -75,11 +80,12 @@ void WindowFlip(const Window *wind) { SDL_RenderPresent(wind->sdl_renderer); }
  * in, and any additional parameters are used for that formatted string.
  * Finally, the window's own title record is updated as well as the SDL_Windows.
  */
-void WindowSetTitle(Window *wind, const char *str, ...) {
+void WindowSetTitle(Window *wind, const char *str, ...)
+{
     char title[64] = {0};
     sprintf(title, "%s", str);
 
-    va_list ap;
+    va_list ap = {0};
     va_start(ap, str);
     vsnprintf(title, 63, str, ap);
     va_end(ap);

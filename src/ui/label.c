@@ -19,7 +19,8 @@
  * created by looping through the string, and their positions are set based on
  * the input parameters as well as the glyph dimensions.
  */
-Label *LabelCreate(i32 x, i32 y, const char *text, SDL_Color fg, SDL_Color bg) {
+Label *LabelCreate(i32 x, i32 y, const char *text, SDL_Color fg, SDL_Color bg)
+{
     Label *label = Allocate(sizeof(Label));
     label->glyphs = VectorCreate();
     label->x = x;
@@ -28,7 +29,8 @@ Label *LabelCreate(i32 x, i32 y, const char *text, SDL_Color fg, SDL_Color bg) {
     label->fg = fg;
     label->bg = bg;
 
-    for (u32 i = 0; i < strlen(text); ++i) {
+    for (u32 i = 0; i < strlen(text); ++i)
+    {
         Glyph *glyph = GlyphCreate();
         glyph->x = x + i;
         glyph->y = y;
@@ -45,8 +47,10 @@ Label *LabelCreate(i32 x, i32 y, const char *text, SDL_Color fg, SDL_Color bg) {
  * \desc Frees a label's memory, first by freeing the graphical glyphs, then the
  * label pointer itself.
  */
-void LabelFree(Label *label) {
-    for (size_t i = 0; i < VectorLength(label->glyphs); ++i) {
+void LabelFree(Label *label)
+{
+    for (size_t i = 0; i < VectorLength(label->glyphs); ++i)
+    {
         Glyph *glyph = VectorAt(label->glyphs, i);
         GlyphFree(glyph);
     }
@@ -58,8 +62,10 @@ void LabelFree(Label *label) {
  * \desc Renders a label to a window based on a given texture by iterating
  * through its glyphs.
  */
-void LabelRender(const Label *label, const Window *wind, const Texture *tex) {
-    for (size_t i = 0; i < VectorLength(label->glyphs); ++i) {
+void LabelRender(const Label *label, const Window *wind, const Texture *tex)
+{
+    for (size_t i = 0; i < VectorLength(label->glyphs); ++i)
+    {
         const Glyph *glyph = VectorAt(label->glyphs, i);
         GlyphRender(glyph, wind, tex);
     }

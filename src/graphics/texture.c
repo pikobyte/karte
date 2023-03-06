@@ -18,7 +18,8 @@
 /**
  * \desc Allocates the memory for the texture object and nothing more.
  */
-Texture *TextureCreate(void) {
+Texture *TextureCreate(void)
+{
     Texture *tex = Allocate(sizeof(Texture));
     return tex;
 }
@@ -39,21 +40,25 @@ void TextureFree(Texture *tex) { Free(tex); }
  * surface is freed and alpha blending is enable for the texture. Finally, the
  * texture source rectangles are created for quick access later.
  */
-bool TextureLoad(Texture *tex, const Window *wind, const char *path) {
-    if (!FileExists(path)) {
+bool TextureLoad(Texture *tex, const Window *wind, const char *path)
+{
+    if (!FileExists(path))
+    {
         Log(LOG_ERROR, "No such texture %s", path);
         return false;
     }
 
     SDL_Surface *surf = IMG_Load(path);
-    if (surf == NULL) {
+    if (surf == NULL)
+    {
         Log(LOG_ERROR, "Could not load SDL_Surface for texture %s", path);
         return false;
     }
     SDL_SetColorKey(surf, 1, SDL_MapRGB(surf->format, 255, 0, 255));
 
     tex->sdl_texture = SDL_CreateTextureFromSurface(wind->sdl_renderer, surf);
-    if (tex->sdl_texture == NULL) {
+    if (tex->sdl_texture == NULL)
+    {
         Log(LOG_ERROR, "Could not load SDL_Texture for texture %s", path);
         return false;
     }
@@ -63,7 +68,8 @@ bool TextureLoad(Texture *tex, const Window *wind, const char *path) {
     tex->glyph_w = tex->width / 16;
     tex->glyph_h = tex->height / 16;
 
-    if (tex->width % 16 != 0 || tex->height % 16 != 0) {
+    if (tex->width % 16 != 0 || tex->height % 16 != 0)
+    {
         Log(LOG_ERROR, "Incorrect texture dimensions for %s", path);
         return false;
     }
@@ -71,7 +77,8 @@ bool TextureLoad(Texture *tex, const Window *wind, const char *path) {
     SDL_FreeSurface(surf);
     SDL_SetTextureBlendMode(tex->sdl_texture, SDL_BLENDMODE_BLEND);
 
-    for (u32 i = 0; i < 256; ++i) {
+    for (u32 i = 0; i < 256; ++i)
+    {
         tex->rects[i].x = (i % 16) * tex->glyph_w;
         tex->rects[i].y = (i / 16) * tex->glyph_h;
         tex->rects[i].w = tex->glyph_w;

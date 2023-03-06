@@ -28,7 +28,8 @@
  * each glyph, assuming that each texture is a set of 16x16 glyphs. A set of 256
  * source rectangles are stored for quick look-up when required.
  */
-typedef struct Texture_s {
+typedef struct Texture_s
+{
     SDL_Texture *sdl_texture; /**< The SDL texture handle. */
     u32 width;                /**< Width of the texture in pixels. */
     u32 height;               /**< Height of the texture in pixels. */

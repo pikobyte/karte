@@ -19,7 +19,8 @@
  * allocating the actual memory correspondant to that capacity. Initially,
  * vectors have no content.
  */
-Vector *VectorCreate(void) {
+Vector *VectorCreate(void)
+{
     Vector *vec = Allocate(sizeof(Vector));
     vec->capacity = VECTOR_INITIAL_CAPACITY;
     vec->size = 0;
@@ -42,13 +43,16 @@ size_t VectorLength(const Vector *vec) { return vec->size; }
  * \desc Resizes a vector provided the capacity is at least unity. The vector
  * data is reallocated to the new capacity and the data are set accordingly.
  */
-void VectorResize(Vector *vec, size_t capacity) {
-    if (capacity < 1) {
+void VectorResize(Vector *vec, size_t capacity)
+{
+    if (capacity < 1)
+    {
         return;
     }
 
     void **data = realloc(vec->data, sizeof(void *) * capacity);
-    if (!data) {
+    if (!data)
+    {
         Log(LOG_ERROR, "Could not resize vector to %u!", capacity);
         return;
     }
@@ -62,8 +66,10 @@ void VectorResize(Vector *vec, size_t capacity) {
  * and then appends data to the end of the current set. The vector size is also
  * incremented. If a resize is triggered, the vector capacity is doubled.
  */
-void VectorPush(Vector *vec, void *data) {
-    if (vec->capacity == vec->size) {
+void VectorPush(Vector *vec, void *data)
+{
+    if (vec->capacity == vec->size)
+    {
         VectorResize(vec, vec->capacity << 1);
     }
 
@@ -74,8 +80,10 @@ void VectorPush(Vector *vec, void *data) {
  * \desc Performs a check as to whether the index provided is within the vector
  * bounds. If it is, the data at that index are set based on the given input.
  */
-void VectorSet(Vector *vec, size_t index, void *data) {
-    if (index > vec->size - 1) {
+void VectorSet(Vector *vec, size_t index, void *data)
+{
+    if (index > vec->size - 1)
+    {
         Log(LOG_ERROR, "VectorSet: index %u out of bounds!", index);
         return;
     }
@@ -87,8 +95,10 @@ void VectorSet(Vector *vec, size_t index, void *data) {
  * \desc Performs a check as to whether the index provided is within the vector
  * bounds. If it is, the data at that index are returned.
  */
-void *VectorAt(const Vector *vec, size_t index) {
-    if (index > vec->size - 1) {
+void *VectorAt(const Vector *vec, size_t index)
+{
+    if (index > vec->size - 1)
+    {
         Log(LOG_ERROR, "VectorAt: index %u out of bounds!", index);
         return NULL;
     }
@@ -100,9 +110,11 @@ void *VectorAt(const Vector *vec, size_t index) {
  * \desc Performs a check as to whether the data at the front of the vector are
  * valid and returns it if it is.
  */
-void *VectorFront(const Vector *vec) {
+void *VectorFront(const Vector *vec)
+{
     void *data = vec->data[0];
-    if (!data) {
+    if (!data)
+    {
         Log(LOG_ERROR, "VectorFront: no data at front of vector!");
         return NULL;
     }
@@ -113,9 +125,11 @@ void *VectorFront(const Vector *vec) {
  * \desc Performs a check as to whether the data at the back of the vector are
  * valid and returns it if it is.
  */
-void *VectorBack(const Vector *vec) {
+void *VectorBack(const Vector *vec)
+{
     void *data = vec->data[vec->size - 1];
-    if (!data) {
+    if (!data)
+    {
         Log(LOG_ERROR, "VectorBack: no data at back of vector!");
         return NULL;
     }
@@ -128,22 +142,26 @@ void *VectorBack(const Vector *vec) {
  * vector are then compacted and the size decremented. If the new size of the
  * vector is a quarter of its capacity, it halves the capacity of the vector.
  */
-void VectorDelete(Vector *vec, size_t index) {
-    if (index > vec->size - 1) {
+void VectorDelete(Vector *vec, size_t index)
+{
+    if (index > vec->size - 1)
+    {
         Log(LOG_ERROR, "VectorDelete: index %u out of bounds!", index);
         return;
     }
 
     vec->data[index] = NULL;
 
-    for (size_t i = 0; i < vec->size - 1; ++i) {
+    for (size_t i = 0; i < vec->size - 1; ++i)
+    {
         vec->data[i] = vec->data[i + 1];
         vec->data[i + 1] = NULL;
     }
 
     vec->size--;
 
-    if (vec->size > 0 && vec->size <= vec->capacity / 4) {
+    if (vec->size > 0 && vec->size <= vec->capacity / 4)
+    {
         VectorResize(vec, vec->capacity >> 1);
     }
 }

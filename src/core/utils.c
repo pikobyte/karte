@@ -12,8 +12,8 @@
  *
  */
 
-#include "core/common.h"
 #include "core/utils.h"
+#include "core/common.h"
 
 /* -------------------------------------------------------------------------- */
 /* I/O                                                                        */
@@ -22,7 +22,8 @@
  * \desc Checks to see if a file with a given path exists. Note that F_OK is
  * specific to Unix systems only.
  */
-bool FileExists(const char *path) {
+bool FileExists(const char *path)
+{
     // TODO: Find a non-Posix way of doing this.
 #if _WIN32
     return _access(path, 0) != -1;
@@ -46,12 +47,14 @@ bool FileExists(const char *path) {
 /*
  * FIXME: Occasional egmentation faults in here when on Windows.
  */
-void Log(LogCode lc, const char *str, ...) {
+void Log(LogCode lc, const char *str, ...)
+{
     char buff[512] = {0};
     char tod[32] = {0};
     char type[32] = {0};
 
-    switch (lc) {
+    switch (lc)
+    {
     case LOG_NOTIFY:
         sprintf(type, "KARTE LOG");
         break;
@@ -75,12 +78,17 @@ void Log(LogCode lc, const char *str, ...) {
 
     va_list ap;
     va_start(ap, str);
-    if (lc == LOG_FATAL) {
+    if (lc == LOG_FATAL)
+    {
         vfprintf(stderr, buff, ap);
         exit(EXIT_FAILURE);
-    } else if (lc == LOG_ERROR) {
+    }
+    else if (lc == LOG_ERROR)
+    {
         vfprintf(stderr, buff, ap);
-    } else {
+    }
+    else
+    {
         vfprintf(stdout, buff, ap);
     }
     va_end(ap);
@@ -95,9 +103,11 @@ void Log(LogCode lc, const char *str, ...) {
  * number of global memory allocations is increased, and a pointer to the start
  * of the allocated memory is returned.
  */
-void *Allocate(size_t size) {
+void *Allocate(size_t size)
+{
     void *mem = calloc(1, size);
-    if (mem == NULL) {
+    if (mem == NULL)
+    {
         Log(LOG_FATAL, "Could not allocate memory of size %i!", size);
     }
 
@@ -111,8 +121,10 @@ void *Allocate(size_t size) {
  * the program produces an error. The program need not exit as it can continue
  * normally.
  */
-void Free(void *mem) {
-    if (mem == NULL) {
+void Free(void *mem)
+{
+    if (mem == NULL)
+    {
         Log(LOG_ERROR, "Could not free memory at %p!", mem);
         return;
     }
@@ -129,7 +141,8 @@ void Free(void *mem) {
  * \desc Takes a destination buffer to which the current date and time is copied
  * to in a YY/MM/DD hr/min/sec format.
  */
-void DateAndTime(char *dest) {
+void DateAndTime(char *dest)
+{
     char buff[27] = {0};
     struct tm *tm_info = NULL;
     time_t timer = {0};
@@ -143,9 +156,12 @@ void DateAndTime(char *dest) {
  * \desc Searches through a string and checks whether a character exists within
  * it.
  */
-bool StringContains(const char *str, char search) {
-    for (size_t i = 0; i < strlen(str); ++i) {
-        if ((char)str[i] == search) {
+bool StringContains(const char *str, char search)
+{
+    for (size_t i = 0; i < strlen(str); ++i)
+    {
+        if ((char)str[i] == search)
+        {
             return true;
         }
     }
@@ -160,21 +176,27 @@ bool StringContains(const char *str, char search) {
  * of the value, and if the value is cleanly divisible by any of the iterants,
  * shows that the value is not prime.
  */
-i32 IsPrime(u32 value) {
-    if (value < 2) {
+i32 IsPrime(u32 value)
+{
+    if (value < 2)
+    {
         return false;
     }
 
-    if (value == 3) {
+    if (value == 3)
+    {
         return true;
     }
 
-    if ((value % 2) == 0) {
+    if ((value % 2) == 0)
+    {
         return false;
     }
 
-    for (i32 i = 3; i < floor(sqrt((f64)value)) - 1; i += 2) {
-        if ((value % i) == 0) {
+    for (i32 i = 3; i < floor(sqrt((f64)value)) - 1; i += 2)
+    {
+        if ((value % i) == 0)
+        {
             return false;
         }
     }
@@ -186,8 +208,10 @@ i32 IsPrime(u32 value) {
  * \desc Increments the value passed in and checks if the incremented value is a
  * prime. Only when the value is prime does it return that value.
  */
-u32 NextPrime(u32 value) {
-    while (!IsPrime(value)) {
+u32 NextPrime(u32 value)
+{
+    while (!IsPrime(value))
+    {
         value++;
     }
 

@@ -24,7 +24,8 @@
  * Timers can be started, at which point the number of ticks since SDL
  * initialisation are retrieved. Pausing gathers ticks separately.
  */
-typedef struct Timer_s {
+typedef struct Timer_s
+{
     u64 start_ticks;  /**< Ticks since timer was started. */
     u64 paused_ticks; /**< Ticks since timer was paused. */
     bool started;     /**< Flag for started. */

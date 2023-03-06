@@ -32,7 +32,8 @@
  * initialised. The running of the application performs the main loop: input,
  * update, render.
  */
-typedef struct Application_s {
+typedef struct Application_s
+{
     u64 frames;         /**< The number of passed frames. */
     f64 fps;            /**< The current frames-per-second. */
     f64 dt;             /**< Time between frames. */

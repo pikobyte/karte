@@ -28,7 +28,8 @@
  * The resourcer stores vectors of different resources such as textures. Other
  * types of resource can be added if required.
  */
-typedef struct Resourcer_s {
+typedef struct Resourcer_s
+{
     Hashmap *textures; /**< Textures used by the program. */
 } Resourcer;
 

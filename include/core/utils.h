@@ -36,7 +36,8 @@ bool FileExists(const char *path);
  * The list of log codes and thier usages are: log for general information
  * output, warning, error, and fatal. The latter causes the program to exit.
  */
-typedef enum LogCode_e {
+typedef enum LogCode_e
+{
     LOG_NOTIFY,
     LOG_WARNING,
     LOG_ERROR,

@@ -32,7 +32,8 @@
  * character. The glyph is rendered at a 2-dimensional position (x, y) with
  * custom background and foreground colours.
  */
-typedef struct Glyph_s {
+typedef struct Glyph_s
+{
     i32 index;    /**< ASCII index. */
     f64 x;        /**< x-position to be rendered in pixels. */
     f64 y;        /**< y-position to be rendered in pixels. */

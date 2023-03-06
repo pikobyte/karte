@@ -16,7 +16,7 @@ OBJECTS := $(patsubst $(SRCDIR)/%,$(BUILDDIR)/%,$(SOURCES:.$(SRCEXT)=.o))
 DEPS := $(OBJECTS:.o=.d)
 
 INC := -Iinclude
-CFLAGS := $(INC) -std=c11 -g -MMD -MP -Wall -Wextra -Wpedantic -Werror -O0
+CFLAGS := $(INC) -std=c2x -g -MMD -MP -Wall -Wextra -Wpedantic -Werror -O0
 LIBS := -lSDL2 -lSDL2_image -lSDL2_mixer -lSDL2_ttf -lm
 
 $(TARGET): $(OBJECTS)

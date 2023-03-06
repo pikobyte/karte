@@ -21,7 +21,8 @@
  * the function.
  * TODO: Load from a JSON file or something similar.
  */
-Interface *InterfaceCreate(Texture *tex) {
+Interface *InterfaceCreate(Texture *tex)
+{
     Interface *itfc = Allocate(sizeof(Interface));
 
     itfc->tex = tex;
@@ -49,8 +50,10 @@ Interface *InterfaceCreate(Texture *tex) {
  * \desc Frees the interface memory by iterating through the interface widgets,
  * freeing each, freeing each vector and finally the interface pointer.
  */
-void InterfaceFree(Interface *itfc) {
-    for (size_t i = 0; i < VectorLength(itfc->widgets); ++i) {
+void InterfaceFree(Interface *itfc)
+{
+    for (size_t i = 0; i < VectorLength(itfc->widgets); ++i)
+    {
         Widget *widget = VectorAt(itfc->widgets, i);
         WidgetFree(widget);
     }
@@ -67,44 +70,57 @@ void InterfaceFree(Interface *itfc) {
  * their corresponding data. Only the persistent widgets or widgets in the
  * current tab have their input handled.
  */
-void InterfaceHandleInput(Interface *itfc, Input *input) {
-    for (size_t i = 0; i < VectorLength(itfc->widgets); ++i) {
+void InterfaceHandleInput(Interface *itfc, Input *input)
+{
+    for (size_t i = 0; i < VectorLength(itfc->widgets); ++i)
+    {
         const Widget *widget = VectorAt(itfc->widgets, i);
         const u32 tab = widget->tab;
-        if (tab == 0 || tab == itfc->active_tab) {
+        if (tab == 0 || tab == itfc->active_tab)
+        {
             WidgetHandleInput(widget, input);
         }
     }
 
     Widget *btn_quit = WidgetFind(itfc->widgets, "btn_quit");
-    if (btn_quit) {
-        if (ButtonIsPressed((Button *)btn_quit->data)) {
+    if (btn_quit)
+    {
+        if (ButtonIsPressed((Button *)btn_quit->data))
+        {
             input->quit = true;
         }
     }
 
     Widget *btn_tab1 = WidgetFind(itfc->widgets, "btn_tab1");
-    if (btn_tab1) {
-        if (ButtonIsPressed((Button *)btn_tab1->data)) {
+    if (btn_tab1)
+    {
+        if (ButtonIsPressed((Button *)btn_tab1->data))
+        {
             itfc->active_tab = 1;
         }
     }
 
     Widget *btn_tab2 = WidgetFind(itfc->widgets, "btn_tab2");
-    if (btn_tab2) {
-        if (ButtonIsPressed((Button *)btn_tab2->data)) {
+    if (btn_tab2)
+    {
+        if (ButtonIsPressed((Button *)btn_tab2->data))
+        {
             itfc->active_tab = 2;
         }
     }
 
-    if (InputKeyPressed(input, SDLK_1)) {
+    if (InputKeyPressed(input, SDLK_1))
+    {
         itfc->active_tab = 1;
-    } else if (InputKeyPressed(input, SDLK_2)) {
+    }
+    else if (InputKeyPressed(input, SDLK_2))
+    {
         itfc->active_tab = 2;
     }
 
     itfc->show_ghost = InputMouseWithin(input, itfc->drawing_area);
-    if (itfc->show_ghost) {
+    if (itfc->show_ghost)
+    {
         const SDL_Point snap = InputMouseSnapToGlyph(input);
         itfc->ghost->index = itfc->cur_glyph->index;
         itfc->ghost->fg = itfc->cur_glyph->fg;
@@ -121,11 +137,14 @@ void InterfaceHandleInput(Interface *itfc, Input *input) {
  * paintable glyph is also set here based on the selected glyph in the options
  * panel.
  */
-void InterfaceUpdate(Interface *itfc) {
-    for (size_t i = 0; i < VectorLength(itfc->widgets); ++i) {
+void InterfaceUpdate(Interface *itfc)
+{
+    for (size_t i = 0; i < VectorLength(itfc->widgets); ++i)
+    {
         Widget *widget = VectorAt(itfc->widgets, i);
         const u32 tab = widget->tab;
-        if (tab == 0 || tab == itfc->active_tab) {
+        if (tab == 0 || tab == itfc->active_tab)
+        {
             WidgetUpdate(widget, itfc->cur_glyph);
         }
     }
@@ -137,20 +156,25 @@ void InterfaceUpdate(Interface *itfc) {
  * glyph is also rendered, as well as a ghost glyph if the flag is set.
  */
 void InterfaceRender(const Interface *itfc, const Window *wind,
-                     const Texture *tex) {
-    for (size_t i = 0; i < VectorLength(itfc->widgets); ++i) {
+                     const Texture *tex)
+{
+    for (size_t i = 0; i < VectorLength(itfc->widgets); ++i)
+    {
         const Widget *widget = VectorAt(itfc->widgets, i);
         const u32 tab = widget->tab;
-        if (tab == 0 || tab == itfc->active_tab) {
+        if (tab == 0 || tab == itfc->active_tab)
+        {
             WidgetRender(widget, wind, tex);
         }
     }
 
-    if (itfc->show_ghost) {
+    if (itfc->show_ghost)
+    {
         GlyphRender(itfc->ghost, wind, tex);
     }
 
-    if (itfc->active_tab == 1) {
+    if (itfc->active_tab == 1)
+    {
         GlyphRender(itfc->cur_glyph, wind, tex);
     }
 }
@@ -159,7 +183,8 @@ void InterfaceRender(const Interface *itfc, const Window *wind,
  * \desc A convenience function which creates a set of widgets for an interface
  * based on hard-coded values. Each widget type created is grouped logically.
  */
-void InterfaceCreateWidgets(Interface *itfc) {
+void InterfaceCreateWidgets(Interface *itfc)
+{
     // BUTTONS -----------------------------------------------------------------
     Button *btn_quit =
         ButtonCreate(1, 41, "Quit", BORDER_SINGLE, GREY, LIGHTGREY, true);
@@ -185,8 +210,10 @@ void InterfaceCreateWidgets(Interface *itfc) {
 
     // CANVASES ----------------------------------------------------------------
     Canvas *cvs_main = CanvasCreate((SDL_Rect){21, 1, 58, 43}, true);
-    for (i32 i = 0; i < 58; ++i) {
-        for (i32 j = 0; j < 43; ++j) {
+    for (i32 i = 0; i < 58; ++i)
+    {
+        for (i32 j = 0; j < 43; ++j)
+        {
             Glyph *glyph = GlyphCreate();
             glyph->x = i + cvs_main->rect.x;
             glyph->y = j + cvs_main->rect.y;
@@ -247,8 +274,10 @@ void InterfaceCreateWidgets(Interface *itfc) {
     // SELECTORS ---------------------------------------------------------------
     Selector *sct_glyphs =
         SelectorCreate((SDL_Rect){2, 24, 17, 16}, SELECTOR_INDEX);
-    for (i32 i = 0; i < 16; ++i) {
-        for (i32 j = 0; j < 16; ++j) {
+    for (i32 i = 0; i < 16; ++i)
+    {
+        for (i32 j = 0; j < 16; ++j)
+        {
             Glyph *glyph = GlyphCreate();
             glyph->x = i + sct_glyphs->rect.x;
             glyph->y = j + sct_glyphs->rect.y;
@@ -264,13 +293,16 @@ void InterfaceCreateWidgets(Interface *itfc) {
     i32 x = 0, y = 0;
     const i32 dx[4] = {0, 1, 0, 1};
     const i32 dy[4] = {0, 0, 1, 1};
-    for (i32 i = 0; i < 16; ++i) {
-        if (i > 0 && i % 8 == 0) {
+    for (i32 i = 0; i < 16; ++i)
+    {
+        if (i > 0 && i % 8 == 0)
+        {
             x = 0;
             y += 2;
         }
 
-        for (i32 j = 0; j < 4; ++j) {
+        for (i32 j = 0; j < 4; ++j)
+        {
             Glyph *glyph = GlyphCreate();
             glyph->x = sct_colors->rect.x + x + dx[j];
             glyph->y = sct_colors->rect.y + y + dy[j];

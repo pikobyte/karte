@@ -17,7 +17,8 @@
 /**
  * \desc Allocates the memory for the resourcer object and nothing more.
  */
-Resourcer *ResourcerCreate(void) {
+Resourcer *ResourcerCreate(void)
+{
     Resourcer *res = Allocate(sizeof(Resourcer));
     res->textures = HashmapCreate(HASHMAP_INITIAL_BASE_SIZE, TextureFree);
     return res;
@@ -27,7 +28,8 @@ Resourcer *ResourcerCreate(void) {
  * \desc Frees all of the data concerned with the resourcer. Beware freeing
  * memory outside of the resourcer!
  */
-void ResourcerFree(Resourcer *res) {
+void ResourcerFree(Resourcer *res)
+{
     HashmapFree(res->textures, true);
     Free(res);
 }
@@ -38,9 +40,11 @@ void ResourcerFree(Resourcer *res) {
  * texture.
  */
 void ResourcerLoadTexture(Resourcer *res, const Window *wind, const char *path,
-                          const char *key) {
+                          const char *key)
+{
     Texture *tex = TextureCreate();
-    if (!TextureLoad(tex, wind, path)) {
+    if (!TextureLoad(tex, wind, path))
+    {
         return;
     }
 
@@ -52,9 +56,11 @@ void ResourcerLoadTexture(Resourcer *res, const Window *wind, const char *path,
  * given key. If the texture is not found within the hashmap, an error is
  * logged.
  */
-Texture *ResourcerGetTexture(const Resourcer *res, const char *key) {
+Texture *ResourcerGetTexture(const Resourcer *res, const char *key)
+{
     Texture *tex = HashmapSearch(res->textures, "main_texture");
-    if (tex == NULL) {
+    if (tex == NULL)
+    {
         Log(LOG_ERROR, "Could not retrieve texture \"%s\" from resourcer!",
             key);
         return NULL;

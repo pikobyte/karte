@@ -32,10 +32,11 @@ void GlyphFree(Glyph *glyph) { Free(glyph); }
  * well as the textures glyph dimensions. The background is drawn first,
  * followed by the foreground. Alpha blending is enabled for both of these.
  */
-void GlyphRender(const Glyph *glyph, const Window *wind, const Texture *tex) {
+void GlyphRender(const Glyph *glyph, const Window *wind, const Texture *tex)
+{
     const SDL_Rect fsrc = tex->rects[glyph->index];
     const SDL_Rect bsrc = tex->rects[FILLED];
-    
+
     SDL_Rect dest = {0};
     dest.x = (u32)glyph->x * tex->glyph_w;
     dest.y = (u32)glyph->y * tex->glyph_h;

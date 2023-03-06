@@ -30,7 +30,8 @@
  * modifier map states what combination of modifier keys are held at a given
  * time. The mouse wheel movement is also stored.
  */
-typedef struct Input_s {
+typedef struct Input_s
+{
     bool curr_key_map[NUM_KEYS];      /**< Currently pressed keyboard. */
     bool prev_key_map[NUM_KEYS];      /**< Previously pressed keyboard. */
     u16 curr_mod_map;                 /**< Currently pressed modifiers. */

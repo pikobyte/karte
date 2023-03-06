@@ -33,7 +33,8 @@
  * the user. The editor contains a UI where the input from the user is taken and
  * fed back appropriately.
  */
-typedef struct Editor_s {
+typedef struct Editor_s
+{
     bool visible;    /**< Visible components flag. */
     Interface *itfc; /**< The user interface. */
     Texture *tex;    /**< Texture for the glyphs. */

@@ -27,7 +27,8 @@
  * screen, render to the back-buffer, and then flip the buffers to present the
  * graphics.
  */
-typedef struct Window_s {
+typedef struct Window_s
+{
     u32 width;                  /**< Window width in pixels. */
     u32 height;                 /**< Window height in pixels. */
     char title[64];             /**< Window title text. */
