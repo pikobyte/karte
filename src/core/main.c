@@ -20,6 +20,8 @@
 #include "core/common.h"
 #include "core/utils.h"
 
+u32 g_mem_allocs = 0;
+
 int main(int argc, char *argv[]) {
     Application *app = ApplicationCreate();
 
