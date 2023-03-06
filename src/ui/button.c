@@ -28,10 +28,11 @@
  * The label and panel (given their own IDs) are created, and the button
  * rectangle is converted to pixels based on glyph dimensions.
  */
-Button *ButtonCreate(i32 x, i32 y, const char *text, Border border,
-                     SDL_Color text_col, SDL_Color bord_col, bool active)
+[[nodiscard]] Button* ButtonCreate(i32 x, i32 y, const char* text,
+                                   Border border, SDL_Color text_col,
+                                   SDL_Color bord_col, bool active)
 {
-    Button *button = Allocate(sizeof(Button));
+    Button* button = Allocate(sizeof(Button));
     i32 len = (i32)strlen(text);
 
     i32 label_x = border == BORDER_NONE ? x : x + 1;
@@ -59,7 +60,7 @@ Button *ButtonCreate(i32 x, i32 y, const char *text, Border border,
  * \desc Frees the button memory, first by freeing the label and panel, then the
  * button pointer itself.
  */
-void ButtonFree(Button *button)
+void ButtonFree(Button* button)
 {
     LabelFree(button->label);
     PanelFree(button->panel);
@@ -72,7 +73,7 @@ void ButtonFree(Button *button)
  * as when the left mouse button is down; pressed when the left mouse button is
  * released.
  */
-void ButtonHandleInput(Button *button, const Input *input)
+void ButtonHandleInput(Button* button, const Input* input)
 {
     if (!button->active)
     {
@@ -111,34 +112,32 @@ void ButtonHandleInput(Button *button, const Input *input)
  * see if it is impressed or not, and colours are set accordingly. When no
  * hovering occurs, the hovering and impressed flags are set to false.
  */
-void ButtonUpdate(Button *button)
+void ButtonUpdate(Button* button)
 {
     if (!button->active)
     {
         ButtonSetOpacity(button, 64);
         return;
     }
-    else
-    {
-        ButtonSetOpacity(button, 255);
-    }
+
+    ButtonSetOpacity(button, 255);
 }
 
 /**
  * \desc Renders a button to a window based on a given texture by iterating
  * through its glyphs. This is done by first rendering the border then the text.
  */
-void ButtonRender(const Button *button, const Window *wind, const Texture *tex)
+void ButtonRender(const Button* button, const Window* wind, const Texture* tex)
 {
     for (size_t i = 0; i < VectorLength(button->panel->glyphs); ++i)
     {
-        const Glyph *glyph = VectorAt(button->panel->glyphs, i);
+        const Glyph* glyph = VectorAt(button->panel->glyphs, i);
         GlyphRender(glyph, wind, tex);
     }
 
     for (size_t i = 0; i < VectorLength(button->label->glyphs); ++i)
     {
-        const Glyph *glyph = VectorAt(button->label->glyphs, i);
+        const Glyph* glyph = VectorAt(button->label->glyphs, i);
         GlyphRender(glyph, wind, tex);
     }
 }
@@ -148,7 +147,7 @@ void ButtonRender(const Button *button, const Window *wind, const Texture *tex)
  * pressed flag as well as a chosen button ID. This allows different buttons to
  * be checked and different behaviour to be issued.
  */
-bool ButtonIsPressed(const Button *button)
+[[nodiscard]] bool ButtonIsPressed(const Button* button)
 {
     const SDL_Point mpos = InputMousePos();
     SDL_Rect r = button->panel->rect;
@@ -156,6 +155,7 @@ bool ButtonIsPressed(const Button *button)
     r.y *= 16;
     r.w *= 16;
     r.h *= 16;
+
     return button->pressed && SDL_PointInRect(&mpos, &r);
 }
 
@@ -163,17 +163,17 @@ bool ButtonIsPressed(const Button *button)
  * \desc Sets the foreground colour of all glyphs contained by a button,
  * including the label and border (if it exists).
  */
-void ButtonSetForeColor(Button *button, SDL_Color col)
+void ButtonSetForeColor(Button* button, SDL_Color col)
 {
     for (size_t i = 0; i < VectorLength(button->label->glyphs); ++i)
     {
-        Glyph *glyph = VectorAt(button->label->glyphs, i);
+        Glyph* glyph = VectorAt(button->label->glyphs, i);
         glyph->fg = col;
     }
 
     for (size_t i = 0; i < VectorLength(button->panel->glyphs); ++i)
     {
-        Glyph *glyph = VectorAt(button->panel->glyphs, i);
+        Glyph* glyph = VectorAt(button->panel->glyphs, i);
         glyph->fg = col;
     }
 }
@@ -182,17 +182,17 @@ void ButtonSetForeColor(Button *button, SDL_Color col)
  * \desc Sets the background colour of all glyphs contained by a button,
  * including the label and border (if it exists).
  */
-void ButtonSetBackColor(Button *button, SDL_Color col)
+void ButtonSetBackColor(Button* button, SDL_Color col)
 {
     for (size_t i = 0; i < VectorLength(button->label->glyphs); ++i)
     {
-        Glyph *glyph = VectorAt(button->label->glyphs, i);
+        Glyph* glyph = VectorAt(button->label->glyphs, i);
         glyph->bg = col;
     }
 
     for (size_t i = 0; i < VectorLength(button->panel->glyphs); ++i)
     {
-        Glyph *glyph = VectorAt(button->panel->glyphs, i);
+        Glyph* glyph = VectorAt(button->panel->glyphs, i);
         glyph->bg = col;
     }
 }
@@ -201,18 +201,18 @@ void ButtonSetBackColor(Button *button, SDL_Color col)
  * \desc Sets the opacity of all glyphs contained by a button, including the
  * label and border (if it exists).
  */
-void ButtonSetOpacity(Button *button, u8 opacity)
+void ButtonSetOpacity(Button* button, u8 opacity)
 {
     for (size_t i = 0; i < VectorLength(button->label->glyphs); ++i)
     {
-        Glyph *glyph = VectorAt(button->label->glyphs, i);
+        Glyph* glyph = VectorAt(button->label->glyphs, i);
         glyph->fg.a = opacity;
         glyph->bg.a = opacity;
     }
 
     for (size_t i = 0; i < VectorLength(button->panel->glyphs); ++i)
     {
-        Glyph *glyph = VectorAt(button->panel->glyphs, i);
+        Glyph* glyph = VectorAt(button->panel->glyphs, i);
         glyph->fg.a = opacity;
         glyph->bg.a = opacity;
     }

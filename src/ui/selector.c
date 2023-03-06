@@ -19,9 +19,9 @@
  * \desc First allocates the memory for the selector then sets its type and
  * dimensions in glyph co-ordinates.
  */
-Selector *SelectorCreate(SDL_Rect rect, SelectorType type)
+[[nodiscard]] Selector* SelectorCreate(SDL_Rect rect, SelectorType type)
 {
-    Selector *selector = Allocate(sizeof(Selector));
+    Selector* selector = Allocate(sizeof(Selector));
     selector->glyphs = VectorCreate();
     selector->cur_glyph = GlyphCreate();
     selector->cur_glyph->index = 250;
@@ -38,13 +38,14 @@ Selector *SelectorCreate(SDL_Rect rect, SelectorType type)
  * \desc Frees the selector memory by freeing the glyphs including the current
  * glyph.
  */
-void SelectorFree(Selector *selector)
+void SelectorFree(Selector* selector)
 {
     for (size_t i = 0; i < VectorLength(selector->glyphs); ++i)
     {
-        Glyph *glyph = VectorAt(selector->glyphs, i);
+        Glyph* glyph = VectorAt(selector->glyphs, i);
         GlyphFree(glyph);
     }
+
     VectorFree(selector->glyphs);
     GlyphFree(selector->cur_glyph);
     Free(selector);
@@ -55,7 +56,7 @@ void SelectorFree(Selector *selector)
  * is within one of them. Given that it is, then mouse input is queried and if
  * successful, the current index is set based on the clicked glyph.
  */
-void SelectorHandleInput(Selector *selector, const Input *input)
+void SelectorHandleInput(Selector* selector, const Input* input)
 {
     if (!InputMouseWithin(input, selector->rect))
     {
@@ -64,7 +65,7 @@ void SelectorHandleInput(Selector *selector, const Input *input)
 
     for (size_t i = 0; i < VectorLength(selector->glyphs); ++i)
     {
-        Glyph *glyph = VectorAt(selector->glyphs, i);
+        Glyph* glyph = VectorAt(selector->glyphs, i);
         SDL_Rect rect = {0};
         rect.x = (u32)glyph->x;
         rect.y = (u32)glyph->y;
@@ -108,7 +109,7 @@ void SelectorHandleInput(Selector *selector, const Input *input)
  * colour are set based on the flags, and are only changed if input was provided
  * on the last frame.
  */
-void SelectorUpdate(Selector *selector, Glyph *cur_glyph)
+void SelectorUpdate(Selector* selector, Glyph* cur_glyph)
 {
     if (!cur_glyph)
     {
@@ -126,12 +127,12 @@ void SelectorUpdate(Selector *selector, Glyph *cur_glyph)
  * \desc Renders a selector to a window based on a given texture by iterating
  * through its glyphs.
  */
-void SelectorRender(const Selector *selector, const Window *wind,
-                    const Texture *tex)
+void SelectorRender(const Selector* selector, const Window* wind,
+                    const Texture* tex)
 {
     for (size_t i = 0; i < VectorLength(selector->glyphs); ++i)
     {
-        const Glyph *glyph = VectorAt(selector->glyphs, i);
+        const Glyph* glyph = VectorAt(selector->glyphs, i);
         GlyphRender(glyph, wind, tex);
     }
 }
@@ -141,7 +142,7 @@ void SelectorRender(const Selector *selector, const Window *wind,
  * glyph. The properties are set subject to a selector type. For each type (of
  * which can be combined), the corresponding selector glyph properties are set.
  */
-void SelectorSetCurrentGlyph(Selector *selector, const Glyph *glyph,
+void SelectorSetCurrentGlyph(Selector* selector, const Glyph* glyph,
                              SelectorType type)
 {
     if (!glyph)
@@ -171,7 +172,7 @@ void SelectorSetCurrentGlyph(Selector *selector, const Glyph *glyph,
  * selector. For each type (of which can be combined), the corresponding
  * selector glyph properties are set.
  */
-void SelectorGetCurrentGlyph(const Selector *selector, Glyph *glyph)
+void SelectorGetCurrentGlyph(const Selector* selector, Glyph* glyph)
 {
     if (!glyph)
     {

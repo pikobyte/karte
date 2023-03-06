@@ -18,9 +18,9 @@
  * \desc Allocates the memory for the editor via the creation of the texture and
  * the renderable glyphs.
  */
-Editor *EditorCreate(const Window *wind, Resourcer *res)
+[[nodiscard]] Editor* EditorCreate(const Window* wind, Resourcer* res)
 {
-    Editor *editor = Allocate(sizeof(Editor));
+    Editor* editor = Allocate(sizeof(Editor));
 
     ResourcerLoadTexture(res, wind, "./res/textures/boxy_16x16.png",
                          "main_texture");
@@ -36,7 +36,7 @@ Editor *EditorCreate(const Window *wind, Resourcer *res)
  * \desc Frees the memory for an editor object, including texture and glyph
  * memory.
  */
-void EditorFree(Editor *editor)
+void EditorFree(Editor* editor)
 {
     InterfaceFree(editor->itfc);
     Free(editor);
@@ -46,7 +46,7 @@ void EditorFree(Editor *editor)
  * \desc Handles the input pertaining to the editor. This requires an input
  * object to poll for events.
  */
-void EditorHandleInput(Editor *editor, Input *input)
+void EditorHandleInput(Editor* editor, Input* input)
 {
     if (InputKeyPressed(input, SDLK_v))
     {
@@ -60,13 +60,13 @@ void EditorHandleInput(Editor *editor, Input *input)
  * \desc Updates of all of the pertinent editor components, such as tool
  * selection and visible glyphs.
  */
-void EditorUpdate(Editor *editor) { InterfaceUpdate(editor->itfc); }
+void EditorUpdate(Editor* editor) { InterfaceUpdate(editor->itfc); }
 
 /**
  * \desc Renders of all of the pertinent editor components provided the visible
  * flag is true.
  */
-void EditorRender(const Editor *editor, const Window *wind)
+void EditorRender(const Editor* editor, const Window* wind)
 {
     if (editor->visible)
     {

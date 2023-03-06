@@ -32,74 +32,74 @@
  * initialised. The running of the application performs the main loop: input,
  * update, render.
  */
-typedef struct Application_s
+typedef struct [[nodiscard]]
 {
     u64 frames;         /**< The number of passed frames. */
     f64 fps;            /**< The current frames-per-second. */
     f64 dt;             /**< Time between frames. */
     f64 exec_time;      /**< Total execution time. */
     bool running;       /**< Running flag. */
-    Editor *editor;     /**< Main editor object. */
-    Input *input;       /**< Input handler to poll event. */
-    Timer *fps_timer;   /**< Timer to calculate frames-per-second. */
-    Timer *limit_timer; /**< Timer to limit the frames-per-second. */
-    Resourcer *res;     /**< Main program resource handler. */
-    Window *wind;       /**< Main rendering window. */
+    Editor* editor;     /**< Main editor object. */
+    Input* input;       /**< Input handler to poll event. */
+    Timer* fps_timer;   /**< Timer to calculate frames-per-second. */
+    Timer* limit_timer; /**< Timer to limit the frames-per-second. */
+    Resourcer* res;     /**< Main program resource handler. */
+    Window* wind;       /**< Main rendering window. */
 } Application;
 
 /**
  * \brief Creates the application object and initialises all systems required.
  * \returns Pointer to an application object.
  */
-Application *ApplicationCreate(void);
+[[nodiscard]] Application* ApplicationCreate(void);
 
 /**
  * \brief Frees up the memory of game systems and the application itself.
  * \param [out] app The application to be freed.
  * \returns Void.
  */
-void ApplicationFree(Application *app);
+void ApplicationFree(Application* app);
 
 /**
  * \brief Starts the main application loop.
  * \param [in, out] app The application to be run.
  * \returns Void.
  */
-void ApplicationRun(Application *app);
+void ApplicationRun(Application* app);
 
 /**
  * \brief Updates the input handler and deals with global input.
  * \param [in, out] app The corresponding application.
  * \returns Void.
  */
-void ApplicationHandleInput(Application *app);
+void ApplicationHandleInput(Application* app);
 
 /**
  * \brief Updates the systems of the application.
  * \param [in, out] app The corresponding application.
  * \returns Void.
  */
-void ApplicationUpdate(Application *app);
+void ApplicationUpdate(Application* app);
 
 /**
  * \brief Renders the systems of the application.
  * \param [in, out] app The corresponding application.
  * \returns Void.
  */
-void ApplicationRender(const Application *app);
+void ApplicationRender(const Application* app);
 
 /**
  * \brief Performs pre-frame timing.
  * \param [in, out] app The corresponding application.
  * \returns Void.
  */
-void ApplicationPreFrame(Application *app);
+void ApplicationPreFrame(Application* app);
 
 /**
  * \brief Performs post-frame timing.
  * \param [in, out] app The corresponding application.
  * \returns Void.
  */
-void ApplicationPostFrame(Application *app);
+void ApplicationPostFrame(Application* app);
 
 #endif

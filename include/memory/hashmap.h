@@ -24,7 +24,10 @@
  * \desc Defines a null pair record for a hashmap.
  */
 #define HASHMAP_DELETED_ITEM                                                   \
-    (HashRecord) { NULL, NULL }
+    (HashRecord)                                                               \
+    {                                                                          \
+        NULL, NULL                                                             \
+    }
 
 /**
  * \desc The initial size of a hashmap given as some small prime number.
@@ -55,9 +58,10 @@
  * A hashmap record is the data type which forms a key-value pair where the key
  * is a character array and the value can be of any type.
  */
-typedef struct HashRecord_s {
-    char *key;
-    void *value;
+typedef struct [[nodiscard]]
+{
+    char* key;
+    void* value;
 } HashRecord;
 
 /**
@@ -68,12 +72,14 @@ typedef struct HashRecord_s {
  * Additionally a function pointer to a function which frees any of the values
  * within the hashmap is provided. This is stored in a functions structure.
  */
-typedef struct Hashmap_s {
+typedef struct [[nodiscard]]
+{
     size_t base_size;
     size_t size;
     size_t count;
-    HashRecord **records;
-    struct {
+    HashRecord** records;
+    struct [[nodiscard]]
+    {
         void (*free)();
     } functions;
 } Hashmap;
@@ -84,14 +90,14 @@ typedef struct Hashmap_s {
  * \param [in] value The actual data associated with that key.
  * \returns Pointer to a hashmap record.
  */
-HashRecord *HashRecordCreate(const char *key, void *value);
+[[nodiscard]] HashRecord* HashRecordCreate(const char* key, void* value);
 
 /**
  * \brief Frees the memory of a hashmap record.
  * \param [out] record The hashmap record to be freed.
  * \returns Void.
  */
-void HashRecordFree(HashRecord *record);
+void HashRecordFree(HashRecord* record);
 
 /**
  * \brief Creates an empty hashmap.
@@ -99,7 +105,7 @@ void HashRecordFree(HashRecord *record);
  * \pararm [in] free A function pointer to a memory free function.
  * \returns Pointer to an empty hashmap.
  */
-Hashmap *HashmapCreate(size_t base_size, void (*free)());
+[[nodiscard]] Hashmap* HashmapCreate(size_t base_size, void (*free)());
 
 /**
  * \brief Frees the memory of a hashmap and data within if recursive is set.
@@ -108,7 +114,7 @@ Hashmap *HashmapCreate(size_t base_size, void (*free)());
  * freed.
  * \returns Void.
  */
-void HashmapFree(Hashmap *hashmap, bool recursive);
+void HashmapFree(Hashmap* hashmap, bool recursive);
 
 /**
  * \brief Resizes a hashmap based on a newly given base size.
@@ -116,7 +122,7 @@ void HashmapFree(Hashmap *hashmap, bool recursive);
  * \param [in] base_size A new base size to increase to.
  * \returns Void.
  */
-void HashmapResize(Hashmap *hashmap, size_t base_size);
+void HashmapResize(Hashmap* hashmap, size_t base_size);
 
 /**
  * \brief Inserts a key-value pair into a hashmap.
@@ -125,7 +131,7 @@ void HashmapResize(Hashmap *hashmap, size_t base_size);
  * \param [in] value A pointer to some data to add to the hashmap.
  * \returns Void.
  */
-void HashmapInsert(Hashmap *hashmap, const char *key, void *value);
+void HashmapInsert(Hashmap* hashmap, const char* key, void* value);
 
 /**
  * \brief Searches through a hashmap and returns a value if it is associated
@@ -134,7 +140,7 @@ void HashmapInsert(Hashmap *hashmap, const char *key, void *value);
  * \param [in] key The key used for the search.
  * \returns A value (if found) associated with the given key.
  */
-void *HashmapSearch(const Hashmap *hashmap, const char *key);
+void* HashmapSearch(const Hashmap* hashmap, const char* key);
 
 /**
  * \brief Deletes a record within a hashmap if the key is found.
@@ -142,7 +148,7 @@ void *HashmapSearch(const Hashmap *hashmap, const char *key);
  * \param [in] key The key of the record to delete.
  * \returns Void.
  */
-void HashmapDelete(Hashmap *hashmap, const char *key);
+void HashmapDelete(Hashmap* hashmap, const char* key);
 
 /**
  * \brief Generates a unique hash from string input.
@@ -151,7 +157,7 @@ void HashmapDelete(Hashmap *hashmap, const char *key);
  * \param [in] num_rec The number of records within a hashmap.
  * \returns Void.
  */
-i32 HashFunction(const char *str, u32 prime, size_t num_rec);
+[[nodiscard]] i32 HashFunction(const char* str, u32 prime, size_t num_rec);
 
 /**
  * \brief Retrieves an index for a hashmap based on a given key.
@@ -160,6 +166,6 @@ i32 HashFunction(const char *str, u32 prime, size_t num_rec);
  * \param [in] attempt Current attempt of the index find.
  * \returns The index of the key.
  */
-i32 HashGet(const char *str, size_t num_rec, i32 attempt);
+[[nodiscard]] i32 HashGet(const char* str, size_t num_rec, i32 attempt);
 
 #endif

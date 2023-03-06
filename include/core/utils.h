@@ -25,7 +25,7 @@
  * \param [in] path The path to the file.
  * returns Existence of the file.
  */
-bool FileExists(const char *path);
+[[nodiscard]] bool FileExists(const char* path);
 
 /* -------------------------------------------------------------------------- */
 /* LOGGING                                                                    */
@@ -36,7 +36,7 @@ bool FileExists(const char *path);
  * The list of log codes and thier usages are: log for general information
  * output, warning, error, and fatal. The latter causes the program to exit.
  */
-typedef enum LogCode_e
+typedef enum
 {
     LOG_NOTIFY,
     LOG_WARNING,
@@ -51,7 +51,7 @@ typedef enum LogCode_e
  * \param [in] ... Extra parameters required for the formatted string.
  * \returns Void.
  */
-void Log(LogCode lc, const char *str, ...);
+void Log(LogCode lc, const char* str, ...);
 
 /* -------------------------------------------------------------------------- */
 /* MEMORY                                                                     */
@@ -62,14 +62,14 @@ void Log(LogCode lc, const char *str, ...);
  * \param [in] size Size of memory to be allocated.
  * \returns Pointer to the allocated memory.
  */
-void *Allocate(size_t size);
+void* Allocate(size_t size);
 
 /**
  * \brief Deallocates memory and decrements the number of allocations.
  * \param [in, out] mem A pointer to the memory to be freed.
  * \returns Void.
  */
-void Free(void *mem);
+void Free(void* mem);
 
 /* -------------------------------------------------------------------------- */
 /* MISCELLANEOUS                                                              */
@@ -79,35 +79,41 @@ void Free(void *mem);
  * \param [in, out] dest The destination buffer.
  * \returns Void.
  */
-void DateAndTime(char *dest);
+void DateAndTime(char* dest);
 
 /**
  * \brief Determines whether a bit is set at a masked position for a 32-bit
- * integer. \param [in] src The source value. \param [in] mask The mask of bits
- * to check against. \returns Whether that bit set is enabled.
+ * integer.
+ * \param [in] src The source value.
+ * \param [in] mask The mask of bits
+ * to check against.
+ * \returns Whether that bit set is enabled.
  */
-bool Mask32(i32 src, i32 mask);
+[[nodiscard]] bool Mask32(i32 src, i32 mask);
 
 /**
  * \brief Determines whether a bit is set at a masked position for a 32-bit
- * integer. \param [in] src The source value. \param [in] mask The mask of bits
- * to check against. \returns Whether that bit set is enabled.
+ * integer.
+ * \param [in] src The source value.
+ * \param [in] mask The mask of bits
+ * to check against.
+ * \returns Whether that bit set is enabled.
  */
-bool Mask64(i64 src, i64 mask);
+[[nodiscard]] bool Mask64(i64 src, i64 mask);
 
 /**
  * \brief Determines whether an input integer is a prime value or not.
  * \param [in] value An input unsigned integer.
  * \returns Whether the input value is prime or not.
  */
-i32 IsPrime(u32 value);
+[[nodiscard]] i32 IsPrime(u32 value);
 
 /**
  * \brief Calculates the next prime number from the given input.
  * \param [in] value An input unsigned integer.
  * \returns The next prime number from the input.
  */
-u32 NextPrime(u32 value);
+[[nodiscard]] u32 NextPrime(u32 value);
 
 /* -------------------------------------------------------------------------- */
 /* STRING                                                                     */
@@ -118,6 +124,6 @@ u32 NextPrime(u32 value);
  * \param [in] search The character to be searched for.
  * \returns Whether the character exists within the string.
  */
-bool StringContains(const char *str, char search);
+[[nodiscard]] bool StringContains(const char* str, char search);
 
 #endif

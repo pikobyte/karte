@@ -28,8 +28,9 @@
  * The label is single-lined: escape control sequences are rendered as the
  * corresponding graphical glyph.
  */
-typedef struct Label_s {
-    Vector *glyphs; /**< Set of glyphs for label text. */
+typedef struct [[nodiscard]]
+{
+    Vector* glyphs; /**< Set of glyphs for label text. */
     i32 x;          /**< x-position of the label. */
     i32 y;          /**< y-position of the label. */
     char text[128]; /**< Stored label text. */
@@ -46,14 +47,15 @@ typedef struct Label_s {
  * \param [in] bg Background colour of the text.
  * \returns Pointer to a label object.
  */
-Label *LabelCreate(i32 x, i32 y, const char *text, SDL_Color fg, SDL_Color bg);
+[[nodiscard]] Label* LabelCreate(i32 x, i32 y, const char* text, SDL_Color fg,
+                                 SDL_Color bg);
 
 /**
  * \brief Frees the label memory.
  * \param [in, out] label The label to be freed.
  * \returns Void.
  */
-void LabelFree(Label *label);
+void LabelFree(Label* label);
 
 /**
  * \brief Renders a label.
@@ -62,6 +64,6 @@ void LabelFree(Label *label);
  * \param [in] tex Texture to render from.
  * \returns Void.
  */
-void LabelRender(const Label *label, const Window *wind, const Texture *tex);
+void LabelRender(const Label* label, const Window* wind, const Texture* tex);
 
 #endif

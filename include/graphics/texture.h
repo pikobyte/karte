@@ -28,9 +28,9 @@
  * each glyph, assuming that each texture is a set of 16x16 glyphs. A set of 256
  * source rectangles are stored for quick look-up when required.
  */
-typedef struct Texture_s
+typedef struct [[nodiscard]]
 {
-    SDL_Texture *sdl_texture; /**< The SDL texture handle. */
+    SDL_Texture* sdl_texture; /**< The SDL texture handle. */
     u32 width;                /**< Width of the texture in pixels. */
     u32 height;               /**< Height of the texture in pixels. */
     u32 glyph_w;              /**< Glyph width (width / 16). */
@@ -42,14 +42,14 @@ typedef struct Texture_s
  * \brief Allocates memory for the texture.
  * \returns A pointer to an texture object.
  */
-Texture *TextureCreate(void);
+[[nodiscard]] Texture* TextureCreate(void);
 
 /**
  * \brief Frees the texture memory.
  * \param [in, out] tex The texture to be freed.
  * \returns Void.
  */
-void TextureFree(Texture *tex);
+void TextureFree(Texture* tex);
 
 /**
  * \brief Loads an image file into a texture.
@@ -58,6 +58,7 @@ void TextureFree(Texture *tex);
  * \param [in] path The path to the image file.
  * \returns Success of texture creation.
  */
-bool TextureLoad(Texture *tex, const Window *wind, const char *path);
+[[nodiscard]] bool TextureLoad(Texture* tex, const Window* wind,
+                               const char* path);
 
 #endif

@@ -32,7 +32,7 @@
  * character. The glyph is rendered at a 2-dimensional position (x, y) with
  * custom background and foreground colours.
  */
-typedef struct Glyph_s
+typedef struct [[nodiscard]]
 {
     i32 index;    /**< ASCII index. */
     f64 x;        /**< x-position to be rendered in pixels. */
@@ -45,14 +45,14 @@ typedef struct Glyph_s
  * \brief Allocates memory for the glyph.
  * \returns A pointer to an glyph object.
  */
-Glyph *GlyphCreate(void);
+[[nodiscard]] Glyph* GlyphCreate(void);
 
 /**
  * \brief Frees the glyph memory.
  * \param [in, out] The glyph to be freed.
  * \returns Void.
  */
-void GlyphFree(Glyph *glyph);
+void GlyphFree(Glyph* glyph);
 
 /**
  * \brief Renders a glyph to a window based on a texture.
@@ -61,6 +61,6 @@ void GlyphFree(Glyph *glyph);
  * \param [in] tex The texture to render from.
  * \returns Void.
  */
-void GlyphRender(const Glyph *glyph, const Window *wind, const Texture *tex);
+void GlyphRender(const Glyph* glyph, const Window* wind, const Texture* tex);
 
 #endif

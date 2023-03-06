@@ -19,9 +19,9 @@
  * by the application are then initialised, the running flag is set to true, and
  * the memory is returned.
  */
-Application *ApplicationCreate(void)
+[[nodiscard]] Application* ApplicationCreate(void)
 {
-    Application *app = Allocate(sizeof(Application));
+    Application* app = Allocate(sizeof(Application));
 
     if (SDL_Init(SDL_INIT_EVERYTHING))
     {
@@ -57,7 +57,7 @@ Application *ApplicationCreate(void)
  * \desc Frees all of the memory that the application allocates and ends by
  * freeing the memory of the application itself.
  */
-void ApplicationFree(Application *app)
+void ApplicationFree(Application* app)
 {
     IMG_Quit();
     TTF_Quit();
@@ -80,7 +80,7 @@ void ApplicationFree(Application *app)
  * the application. The length of execution time in seconds is logged after
  * this.
  */
-void ApplicationRun(Application *app)
+void ApplicationRun(Application* app)
 {
     TimerStart(app->fps_timer);
 
@@ -100,7 +100,7 @@ void ApplicationRun(Application *app)
  * \desc Updates the application's input handler and checks for any global
  * input. This is where user input can result in the application closing.
  */
-void ApplicationHandleInput(Application *app)
+void ApplicationHandleInput(Application* app)
 {
     InputUpdate(app->input);
     if (InputKeyPressed(app->input, SDLK_ESCAPE) || app->input->quit)
@@ -114,13 +114,13 @@ void ApplicationHandleInput(Application *app)
 /**
  * \desc Updates the application state i.e. where all logic is performed.
  */
-void ApplicationUpdate(Application *app) { EditorUpdate(app->editor); }
+void ApplicationUpdate(Application* app) { EditorUpdate(app->editor); }
 
 /**
  * \desc Renders the application by clearing the window, drawing to it and then
  * flipping the buffers.
  */
-void ApplicationRender(const Application *app)
+void ApplicationRender(const Application* app)
 {
     WindowClear(app->wind);
     EditorRender(app->editor, app->wind);
@@ -131,7 +131,7 @@ void ApplicationRender(const Application *app)
  * \desc Calculates timing before the new frame has begun and also sets the
  * application frames-per-second.
  */
-void ApplicationPreFrame(Application *app)
+void ApplicationPreFrame(Application* app)
 {
     app->dt = TimerGetTicks(app->limit_timer) / 1000.0;
     TimerStart(app->limit_timer);
@@ -145,7 +145,7 @@ void ApplicationPreFrame(Application *app)
  * to display frames-per-second and then delays the application to cap to the
  * target FPS, provided v-sync is turned off.
  */
-void ApplicationPostFrame(Application *app)
+void ApplicationPostFrame(Application* app)
 {
     u64 ticks = TimerGetTicks(app->limit_timer);
     if (!app->wind->v_sync && ticks < (1000.0 / 60.0))

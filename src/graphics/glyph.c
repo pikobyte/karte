@@ -17,12 +17,12 @@
 /**
  * \desc Allocates the memory for the glyph object and nothing more.
  */
-Glyph *GlyphCreate(void) { return Allocate(sizeof(Glyph)); }
+[[nodiscard]] Glyph* GlyphCreate(void) { return Allocate(sizeof(Glyph)); }
 
 /**
  * \desc Frees the memory for a glyph object and nothing more.
  */
-void GlyphFree(Glyph *glyph) { Free(glyph); }
+void GlyphFree(Glyph* glyph) { Free(glyph); }
 
 /**
  * \desc Glyph rendering requires a window to render to and a base texture. The
@@ -32,7 +32,7 @@ void GlyphFree(Glyph *glyph) { Free(glyph); }
  * well as the textures glyph dimensions. The background is drawn first,
  * followed by the foreground. Alpha blending is enabled for both of these.
  */
-void GlyphRender(const Glyph *glyph, const Window *wind, const Texture *tex)
+void GlyphRender(const Glyph* glyph, const Window* wind, const Texture* tex)
 {
     const SDL_Rect fsrc = tex->rects[glyph->index];
     const SDL_Rect bsrc = tex->rects[FILLED];

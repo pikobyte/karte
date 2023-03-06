@@ -18,9 +18,9 @@
  * \desc First allocates the memory for the canvas then sets its current
  * operation, glyph index an dimensions in glyph co-ordinates.
  */
-Canvas *CanvasCreate(SDL_Rect rect, bool writable)
+[[nodiscard]] Canvas* CanvasCreate(SDL_Rect rect, bool writable)
 {
-    Canvas *canvas = Allocate(sizeof(Canvas));
+    Canvas* canvas = Allocate(sizeof(Canvas));
     canvas->glyphs = VectorCreate();
     canvas->op = CANVAS_NONE;
     canvas->glyph_index = 0;
@@ -34,13 +34,14 @@ Canvas *CanvasCreate(SDL_Rect rect, bool writable)
  * \desc Frees the canvas memory by freeing the glyphs including the current
  * glyph.
  */
-void CanvasFree(Canvas *canvas)
+void CanvasFree(Canvas* canvas)
 {
     for (size_t i = 0; i < VectorLength(canvas->glyphs); ++i)
     {
-        Glyph *glyph = VectorAt(canvas->glyphs, i);
+        Glyph* glyph = VectorAt(canvas->glyphs, i);
         GlyphFree(glyph);
     }
+
     VectorFree(canvas->glyphs);
     Free(canvas);
 }
@@ -54,7 +55,7 @@ void CanvasFree(Canvas *canvas)
  * middle selects the hovered over glyph. The canvas operation and glyph index
  * are then used during the canvas update.
  */
-void CanvasHandleInput(Canvas *canvas, const Input *input)
+void CanvasHandleInput(Canvas* canvas, const Input* input)
 {
     canvas->op = CANVAS_NONE;
 
@@ -65,7 +66,7 @@ void CanvasHandleInput(Canvas *canvas, const Input *input)
 
     for (size_t i = 0; i < VectorLength(canvas->glyphs); ++i)
     {
-        Glyph *glyph = VectorAt(canvas->glyphs, i);
+        Glyph* glyph = VectorAt(canvas->glyphs, i);
         SDL_Rect rect = {0};
         rect.x = (u32)glyph->x;
         rect.y = (u32)glyph->y;
@@ -112,9 +113,9 @@ void CanvasHandleInput(Canvas *canvas, const Input *input)
  * glyph to the current glyph; selection sets the current glyph to a canvas
  * glyph (based on canvas type); erasure just sets a canvas glyph to blank.
  */
-void CanvasUpdate(Canvas *canvas, Glyph *cur_glyph)
+void CanvasUpdate(Canvas* canvas, Glyph* cur_glyph)
 {
-    Glyph *glyph = VectorAt(canvas->glyphs, canvas->glyph_index);
+    Glyph* glyph = VectorAt(canvas->glyphs, canvas->glyph_index);
 
     if (!cur_glyph)
     {
@@ -124,33 +125,24 @@ void CanvasUpdate(Canvas *canvas, Glyph *cur_glyph)
     switch (canvas->op)
     {
     case CANVAS_NONE:
-    {
         break;
-    }
 
     case CANVAS_PLACE:
-    {
         glyph->fg = cur_glyph->fg;
         glyph->bg = cur_glyph->bg;
         glyph->index = cur_glyph->index;
         break;
-    }
 
     case CANVAS_SELECT:
-    {
         cur_glyph->fg = glyph->fg;
         cur_glyph->bg = glyph->bg;
         cur_glyph->index = glyph->index;
         break;
-    }
 
     case CANVAS_ERASE:
-    {
         glyph->index = 0;
         glyph->fg = BLANK;
         glyph->bg = BLANK;
-        break;
-    }
 
     default:
         break;
@@ -161,11 +153,11 @@ void CanvasUpdate(Canvas *canvas, Glyph *cur_glyph)
  * \desc Renders a canvas to a window based on a given texture by iterating
  * through its glyphs.
  */
-void CanvasRender(const Canvas *canvas, const Window *wind, const Texture *tex)
+void CanvasRender(const Canvas* canvas, const Window* wind, const Texture* tex)
 {
     for (size_t i = 0; i < VectorLength(canvas->glyphs); ++i)
     {
-        const Glyph *glyph = VectorAt(canvas->glyphs, i);
+        const Glyph* glyph = VectorAt(canvas->glyphs, i);
         GlyphRender(glyph, wind, tex);
     }
 }

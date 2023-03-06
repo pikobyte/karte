@@ -51,12 +51,6 @@ typedef float f32;
 typedef double f64;
 
 /**
- * \desc This is a utility macro which simply prevents the GCC unused-parameter
- * warning from firing. This should be removed in final releases.
- */
-#define UNUSED(x) (void)(x)
-
-/**
  * \desc Current working directory for the project. Requires changing for
  * release.
  */

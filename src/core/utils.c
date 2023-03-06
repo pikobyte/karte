@@ -22,7 +22,7 @@
  * \desc Checks to see if a file with a given path exists. Note that F_OK is
  * specific to Unix systems only.
  */
-bool FileExists(const char *path)
+[[nodiscard]] bool FileExists(const char* path)
 {
     // TODO: Find a non-Posix way of doing this.
 #if _WIN32
@@ -45,9 +45,9 @@ bool FileExists(const char *path)
  */
 
 /*
- * FIXME: Occasional egmentation faults in here when on Windows.
+ * FIXME: Occasional segmentation faults in here when on Windows.
  */
-void Log(LogCode lc, const char *str, ...)
+void Log(LogCode lc, const char* str, ...)
 {
     char buff[512] = {0};
     char tod[32] = {0};
@@ -103,9 +103,9 @@ void Log(LogCode lc, const char *str, ...)
  * number of global memory allocations is increased, and a pointer to the start
  * of the allocated memory is returned.
  */
-void *Allocate(size_t size)
+void* Allocate(size_t size)
 {
-    void *mem = calloc(1, size);
+    void* mem = calloc(1, size);
     if (mem == NULL)
     {
         Log(LOG_FATAL, "Could not allocate memory of size %i!", size);
@@ -121,7 +121,7 @@ void *Allocate(size_t size)
  * the program produces an error. The program need not exit as it can continue
  * normally.
  */
-void Free(void *mem)
+void Free(void* mem)
 {
     if (mem == NULL)
     {
@@ -141,10 +141,10 @@ void Free(void *mem)
  * \desc Takes a destination buffer to which the current date and time is copied
  * to in a YY/MM/DD hr/min/sec format.
  */
-void DateAndTime(char *dest)
+void DateAndTime(char* dest)
 {
     char buff[27] = {0};
-    struct tm *tm_info = NULL;
+    struct tm* tm_info = NULL;
     time_t timer = {0};
     time(&timer);
     tm_info = localtime(&timer);
@@ -156,7 +156,7 @@ void DateAndTime(char *dest)
  * \desc Searches through a string and checks whether a character exists within
  * it.
  */
-bool StringContains(const char *str, char search)
+[[nodiscard]] bool StringContains(const char* str, char search)
 {
     for (size_t i = 0; i < strlen(str); ++i)
     {
@@ -176,7 +176,7 @@ bool StringContains(const char *str, char search)
  * of the value, and if the value is cleanly divisible by any of the iterants,
  * shows that the value is not prime.
  */
-i32 IsPrime(u32 value)
+[[nodiscard]] i32 IsPrime(u32 value)
 {
     if (value < 2)
     {
@@ -208,7 +208,7 @@ i32 IsPrime(u32 value)
  * \desc Increments the value passed in and checks if the incremented value is a
  * prime. Only when the value is prime does it return that value.
  */
-u32 NextPrime(u32 value)
+[[nodiscard]] u32 NextPrime(u32 value)
 {
     while (!IsPrime(value))
     {
@@ -221,9 +221,9 @@ u32 NextPrime(u32 value)
 /**
  * \desc Returns the truth value of a 32-bit integer masked with a bit-field.
  */
-bool Mask32(i32 src, i32 mask) { return ((src & mask) == mask); }
+[[nodiscard]] bool Mask32(i32 src, i32 mask) { return ((src & mask) == mask); }
 
 /**
  * \desc Returns the truth value of a 64-bit integer masked with a bit-field.
  */
-bool Mask64(i64 src, i64 mask) { return ((src & mask) == mask); }
+[[nodiscard]] bool Mask64(i64 src, i64 mask) { return ((src & mask) == mask); }

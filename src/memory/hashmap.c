@@ -20,12 +20,13 @@
  * \desc The creation of a hashmap record first allocates the required amount of
  * memory and then sets the key and values of that record.
  */
-HashRecord *HashRecordCreate(const char *key, void *value)
+[[nodiscard]] HashRecord* HashRecordCreate(const char* key, void* value)
 {
-    HashRecord *record = Allocate(sizeof(HashRecord));
+    HashRecord* record = Allocate(sizeof(HashRecord));
     record->key = calloc(strlen(key), sizeof(char));
     strcpy(record->key, key);
     record->value = value;
+
     return record;
 }
 
@@ -35,21 +36,22 @@ HashRecord *HashRecordCreate(const char *key, void *value)
  * from the base size. The hashmap records are allocated using this new size. A
  * free function is also passed in so that the hashmap can free its data later.
  */
-Hashmap *HashmapCreate(size_t base_size, void (*free)())
+[[nodiscard]] Hashmap* HashmapCreate(size_t base_size, void (*free)())
 {
-    Hashmap *hashmap = Allocate(sizeof(Hashmap));
+    Hashmap* hashmap = Allocate(sizeof(Hashmap));
     hashmap->base_size = base_size;
     hashmap->size = (size_t)NextPrime((u32)hashmap->base_size);
     hashmap->count = 0;
     hashmap->functions.free = free;
-    hashmap->records = Allocate(sizeof(HashRecord *) * hashmap->size);
+    hashmap->records = Allocate(sizeof(HashRecord*) * hashmap->size);
+
     return hashmap;
 }
 
 /**
  * \desc Simply frees the memory which a hashmap record points to.
  */
-void HashRecordFree(HashRecord *record) { Free(record); }
+void HashRecordFree(HashRecord* record) { Free(record); }
 
 /**
  * \desc A hashmap can be freed via two approaches. The first is to clear the
@@ -59,11 +61,11 @@ void HashRecordFree(HashRecord *record) { Free(record); }
  * This only occurs when the recursive flag is set, the current record is valid
  * and that a free function exists for the hashmap.
  */
-void HashmapFree(Hashmap *hashmap, bool recursive)
+void HashmapFree(Hashmap* hashmap, bool recursive)
 {
     for (size_t i = 0; i < (size_t)hashmap->size; ++i)
     {
-        HashRecord *record = hashmap->records[i];
+        HashRecord* record = hashmap->records[i];
         if (record == NULL || record == &HASHMAP_DELETED_ITEM ||
             !strcmp(record->key, ""))
         {
@@ -99,17 +101,17 @@ void HashmapFree(Hashmap *hashmap, bool recursive)
  * course, if the new base size is less than the initial base size, the function
  * returns early.
  */
-void HashmapResize(Hashmap *hashmap, size_t base_size)
+void HashmapResize(Hashmap* hashmap, size_t base_size)
 {
     if (base_size < HASHMAP_INITIAL_BASE_SIZE)
     {
         return;
     }
 
-    Hashmap *new_hashmap = HashmapCreate(base_size, hashmap->functions.free);
+    Hashmap* new_hashmap = HashmapCreate(base_size, hashmap->functions.free);
     for (size_t i = 0; i < hashmap->size; ++i)
     {
-        HashRecord *record = hashmap->records[i];
+        HashRecord* record = hashmap->records[i];
         if (record != NULL && record != &HASHMAP_DELETED_ITEM)
         {
             HashmapInsert(new_hashmap, record->key, record->value);
@@ -123,7 +125,7 @@ void HashmapResize(Hashmap *hashmap, size_t base_size)
     hashmap->size = new_hashmap->size;
     new_hashmap->size = tmp_size;
 
-    HashRecord **tmp_records = hashmap->records;
+    HashRecord** tmp_records = hashmap->records;
     hashmap->records = new_hashmap->records;
     new_hashmap->records = tmp_records;
 
@@ -135,7 +137,7 @@ void HashmapResize(Hashmap *hashmap, size_t base_size)
  * it exceeds a certain load thus increasing its size to accomodate the new
  * record.
  */
-void HashmapInsert(Hashmap *hashmap, const char *key, void *value)
+void HashmapInsert(Hashmap* hashmap, const char* key, void* value)
 {
     const size_t load = hashmap->count / hashmap->size;
     if (load > HASHMAP_LOAD_INCREASE)
@@ -143,9 +145,9 @@ void HashmapInsert(Hashmap *hashmap, const char *key, void *value)
         HashmapResize(hashmap, hashmap->base_size << 1);
     }
 
-    HashRecord *record = HashRecordCreate(key, value);
+    HashRecord* record = HashRecordCreate(key, value);
     u32 index = HashGet(record->key, hashmap->size, 0);
-    HashRecord *last_record = hashmap->records[index];
+    HashRecord* last_record = hashmap->records[index];
 
     u32 i = 1;
     while (last_record != NULL && last_record)
@@ -189,10 +191,10 @@ void HashmapInsert(Hashmap *hashmap, const char *key, void *value)
  * Otherwise the next record is checked, and a null value is returned if the
  * associated value was not obtained.
  */
-void *HashmapSearch(const Hashmap *hashmap, const char *key)
+void* HashmapSearch(const Hashmap* hashmap, const char* key)
 {
     size_t index = HashGet(key, hashmap->size, 0);
-    HashRecord *record = hashmap->records[index];
+    HashRecord* record = hashmap->records[index];
 
     i32 i = 1;
     while (record != NULL)
@@ -215,7 +217,7 @@ void *HashmapSearch(const Hashmap *hashmap, const char *key)
     return NULL;
 }
 
-void HashmapDelete(Hashmap *hashmap, const char *key)
+void HashmapDelete(Hashmap* hashmap, const char* key)
 {
     const size_t load = hashmap->count / hashmap->size;
     if (load < HASHMAP_LOAD_DECREASE)
@@ -224,7 +226,7 @@ void HashmapDelete(Hashmap *hashmap, const char *key)
     }
 
     i32 index = HashGet(key, hashmap->size, 0);
-    HashRecord *record = hashmap->records[index];
+    HashRecord* record = hashmap->records[index];
 
     i32 i = 0;
     while (record != NULL)
@@ -269,7 +271,7 @@ void HashmapDelete(Hashmap *hashmap, const char *key)
  * reasonable values and so a very large amount of empty memory is not allocated
  * for each hashmap.
  */
-i32 HashFunction(const char *str, u32 prime, size_t num_rec)
+[[nodiscard]] i32 HashFunction(const char* str, u32 prime, size_t num_rec)
 {
     i64 hash = 0;
     const size_t length = strlen(str);
@@ -279,6 +281,7 @@ i32 HashFunction(const char *str, u32 prime, size_t num_rec)
         hash += (i64)pow(prime, exponent) * str[i];
         hash = hash % num_rec;
     }
+
     return (i32)hash;
 }
 
@@ -287,7 +290,7 @@ i32 HashFunction(const char *str, u32 prime, size_t num_rec)
  * numbers) and uses them to obtain an index within a hashmap for that key. The
  * attempt count is tracked to mitigate "double-booked" indices.
  */
-i32 HashGet(const char *str, size_t num_rec, i32 attempt)
+[[nodiscard]] i32 HashGet(const char* str, size_t num_rec, i32 attempt)
 {
     const i32 hash_a = HashFunction(str, HASHMAP_PRIME_1, num_rec);
     const i32 hash_b = HashFunction(str, HASHMAP_PRIME_2, num_rec);

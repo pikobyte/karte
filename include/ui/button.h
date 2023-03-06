@@ -38,9 +38,10 @@
  * The colour changes based on this state. A test for a button press is based on
  * its ID and its pressed state,
  */
-typedef struct Button_s {
-    Label *label;   /**< Text label. */
-    Panel *panel;   /**< Panel encompassing the button. */
+typedef struct [[nodiscard]]
+{
+    Label* label;   /**< Text label. */
+    Panel* panel;   /**< Panel encompassing the button. */
     bool active;    /**< Whether the button can be interacted with. */
     bool hovering;  /**< Flag for when hovering over the button. */
     bool impressed; /**< Flag for when input is held on a button. */
@@ -58,15 +59,16 @@ typedef struct Button_s {
  * \param [in] active The default active state of the button.
  * \returns Pointer to a panel object.
  */
-Button *ButtonCreate(i32 x, i32 y, const char *text, Border border,
-                     SDL_Color text_col, SDL_Color bord_col, bool active);
+[[nodiscard]] Button* ButtonCreate(i32 x, i32 y, const char* text,
+                                   Border border, SDL_Color text_col,
+                                   SDL_Color bord_col, bool active);
 
 /**
  * \brief Frees the button memory.
  * \param [in, out] button The button to be freed.
  * \returns Void.
  */
-void ButtonFree(Button *button);
+void ButtonFree(Button* button);
 
 /**
  * \brief Deals with the input of a button.
@@ -74,14 +76,14 @@ void ButtonFree(Button *button);
  * \param [in] input An input handler.
  * \returns Void.
  */
-void ButtonHandleInput(Button *button, const Input *input);
+void ButtonHandleInput(Button* button, const Input* input);
 
 /**
  * \brief Updates the button, namely colour based on state.
  * \param [in, out] button The button to be updated.
  * \returns Void.
  */
-void ButtonUpdate(Button *button);
+void ButtonUpdate(Button* button);
 
 /**
  * \brief Renders a button.
@@ -90,14 +92,14 @@ void ButtonUpdate(Button *button);
  * \param [in] tex Texture to render from.
  * \returns Void.
  */
-void ButtonRender(const Button *button, const Window *wind, const Texture *tex);
+void ButtonRender(const Button* button, const Window* wind, const Texture* tex);
 
 /**
  * \brief Checks whether a button and chosen ID is pressed.
  * \param [in] button The button to check whether it has been pressed.
  * \returns Whether the button is pressed.
  */
-bool ButtonIsPressed(const Button *button);
+[[nodiscard]] bool ButtonIsPressed(const Button* button);
 
 /**
  * \brief Changes the foreground colour of a button.
@@ -105,7 +107,7 @@ bool ButtonIsPressed(const Button *button);
  * \param [in] col The colour to change to.
  * \returns Void.
  */
-void ButtonSetForeColor(Button *button, SDL_Color col);
+void ButtonSetForeColor(Button* button, SDL_Color col);
 
 /**
  * \brief Changes the background colour of a button.
@@ -113,7 +115,7 @@ void ButtonSetForeColor(Button *button, SDL_Color col);
  * \param [in] col The colour to change to.
  * \returns Void.
  */
-void ButtonSetBackColor(Button *button, SDL_Color col);
+void ButtonSetBackColor(Button* button, SDL_Color col);
 
 /**
  * \brief Changes the opacity of a button.
@@ -121,6 +123,6 @@ void ButtonSetBackColor(Button *button, SDL_Color col);
  * \param [in] opacity The opacity to change to.
  * \returns Void.
  */
-void ButtonSetOpacity(Button *button, u8 opacity);
+void ButtonSetOpacity(Button* button, u8 opacity);
 
 #endif

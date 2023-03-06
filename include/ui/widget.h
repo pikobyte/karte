@@ -27,7 +27,8 @@
 #include "ui/panel.h"
 #include "ui/selector.h"
 
-typedef enum WidgetType_e {
+typedef enum
+{
     WIDGET_BUTTON,
     WIDGET_CANVAS,
     WIDGET_LABEL,
@@ -41,32 +42,33 @@ typedef enum WidgetType_e {
  * tab (0 for persistent) and a render order (the higher this value, the later
  * it is rendered).
  */
-typedef struct Widget_s {
+typedef struct [[nodiscard]]
+{
     char id[256];    /** Widget identifier. */
     WidgetType type; /**< A type of widget. */
-    void *data;      /**< The data pertaining to the component. */
+    void* data;      /**< The data pertaining to the component. */
     u32 tab;         /**< Tab number in which it belongs. */
     i32 z;           /**< Rendering priority. */
 } Widget;
 
 /**
  * \brief Create a UI widget.
- * \param [in] id Widget idenfifier.
+ * \param [in] id Widget identifier.
  * \param [in] type The type of widget.
  * \param [in] content A pointer to a widget data.
  * \param [in] tab The tab the widget belongs to.
  * \param [in] z The rendering priority of the widget.
  * \returns Pointer to a widget object.
  */
-Widget *WidgetCreate(const char *id, WidgetType type, void *data, u32 tab,
-                     i32 z);
+[[nodiscard]] Widget* WidgetCreate(const char* id, WidgetType type, void* data,
+                                   u32 tab, i32 z);
 
 /**
  * \brief Frees the widget memory.
  * \param [in, out] widget The widget to be freed.
  * \returns Void.
  */
-void WidgetFree(Widget *widget);
+void WidgetFree(Widget* widget);
 
 /**
  * \brief Deals with the input of a widget.
@@ -74,7 +76,7 @@ void WidgetFree(Widget *widget);
  * \param [in] input An input handler.
  * \returns Void.
  */
-void WidgetHandleInput(const Widget *widget, const Input *input);
+void WidgetHandleInput(const Widget* widget, const Input* input);
 
 /**
  * \brief Updates a widget and sets a custom glyph, typically if the widget type
@@ -82,7 +84,7 @@ void WidgetHandleInput(const Widget *widget, const Input *input);
  * \param [in, out] widget The widget to be updated.
  * \returns Void.
  */
-void WidgetUpdate(Widget *widget, Glyph *glyph);
+void WidgetUpdate(Widget* widget, Glyph* glyph);
 
 /**
  * \brief Renders a widget.
@@ -91,7 +93,7 @@ void WidgetUpdate(Widget *widget, Glyph *glyph);
  * \param [in] tex Texture to render from.
  * \returns Void.
  */
-void WidgetRender(const Widget *widget, const Window *wind, const Texture *tex);
+void WidgetRender(const Widget* widget, const Window* wind, const Texture* tex);
 
 /**
  * \brief Sorts a set of widgets by ascending render order.
@@ -99,7 +101,7 @@ void WidgetRender(const Widget *widget, const Window *wind, const Texture *tex);
  * \param [in] b The second comparator.
  * \returns Swap behaviour.
  */
-int WidgetSort(const void *a, const void *b);
+[[nodiscard]] int WidgetSort(const void* a, const void* b);
 
 /**
  * \brief Finds a widget based on its identifier.
@@ -107,6 +109,6 @@ int WidgetSort(const void *a, const void *b);
  * \param [in] id The widget identifier to search against.
  * \returns A found widget, or otherwise NULL.
  */
-Widget *WidgetFind(Vector *widgets, const char *id);
+[[nodiscard]] Widget* WidgetFind(Vector* widgets, const char* id);
 
 #endif

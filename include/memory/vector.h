@@ -32,31 +32,32 @@
  * vector is the actual used spaced. The data within the vector are represented
  * as an array of pointers.
  */
-typedef struct Vector_s {
+typedef struct [[nodiscard]]
+{
     size_t capacity;
     size_t size;
-    void **data;
+    void** data;
 } Vector;
 
 /**
  * \brief Creates an empty vector.
  * \returns Pointer to an empty vector.
  */
-Vector *VectorCreate(void);
+[[nodiscard]] Vector* VectorCreate(void);
 
 /**
  * \brief Frees the memory of a vector.
  * \param [out] vec The vector to be freed.
  * \returns Void.
  */
-void VectorFree(Vector *vec);
+void VectorFree(Vector* vec);
 
 /**
  * \brief Finds the actual used space of a vector.
  * \param [in] vec The vector to find the length of.
  * \returns The length of the vector.
  */
-size_t VectorLength(const Vector *vec);
+[[nodiscard]] size_t VectorLength(const Vector* vec);
 
 /**
  * \brief Resizes a vector to a given capacity.
@@ -64,7 +65,7 @@ size_t VectorLength(const Vector *vec);
  * \param [in] capacity The capacity to resize to.
  * \returns Void.
  */
-void VectorResize(Vector *vec, size_t capacity);
+void VectorResize(Vector* vec, size_t capacity);
 
 /**
  * \brief Pushes an object to the end of the vector.
@@ -72,7 +73,7 @@ void VectorResize(Vector *vec, size_t capacity);
  * \param [in] data The data to push.
  * \returns Void.
  */
-void VectorPush(Vector *vec, void *data);
+void VectorPush(Vector* vec, void* data);
 
 /**
  * \brief Puts data into a given position within a vector.
@@ -81,7 +82,7 @@ void VectorPush(Vector *vec, void *data);
  * \param [in] data The data to assign.
  * \returns Void.
  */
-void VectorSet(Vector *vec, size_t index, void *data);
+void VectorSet(Vector* vec, size_t index, void* data);
 
 /**
  * \brief Returns an object at a given index within a vector.
@@ -89,27 +90,27 @@ void VectorSet(Vector *vec, size_t index, void *data);
  * \param [in] index The index in the vector to get the data from.
  * \returns The data at a given index.
  */
-void *VectorAt(const Vector *vec, size_t index);
+void* VectorAt(const Vector* vec, size_t index);
 
 /**
  * \brief Returns the data at the front of a vector.
  * \param [in] vec The vector to return data from.
  * \returns The data at the front of a vector.
  */
-void *VectorFront(const Vector *vec);
+void* VectorFront(const Vector* vec);
 
 /**
  * \brief Returns the data at the back of a vector.
  * \param [in] vec The vector to return data from.
  * \returns The data at the back of a vector.
  */
-void *VectorBack(const Vector *vec);
+void* VectorBack(const Vector* vec);
 
 /**
  * \brief Deletes data at a given index within a vector.
  * \param [out] vec The vector to delete data from.
  * \returns Void.
  */
-void VectorDelete(Vector *vec, size_t index);
+void VectorDelete(Vector* vec, size_t index);
 
 #endif

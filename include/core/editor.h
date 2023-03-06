@@ -33,11 +33,11 @@
  * the user. The editor contains a UI where the input from the user is taken and
  * fed back appropriately.
  */
-typedef struct Editor_s
+typedef struct [[nodiscard]]
 {
     bool visible;    /**< Visible components flag. */
-    Interface *itfc; /**< The user interface. */
-    Texture *tex;    /**< Texture for the glyphs. */
+    Interface* itfc; /**< The user interface. */
+    Texture* tex;    /**< Texture for the glyphs. */
 } Editor;
 
 /**
@@ -46,14 +46,14 @@ typedef struct Editor_s
  * created.
  * \returns Pointer to an application object.
  */
-Editor *EditorCreate(const Window *wind, Resourcer *res);
+[[nodiscard]] Editor* EditorCreate(const Window* wind, Resourcer* res);
 
 /**
  * \brief Frees the editor memory.
  * \param [in, out] editor The editor to be freed.
  * \returns Void.
  */
-void EditorFree(Editor *editor);
+void EditorFree(Editor* editor);
 
 /**
  * \brief Deals with editor input.
@@ -61,14 +61,14 @@ void EditorFree(Editor *editor);
  * \param [in] input The input handler to poll.
  * \returns Void.
  */
-void EditorHandleInput(Editor *editor, Input *input);
+void EditorHandleInput(Editor* editor, Input* input);
 
 /**
  * \brief Updates the editor components.
  * \param [in, out] editor The editor to be updated.
  * \returns Void.
  */
-void EditorUpdate(Editor *editor);
+void EditorUpdate(Editor* editor);
 
 /**
  * \brief Renders the editor components.
@@ -76,6 +76,6 @@ void EditorUpdate(Editor *editor);
  * \param [in, out] wind The window to render to.
  * \returns Void.
  */
-void EditorRender(const Editor *editor, const Window *wind);
+void EditorRender(const Editor* editor, const Window* wind);
 
 #endif

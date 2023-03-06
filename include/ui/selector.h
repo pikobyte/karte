@@ -30,16 +30,18 @@
  * colour, background colour or the glyph index. This enumeration acts as a bit
  * field.
  */
-typedef enum SelectorType_e {
+typedef enum
+{
     SELECTOR_NONE = 0,
     SELECTOR_INDEX = 1 << 0,
     SELECTOR_FOREGROUND = 1 << 1,
     SELECTOR_BACKGROUND = 1 << 2
 } SelectorType;
 
-typedef struct Selector_s {
-    Vector *glyphs;    /**< The glyphs representing the selector. */
-    Glyph *cur_glyph;  /**< Currently selected glyph. */
+typedef struct [[nodiscard]]
+{
+    Vector* glyphs;    /**< The glyphs representing the selector. */
+    Glyph* cur_glyph;  /**< Currently selected glyph. */
     SelectorType type; /**< The type of selection that will be utilised. */
     SDL_Rect rect;     /**< Dimensions of the selector in glyph dimensions. */
     bool changed;      /**< Flag to check if selected glyph has changed. */
@@ -51,14 +53,14 @@ typedef struct Selector_s {
  * \param [in] type The type of selector the created one should be.
  * \returns Pointer to a selector object.
  */
-Selector *SelectorCreate(SDL_Rect rect, SelectorType type);
+[[nodiscard]] Selector* SelectorCreate(SDL_Rect rect, SelectorType type);
 
 /**
  * \brief Frees the selector memory.
  * \param [in, out] selector The selector to be freed.
  * \returns Void.
  */
-void SelectorFree(Selector *selector);
+void SelectorFree(Selector* selector);
 
 /**
  * \brief Deals with the input of a selector based on its type.
@@ -66,7 +68,7 @@ void SelectorFree(Selector *selector);
  * \param [in] input An input handler.
  * \returns Void.
  */
-void SelectorHandleInput(Selector *selector, const Input *input);
+void SelectorHandleInput(Selector* selector, const Input* input);
 
 /**
  * \brief Updates a selector.
@@ -74,7 +76,7 @@ void SelectorHandleInput(Selector *selector, const Input *input);
  * \param [in, out] cur_glyph A current glyph to be changed based on the
  * selector type. \returns Void.
  */
-void SelectorUpdate(Selector *selector, Glyph *cur_glyph);
+void SelectorUpdate(Selector* selector, Glyph* cur_glyph);
 
 /**
  * \brief Renders a selector.
@@ -83,8 +85,8 @@ void SelectorUpdate(Selector *selector, Glyph *cur_glyph);
  * \param [in] tex Texture to render from.
  * \returns Void.
  */
-void SelectorRender(const Selector *selector, const Window *wind,
-                    const Texture *tex);
+void SelectorRender(const Selector* selector, const Window* wind,
+                    const Texture* tex);
 
 /**
  * \brief Sets the current glyph based on a type of selector.
@@ -93,7 +95,7 @@ void SelectorRender(const Selector *selector, const Window *wind,
  * \param [in] type The type of selector.
  * \returns Void.
  */
-void SelectorSetCurrentGlyph(Selector *selector, const Glyph *glyph,
+void SelectorSetCurrentGlyph(Selector* selector, const Glyph* glyph,
                              SelectorType type);
 
 /**
@@ -102,6 +104,6 @@ void SelectorSetCurrentGlyph(Selector *selector, const Glyph *glyph,
  * \param [in, out] glyph Glyph to set the properties to.
  * \returns Void.
  */
-void SelectorGetCurrentGlyph(const Selector *selector, Glyph *glyph);
+void SelectorGetCurrentGlyph(const Selector* selector, Glyph* glyph);
 
 #endif

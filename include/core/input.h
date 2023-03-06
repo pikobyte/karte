@@ -30,7 +30,7 @@
  * modifier map states what combination of modifier keys are held at a given
  * time. The mouse wheel movement is also stored.
  */
-typedef struct Input_s
+typedef struct [[nodiscard]]
 {
     bool curr_key_map[NUM_KEYS];      /**< Currently pressed keyboard. */
     bool prev_key_map[NUM_KEYS];      /**< Previously pressed keyboard. */
@@ -49,21 +49,21 @@ typedef struct Input_s
  * \brief Allocates memory for the input.
  * \returns A pointer to an input object.
  */
-Input *InputCreate();
+[[nodiscard]] Input* InputCreate();
 
 /**
  * \brief Frees the input memory.
  * \param [in, out] The input to be freed.
  * \returns Void.
  */
-void InputFree(Input *input);
+void InputFree(Input* input);
 
 /**
  * \brief Polls for events.
  * \param [in, out] The input object to be polled.
  * \returns Void.
  */
-void InputUpdate(Input *input);
+void InputUpdate(Input* input);
 
 /* -----------------------------------------------------------------------------
  * KEYBOARD
@@ -74,7 +74,7 @@ void InputUpdate(Input *input);
  * \param [in] key A keyboard key code to check.
  * \returns Whether the current key is pressed.
  */
-bool InputKeyPressed(const Input *input, u32 key);
+[[nodiscard]] bool InputKeyPressed(const Input* input, u32 key);
 
 /**
  * \brief Checks whether a keyboard modifier button is pressed.
@@ -82,7 +82,7 @@ bool InputKeyPressed(const Input *input, u32 key);
  * \param [in] mod A keyboard modifier combination to check.
  * \returns Whether the current modifier combination is pressed.
  */
-bool InputModPressed(const Input *input, u16 mod);
+[[nodiscard]] bool InputModPressed(const Input* input, u16 mod);
 
 /**
  * \brief Checks whether a keyboard button is held down.
@@ -90,7 +90,7 @@ bool InputModPressed(const Input *input, u16 mod);
  * \param [in] key A keyboard key code to check.
  * \returns Whether the current key is held down.
  */
-bool InputKeyHeld(const Input *input, u32 key);
+[[nodiscard]] bool InputKeyHeld(const Input* input, u32 key);
 
 /**
  * \brief Checks whether a keyboard key was pressed or was held down.
@@ -98,7 +98,7 @@ bool InputKeyHeld(const Input *input, u32 key);
  * \param [in] button A keyboard key code to check.
  * \returns Whether the current keyboard key was pressed or is held down.
  */
-bool InputKeyDown(const Input *input, u32 button);
+[[nodiscard]] bool InputKeyDown(const Input* input, u32 button);
 
 /**
  * \brief Checks whether a keyboard modifier button is held down.
@@ -106,7 +106,7 @@ bool InputKeyDown(const Input *input, u32 button);
  * \param [in] mod A keyboard modifier combination to check.
  * \returns Whether the current modifier combination is held down.
  */
-bool InputModDown(const Input *input, u16 mod);
+[[nodiscard]] bool InputModDown(const Input* input, u16 mod);
 
 /**
  * \brief Checks whether a keyboard button is released.
@@ -114,7 +114,7 @@ bool InputModDown(const Input *input, u16 mod);
  * \param [in] key A keyboard key code to check.
  * \returns Whether the current key is released.
  */
-bool InputKeyReleased(const Input *input, u32 key);
+[[nodiscard]] bool InputKeyReleased(const Input* input, u32 key);
 
 /**
  * \brief Checks whether a keyboard modifier button is released.
@@ -122,7 +122,7 @@ bool InputKeyReleased(const Input *input, u32 key);
  * \param [in] mod A keyboard modifier combination to check.
  * \returns Whether the current modifier combination is released.
  */
-bool InputModReleased(const Input *input, u16 mod);
+[[nodiscard]] bool InputModReleased(const Input* input, u16 mod);
 
 /* -----------------------------------------------------------------------------
  * MOUSE
@@ -133,7 +133,7 @@ bool InputModReleased(const Input *input, u16 mod);
  * \param [in] button A mouse button code to check.
  * \returns Whether the current mouse button is pressed.
  */
-bool InputMousePressed(const Input *input, u32 button);
+[[nodiscard]] bool InputMousePressed(const Input* input, u32 button);
 
 /**
  * \brief Checks whether a mouse button is held down.
@@ -141,7 +141,7 @@ bool InputMousePressed(const Input *input, u32 button);
  * \param [in] button A mouse button code to check.
  * \returns Whether the current mouse button is held down.
  */
-bool InputMouseHeld(const Input *input, u32 button);
+[[nodiscard]] bool InputMouseHeld(const Input* input, u32 button);
 
 /**
  * \brief Checks whether a mouse button was pressed or was held down.
@@ -149,7 +149,7 @@ bool InputMouseHeld(const Input *input, u32 button);
  * \param [in] button A mouse button code to check.
  * \returns Whether the current mouse button was pressed or is held down.
  */
-bool InputMouseDown(const Input *input, u32 button);
+[[nodiscard]] bool InputMouseDown(const Input* input, u32 button);
 
 /**
  * \brief Checks whether a mouse button is released.
@@ -157,7 +157,7 @@ bool InputMouseDown(const Input *input, u32 button);
  * \param [in] button A mouse button code to check.
  * \returns Whether the current mouse button is released.
  */
-bool InputMouseReleased(const Input *input, u32 button);
+[[nodiscard]] bool InputMouseReleased(const Input* input, u32 button);
 
 /**
  * \brief Determines if the mouse is within a rectangle in glyph co-ordinates.
@@ -166,25 +166,25 @@ bool InputMouseReleased(const Input *input, u32 button);
  * co-ordinates.
  * \returns Whether the mouse is within the rectangle.
  */
-bool InputMouseWithin(const Input *input, SDL_Rect rect);
+[[nodiscard]] bool InputMouseWithin(const Input* input, SDL_Rect rect);
 
 /**
  * \brief Gets the x-position of the mouse in pixels.
  * \returns The x-position of the mouse in pixels.
  */
-u32 InputMouseX(void);
+[[nodiscard]] u32 InputMouseX(void);
 
 /**
  * \brief Gets the y-position of the mouse in pixels.
  * \returns The y-position of the mouse in pixels.
  */
-u32 InputMouseY(void);
+[[nodiscard]] u32 InputMouseY(void);
 
 /**
  * \brief Gets the position of the mouse in pixels.
  * \returns The position stored as an SDL_Point.
  */
-SDL_Point InputMousePos(void);
+[[nodiscard]] SDL_Point InputMousePos(void);
 
 /**
  * \brief Snaps the mouse x-position to a given division.
@@ -192,7 +192,7 @@ SDL_Point InputMousePos(void);
  * \returns The snapped x-position of the mouse in pixels, or zero if snap is
  * zero.
  */
-u32 InputMouseSnapX(u32 snap);
+[[nodiscard]] u32 InputMouseSnapX(u32 snap);
 
 /**
  * \brief Snaps the mouse y-position to a given division.
@@ -200,7 +200,7 @@ u32 InputMouseSnapX(u32 snap);
  * \returns The snapped y-position of the mouse in pixels, or zero if snap is
  * zero.
  */
-u32 InputMouseSnapY(u32 snap);
+[[nodiscard]] u32 InputMouseSnapY(u32 snap);
 
 /**
  * \brief Snaps the mouse position to a given division.
@@ -210,7 +210,7 @@ u32 InputMouseSnapY(u32 snap);
  * the mouse in pixels. If either snap_x or snap_y are zero, a zero'ed point is
  * returned.
  */
-SDL_Point InputMouseSnap(u32 snap_x, u32 snap_y);
+[[nodiscard]] SDL_Point InputMouseSnap(u32 snap_x, u32 snap_y);
 
 /**
  * \brief Snaps the mouse position to glyph dimensions.
@@ -219,6 +219,6 @@ SDL_Point InputMouseSnap(u32 snap_x, u32 snap_y);
  * the mouse in pixels. If either snap_x or snap_y are zero, a zero'ed point is
  * returned.
  */
-SDL_Point InputMouseSnapToGlyph(const Input *input);
+[[nodiscard]] SDL_Point InputMouseSnapToGlyph(const Input* input);
 
 #endif

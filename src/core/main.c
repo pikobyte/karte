@@ -22,17 +22,14 @@
 
 u32 g_mem_allocs = 0;
 
-int main(int argc, char *argv[])
+int main([[maybe_unused]] int argc, [[maybe_unused]] char* argv[])
 {
-    Application *app = ApplicationCreate();
+    Application* app = ApplicationCreate();
 
     ApplicationRun(app);
     ApplicationFree(app);
 
     Log(LOG_NOTIFY, "Allocations remaining: %u", g_mem_allocs);
-
-    UNUSED(argc);
-    UNUSED(argv);
 
     return EXIT_SUCCESS;
 }

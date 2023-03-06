@@ -20,9 +20,9 @@
  * created, only a border is considered. Glyph indices are set based on corners,
  * horizontal and vertical edges.
  */
-Panel *PanelCreate(SDL_Rect rect, Border border, SDL_Color col)
+[[nodiscard]] Panel* PanelCreate(SDL_Rect rect, Border border, SDL_Color col)
 {
-    Panel *panel = Allocate(sizeof(Panel));
+    Panel* panel = Allocate(sizeof(Panel));
     panel->glyphs = VectorCreate();
     panel->rect = rect;
 
@@ -77,7 +77,7 @@ Panel *PanelCreate(SDL_Rect rect, Border border, SDL_Color col)
                 index = 4;
             }
 
-            Glyph *glyph = GlyphCreate();
+            Glyph* glyph = GlyphCreate();
             glyph->x = rect.x + i;
             glyph->y = rect.y + j;
             glyph->fg = col;
@@ -96,13 +96,14 @@ Panel *PanelCreate(SDL_Rect rect, Border border, SDL_Color col)
  * \desc Frees a panels's memory, first by freeing the graphical glyphs, then
  * the panel pointer itself.
  */
-void PanelFree(Panel *panel)
+void PanelFree(Panel* panel)
 {
     for (size_t i = 0; i < VectorLength(panel->glyphs); ++i)
     {
-        Glyph *glyph = VectorAt(panel->glyphs, i);
+        Glyph* glyph = VectorAt(panel->glyphs, i);
         GlyphFree(glyph);
     }
+
     VectorFree(panel->glyphs);
     Free(panel);
 }
@@ -111,11 +112,11 @@ void PanelFree(Panel *panel)
  * \desc Renders a panel to a window based on a given texture by iterating
  * through its glyphs.
  */
-void PanelRender(const Panel *panel, const Window *wind, const Texture *tex)
+void PanelRender(const Panel* panel, const Window* wind, const Texture* tex)
 {
     for (size_t i = 0; i < VectorLength(panel->glyphs); ++i)
     {
-        const Glyph *glyph = VectorAt(panel->glyphs, i);
+        const Glyph* glyph = VectorAt(panel->glyphs, i);
         GlyphRender(glyph, wind, tex);
     }
 }

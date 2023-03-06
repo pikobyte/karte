@@ -27,43 +27,43 @@
  * screen, render to the back-buffer, and then flip the buffers to present the
  * graphics.
  */
-typedef struct Window_s
+typedef struct [[nodiscard]]
 {
     u32 width;                  /**< Window width in pixels. */
     u32 height;                 /**< Window height in pixels. */
     char title[64];             /**< Window title text. */
     bool full_screen;           /**< Full-screen flag. */
     bool v_sync;                /**< Vertical synchonisation flag. */
-    SDL_Window *sdl_window;     /**< Pointer to the SDL window. */
-    SDL_Renderer *sdl_renderer; /**< SDL rendering context. */
+    SDL_Window* sdl_window;     /**< Pointer to the SDL window. */
+    SDL_Renderer* sdl_renderer; /**< SDL rendering context. */
 } Window;
 
 /**
  * \brief Allocates memory for the window and defines the graphical context.
  * \returns Pointer to the window object.
  */
-Window *WindowCreate(void);
+[[nodiscard]] Window* WindowCreate(void);
 
 /**
  * \brief Frees the window memory.
  * \param [in, out] The window to be freed.
  * \returns Void.
  */
-void WindowFree(Window *wind);
+void WindowFree(Window* wind);
 
 /**
  * \brief Clears the window buffer to black.
  * \param [in] wind The window to clear.
  * \returns Void.
  */
-void WindowClear(const Window *wind);
+void WindowClear(const Window* wind);
 
 /**
  * \brief Flips the window buffers to display graphics.
  * \param [in] wind The window to display graphics of.
  * \returns Void.
  */
-void WindowFlip(const Window *wind);
+void WindowFlip(const Window* wind);
 
 /**
  * \brief Sets the window title based on a formatted string.
@@ -72,6 +72,6 @@ void WindowFlip(const Window *wind);
  * \param [in] ... Additional parameters for the formatted string.
  * \returns Void.
  */
-void WindowSetTitle(Window *wind, const char *str, ...);
+void WindowSetTitle(Window* wind, const char* str, ...);
 
 #endif

@@ -20,9 +20,9 @@
  * renderer, where the clear colour is set to black. Finally, a pointer to the
  * window is returned.
  */
-Window *WindowCreate(void)
+[[nodiscard]] Window* WindowCreate(void)
 {
-    Window *wind = Allocate(sizeof(Window));
+    Window* wind = Allocate(sizeof(Window));
 
     wind->width = 1280;
     wind->height = 720;
@@ -56,7 +56,7 @@ Window *WindowCreate(void)
  * \desc Frees the memory pointed to by a window. The SDL context memory is also
  * freed here.
  */
-void WindowFree(Window *wind)
+void WindowFree(Window* wind)
 {
     SDL_DestroyRenderer(wind->sdl_renderer);
     SDL_DestroyWindow(wind->sdl_window);
@@ -67,20 +67,20 @@ void WindowFree(Window *wind)
  * \desc Clears the SDL renderer context held by a window to a single colour.
  * This colour is set in the window creation.
  */
-void WindowClear(const Window *wind) { SDL_RenderClear(wind->sdl_renderer); }
+void WindowClear(const Window* wind) { SDL_RenderClear(wind->sdl_renderer); }
 
 /**
  * \desc Updates the SDL renderer with any of the drawn graphics since the
  * previous call.
  */
-void WindowFlip(const Window *wind) { SDL_RenderPresent(wind->sdl_renderer); }
+void WindowFlip(const Window* wind) { SDL_RenderPresent(wind->sdl_renderer); }
 
 /**
  * \desc Sets the string for the windows title bar. A formatted string is passed
  * in, and any additional parameters are used for that formatted string.
  * Finally, the window's own title record is updated as well as the SDL_Windows.
  */
-void WindowSetTitle(Window *wind, const char *str, ...)
+void WindowSetTitle(Window* wind, const char* str, ...)
 {
     char title[64] = {0};
     sprintf(title, "%s", str);

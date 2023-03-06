@@ -31,15 +31,17 @@
  * This then governs how the canvas is updated. The operations include glyph
  * placing, glyph selection and glyph erasure.
  */
-typedef enum CanvasOperation_e {
+typedef enum
+{
     CANVAS_NONE = 0,
     CANVAS_PLACE = 1,
     CANVAS_SELECT = 2,
     CANVAS_ERASE = 3
 } CanvasOperation;
 
-typedef struct Canvas_s {
-    Vector *glyphs;     /**< List of glyphs within the canvas. */
+typedef struct [[nodiscard]]
+{
+    Vector* glyphs;     /**< List of glyphs within the canvas. */
     CanvasOperation op; /**< Current canvas operation. */
     size_t glyph_index; /**< Index of glyph to perform operation. */
     SDL_Rect rect;      /**< Canvas dimensions in pixel units. */
@@ -54,14 +56,14 @@ typedef struct Canvas_s {
  * \param [in] writable Sets whether the canvas can be written to.
  * \returns Pointer to a canvas object.
  */
-Canvas *CanvasCreate(SDL_Rect rect, bool writable);
+[[nodiscard]] Canvas* CanvasCreate(SDL_Rect rect, bool writable);
 
 /**
  * \brief Frees the canvas memory.
  * \param [in, out] canvas The canvas to be freed.
  * \returns Void.
  */
-void CanvasFree(Canvas *canvas);
+void CanvasFree(Canvas* canvas);
 
 /**
  * \brief Deals with the input of a canvas based on its type.
@@ -69,7 +71,7 @@ void CanvasFree(Canvas *canvas);
  * \param [in] input An input handler.
  * \returns Void.
  */
-void CanvasHandleInput(Canvas *canvas, const Input *input);
+void CanvasHandleInput(Canvas* canvas, const Input* input);
 
 /**
  * \brief Updates a canvas.
@@ -77,7 +79,7 @@ void CanvasHandleInput(Canvas *canvas, const Input *input);
  * \param [in, out] cur_glyph A current glyph to be changed based on operation.
  * \returns Void.
  */
-void CanvasUpdate(Canvas *canvas, Glyph *cur_glyph);
+void CanvasUpdate(Canvas* canvas, Glyph* cur_glyph);
 
 /**
  * \brief Renders a canvas.
@@ -86,6 +88,6 @@ void CanvasUpdate(Canvas *canvas, Glyph *cur_glyph);
  * \param [in] tex Texture to render from.
  * \returns Void.
  */
-void CanvasRender(const Canvas *canvas, const Window *wind, const Texture *tex);
+void CanvasRender(const Canvas* canvas, const Window* wind, const Texture* tex);
 
 #endif

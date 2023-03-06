@@ -18,16 +18,16 @@
 /**
  * \desc Allocates the memory for the texture object and nothing more.
  */
-Texture *TextureCreate(void)
+[[nodiscard]] Texture* TextureCreate(void)
 {
-    Texture *tex = Allocate(sizeof(Texture));
+    Texture* tex = Allocate(sizeof(Texture));
     return tex;
 }
 
 /**
  * \desc Frees the memory for a texture object and nothing more.
  */
-void TextureFree(Texture *tex) { Free(tex); }
+void TextureFree(Texture* tex) { Free(tex); }
 
 /**
  * \desc Loading an image into a texture object requires an SDL_Renderer for
@@ -40,7 +40,7 @@ void TextureFree(Texture *tex) { Free(tex); }
  * surface is freed and alpha blending is enable for the texture. Finally, the
  * texture source rectangles are created for quick access later.
  */
-bool TextureLoad(Texture *tex, const Window *wind, const char *path)
+bool TextureLoad(Texture* tex, const Window* wind, const char* path)
 {
     if (!FileExists(path))
     {
@@ -48,7 +48,7 @@ bool TextureLoad(Texture *tex, const Window *wind, const char *path)
         return false;
     }
 
-    SDL_Surface *surf = IMG_Load(path);
+    SDL_Surface* surf = IMG_Load(path);
     if (surf == NULL)
     {
         Log(LOG_ERROR, "Could not load SDL_Surface for texture %s", path);

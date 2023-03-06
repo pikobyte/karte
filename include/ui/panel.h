@@ -28,7 +28,8 @@
  * default for buttons. Single and double are the lines which decorate the
  * border.
  */
-typedef enum Border_e {
+typedef enum Border_e
+{
     BORDER_NONE = 0,
     BORDER_SINGLE = 1,
     BORDER_DOUBLE = 2
@@ -53,8 +54,9 @@ static const u8 DOUBLE_BORDER[6] = {201, 187, 200, 188, 205, 186};
  * The inside of the rectangle remains unfilled, but the border is drawn (if
  * set).
  */
-typedef struct Panel_s {
-    Vector *glyphs; /**< List of glyphs. */
+typedef struct [[nodiscard]]
+{
+    Vector* glyphs; /**< List of glyphs. */
     SDL_Rect rect;  /**< Bounding rectangle in glyph units. */
     Border border;  /**< Border type. */
     SDL_Color col;  /**< Border colour. */
@@ -67,14 +69,14 @@ typedef struct Panel_s {
  * \param [in] col Colour of the border.
  * \returns Pointer to a panel object.
  */
-Panel *PanelCreate(SDL_Rect rect, Border border, SDL_Color col);
+[[nodiscard]] Panel* PanelCreate(SDL_Rect rect, Border border, SDL_Color col);
 
 /**
  * \brief Frees the panel memory.
  * \param [in, out] panel The panel to be freed.
  * \returns Void.
  */
-void PanelFree(Panel *panel);
+void PanelFree(Panel* panel);
 
 /**
  * \brief Renders a panel.
@@ -83,6 +85,6 @@ void PanelFree(Panel *panel);
  * \param [in] tex Texture to render from.
  * \returns Void.
  */
-void PanelRender(const Panel *panel, const Window *wind, const Texture *tex);
+void PanelRender(const Panel* panel, const Window* wind, const Texture* tex);
 
 #endif
